@@ -1,0 +1,129 @@
+// SCSS Variables for layout styling (will be moved to global styles folder later)
+$primary-color: #6366f1; // Purple accent color matching the user flow
+$text-color: #1f2937;
+$error-color: #ef4444;
+$border-color: #d1d5db;
+
+.formContainer, .successContainer {
+  font-family: 'Inter', sans-serif;
+  max-width: 400px;
+  margin: 60px auto;
+  padding: 40px;
+  border-radius: 12px;
+  box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1), 0 2px 4px -1px rgba(0, 0, 0, 0.06);
+  background-color: #ffffff;
+  text-align: center;
+}
+
+.title {
+  font-size: 28px;
+  color: $text-color;
+  margin-bottom: 8px;
+}
+
+.subtitle {
+  color: #6b7280;
+  margin-bottom: 32px;
+  font-size: 16px;
+}
+
+.form {
+  text-align: center;
+
+  .inputGroup {
+    margin-bottom: 20px;
+    
+
+    .label {
+      display: block;
+      font-size: 14px;
+      font-weight: 500;
+      color: #374151;
+      margin-bottom: 8px;
+      text-align: center;
+    }
+
+    .input {
+      width: 100%;
+      box-sizing: border-box;
+      margin: 0 auto;
+      padding: 12px 16px;
+      border: 1px solid $border-color;
+      border-radius: 8px;
+      font-size: 16px;
+      outline: none;
+      transition: border-color 0.2s;
+      text-align: left;
+      // 1. Explicitly set normal styles (white background, dark text)
+      background-color: #ffffff;
+      color: #1f2937;
+
+      &:focus {
+        border-color: $primary-color;
+      }
+
+      &:disabled {
+        background-color: #f3f4f6;
+        cursor: not-allowed;
+      }
+
+      // 2. Fix the annoying browser autofill background color change
+      &:-webkit-autofill,
+      &:-webkit-autofill:hover, 
+      &:-webkit-autofill:focus, 
+      &:-webkit-autofill:active {
+        // We use a large inset box-shadow to override Chrome's default blue/yellow background
+        -webkit-box-shadow: 0 0 0 1000px #ffffff inset !important;
+        // Forces the text color to stay dark during autofill
+        -webkit-text-fill-color: #1f2937 !important;
+        transition: background-color 5000s ease-in-out 0s;
+      }
+    }
+  }
+  .errorMessage {
+    color: $error-color;
+    font-size: 14px;
+    margin-bottom: 16px;
+    font-weight: 500;
+    text-align: center;
+  }
+
+  .button {
+    width: 100%;
+    padding: 14px;
+    background-color: $primary-color;
+    color: white;
+    border: none;
+    border-radius: 8px;
+    font-size: 16px;
+    font-weight: 600;
+    cursor: pointer;
+    transition: background-color 0.2s;
+
+    &:hover {
+      background-color: darken($primary-color, 10%);
+    }
+
+    &:disabled {
+      background-color: #9ca3af;
+      cursor: not-allowed;
+    }
+  }
+}
+
+.successContainer {
+  .icon {
+    font-size: 48px;
+    margin-bottom: 16px;
+  }
+  
+  h2 {
+    color: $text-color;
+    margin-bottom: 12px;
+  }
+  
+  p {
+    color: #4b6353;
+    line-height: 1.5;
+  }
+}
