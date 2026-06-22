@@ -1,0 +1,128 @@
+@use "../../styles/variables" as v;
+
+.instructor-page-container {
+  padding: 24px;
+  max-width: 1200px;
+  margin: 0 auto; // Centers the container on large screens
+  font-family: v.$font-primary;
+
+  .page-header {
+    text-align: center;
+    margin-bottom: 40px;
+
+    h1 {
+      font-size: 2rem;
+      color: v.$color-text-medium;
+      margin-bottom: 8px;
+    }
+
+    p {
+      color: v.$color-text-light;
+    }
+  }
+
+  // Responsive Grid with Global Breakpoints
+  .instructor-grid {
+    display: grid;
+    gap: 24px;
+    grid-template-columns: 1fr;
+
+    // Tablet breakpoint
+    @media (min-width: v.$breakpoint-tablet) {
+      grid-template-columns: repeat(2, 1fr);
+    }
+
+    // Desktop breakpoint
+    @media (min-width: v.$breakpoint-desktop) {
+      grid-template-columns: repeat(3, 1fr);
+    }
+
+    // Large Desktop breakpoint
+    @media (min-width: v.$breakpoint-desktop-lg) {
+      grid-template-columns: repeat(4, 1fr);
+    }
+  }
+
+  // Card component using style tokens
+  .instructor-card {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    text-align: center;
+    background-color: v.$color-bg-main;
+    border: 1px solid v.$color-border;
+    border-radius: 12px;
+    padding: 24px;
+    box-shadow: v.$shadow-light;
+    transition: v.$transition-smooth;
+
+    // Hover animation for the entire card
+    &:hover {
+      transform: translateY(-5px);
+      box-shadow: v.$shadow-hover;
+    }
+
+    .instructor-avatar {
+      width: 90px;
+      height: 90px;
+      border-radius: 50%;
+      object-fit: cover;
+      margin-bottom: 16px;
+      border: 3px solid v.$color-bg-light;
+    }
+
+    .instructor-info {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+
+      .instructor-name {
+        font-size: 1.25rem;
+        font-weight: 600;
+        color: v.$color-text-dark;
+        margin: 0 0 8px 0;
+      }
+
+      .instructor-specialization {
+        font-size: 0.9rem;
+        font-weight: 500;
+        color: v.$color-text-muted;
+        background-color: v.$color-bg-pill;
+        padding: 4px 12px;
+        border-radius: 999px;
+        display: inline-block;
+        margin: 0 0 12px 0;
+      }
+
+      // Circular button container for the email icon
+      .instructor-email-button {
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        width: 44px;
+        height: 44px;
+        border-radius: 50%;
+        background-color: v.$color-bg-light;
+        color: v.$color-primary; // This color flows into the SVG icon
+        transition:
+          background-color 0.2s ease,
+          color 0.2s ease,
+          transform 0.1s ease;
+        text-decoration: none;
+
+        // Styles for the inner nested icon component
+        .mail-icon {
+          width: 20px;
+          height: 20px;
+        }
+
+        // Hover effect for the email button
+        &:hover {
+          background-color: v.$color-primary; // Background turns blue
+          color: v.$color-bg-main; // Icon color changes to white
+          transform: scale(1.05); // Subtle pop-out effect
+        }
+      }
+    }
+  }
+}

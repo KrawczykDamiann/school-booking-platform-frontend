@@ -1,0 +1,10 @@
+@use "../../styles/variables" as v;
+
+.login-page-wrapper {
+  min-height: 100vh;
+  background-color: v.$color-bg-light;
+  display: flex;
+  align-items: center;
+  justify-content: center; // Center horizontally as well for a perfect layout
+  padding: 24px; // Safety padding for mobile screens so the form doesn't touch the edges
+}
