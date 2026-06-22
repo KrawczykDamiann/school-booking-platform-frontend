@@ -1,12 +1,11 @@
-import React from "react";
-import { LoginPage } from "./pages/LoginPage/LoginPage";
+// import { LoginPage } from "./pages/LoginPage/LoginPage";
 import { InstructorListPage } from "./pages/InstructorListPage/InstructorListPage";
 
 function App() {
   return (
     <>
       {/* Rendering your new Magic Link login page */}
-      <LoginPage />
+      {/* <LoginPage /> */}
       {/* Rendering the Instructor List Page */}
       <InstructorListPage />
     </>
