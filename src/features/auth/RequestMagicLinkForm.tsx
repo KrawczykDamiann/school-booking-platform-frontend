@@ -1,7 +1,12 @@
 import React, { useState } from 'react';
+// 1. Import the translation hook from i18next
+import { useTranslation } from 'react-i18next';
 import styles from './RequestMagicLinkForm.module.scss';
 
 export const RequestMagicLinkForm: React.FC = () => {
+  // 2. Initialize the translation function
+  const { t } = useTranslation();
+
   // State to store the email typed by the user
   const [email, setEmail] = useState<string>('');
   
@@ -28,9 +33,9 @@ export const RequestMagicLinkForm: React.FC = () => {
       // If the request succeeds, we update the state to show the confirmation message
       setIsSubmitted(true);
     } catch (err) {
-      // If the backend returns an error, we catch it and display it to the user
       console.error('API Error:', err);
-      setError('Something went wrong. Please check your email and try again.');
+      // 3. Set the translated error message directly into the state
+      setError(t('login_magic_link.error_generic'));
     } finally {
       setIsLoading(false); // Turn off the loading state
     }
@@ -41,10 +46,11 @@ export const RequestMagicLinkForm: React.FC = () => {
     return (
       <div className={styles.successContainer}>
         <div className={styles.icon}>✉️</div>
-        <h2>Check your inbox!</h2>
+        <h2>{t('login_magic_link.success_title')}</h2>
         <p>
-          We have sent a secure magic login link to <strong>{email}</strong>. 
-          Click the link in the email to log in.
+          {t('login_magic_link.success_text_start')}
+          <strong>{email}</strong>
+          {t('login_magic_link.success_text_end')}
         </p>
       </div>
     );
@@ -53,18 +59,20 @@ export const RequestMagicLinkForm: React.FC = () => {
   // SBP-65: Default view - The email request form (Matching Kamil's user flow chart)
   return (
     <div className={styles.formContainer}>
-      <h1 className={styles.title}>Welcome!</h1>
-      <p className={styles.subtitle}>Enter your email to continue</p>
+      <h1 className={styles.title}>{t('login_magic_link.title')}</h1>
+      <p className={styles.subtitle}>{t('login_magic_link.subtitle')}</p>
       
       <form onSubmit={handleSubmit} className={styles.form}>
         <div className={styles.inputGroup}>
-          <label htmlFor="email" className={styles.label}>Email address</label>
+          <label htmlFor="email" className={styles.label}>
+            {t('login_magic_link.label_email')}
+          </label>
           <input
             id="email"
             type="email"
             value={email}
             onChange={(e) => setEmail(e.target.value)}
-            placeholder="student@example.com"
+            placeholder={t('login_magic_link.placeholder_email')}
             required
             disabled={isLoading}
             className={styles.input}
@@ -75,7 +83,7 @@ export const RequestMagicLinkForm: React.FC = () => {
         {error && <p className={styles.errorMessage}>{error}</p>}
 
         <button type="submit" disabled={isLoading} className={styles.button}>
-          {isLoading ? 'Sending...' : 'Continue'}
+          {isLoading ? t('login_magic_link.button_sending') : t('login_magic_link.button_continue')}
         </button>
       </form>
     </div>

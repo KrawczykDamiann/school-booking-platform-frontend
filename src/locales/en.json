@@ -1,0 +1,29 @@
+{
+  "title": "Instructor Catalog",
+  "subtitle": "Manage and browse all available teaching resources",
+  
+  "forgot_password": {
+    "title": "Forgot Password?",
+    "description": "Enter your email address and we will send you a secure link to reset your password.",
+    "label_email": "Email Address",
+    "placeholder_email": "e.g., john.doe@school.com",
+    "button_send": "Send Reset Link",
+    "button_back": "Back to login",
+    "success_message": "Email sent successfully! Please check your inbox and follow the instructions.",
+    "error_invalid_email": "Please enter a valid email address.",
+    "error_required": "This field is required.",
+    "error_user_not_found": "No user found with this email address in our system."
+  },
+  "login_magic_link": {
+    "title": "Welcome!",
+    "subtitle": "Enter your email to continue",
+    "label_email": "Email address",
+    "placeholder_email": "student@example.com",
+    "button_continue": "Continue",
+    "button_sending": "Sending...",
+    "error_generic": "Something went wrong. Please check your email and try again.",
+    "success_title": "Check your inbox!",
+    "success_text_start": "We have sent a secure magic login link to ",
+    "success_text_end": ". Click the link in the email to log in."
+  }
+}

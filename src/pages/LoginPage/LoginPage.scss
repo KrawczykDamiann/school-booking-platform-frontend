@@ -3,8 +3,127 @@
 .login-page-wrapper {
   min-height: 100vh;
   background-color: v.$color-bg-light;
+  background-image: url('../../components/icons/Chroma.jpeg');
+  background-size: cover;
+  background-position: center;
+  background-repeat: no-repeat;
+  background-attachment: fixed;
+  width: 100vw;
+  left: 50%;
+  margin-left: -50vw;
+  overflow-x: hidden; 
+  box-sizing: border-box;
+  position: relative;
   display: flex;
   align-items: center;
-  justify-content: center; // Center horizontally as well for a perfect layout
-  padding: 24px; // Safety padding for mobile screens so the form doesn't touch the edges
+  justify-content: center;
+  padding: 24px;
+
+  .login-card {
+    /* 1. GLASSMORPHISM CORE */
+    background: rgba(255, 255, 255, 0.06); 
+    backdrop-filter: blur(20px);             
+    -webkit-backdrop-filter: blur(20px);     
+
+    /* 2. 3D VOLUMETRIC BORDERS */
+    border: 1px solid rgba(255, 255, 255, 0.12);
+    border-radius: 24px;                     
+
+    /* 3. 3D LAYERED SHADOWS */
+    box-shadow:
+      inset 1px 1px 0px rgba(255, 255, 255, 0.22),   
+      inset -1px -1px 0px rgba(0, 0, 0, 0.4),       
+      0 10px 30px rgba(0, 0, 0, 0.3),               
+      0 30px 60px rgba(0, 0, 0, 0.6);               
+
+    padding: 40px;
+    width: 100%;
+    max-width: 440px;
+    box-sizing: border-box;
+    text-align: center;
+
+    /* ==================================================================
+       CRITICAL FIX: Stripping away the hardcoded white box from inner form
+       ================================================================== */
+    form, 
+    div[class*="form"],
+    .magic-link-form-wrapper {
+      background: transparent !important;
+      background-color: transparent !important;
+      box-shadow: none !important;
+      border: none !important;
+      padding: 0 !important; // Removes duplicate padding so it expands perfectly
+      margin: 0 !important;
+      width: 100% !important;
+    }
+
+    /* --- TYPOGRAPHY CORRECTIONS FOR HIGH VISIBILITY OVER GLASS --- */
+
+    /* Headings ("Welcome!") */
+    h1, h2, .login-title, h1[class*="title"] {
+      color: #ffffff !important; 
+      font-weight: 700 !important;
+      margin-bottom: 12px !important;
+      text-shadow: 0 2px 8px rgba(0, 0, 0, 0.5) !important;
+    }
+
+    /* Subtitles and input labels ("Email address") */
+    p, label, .login-subtitle, .input-label {
+      color: #e2e8f0 !important; 
+      font-size: 0.95rem !important;
+      text-shadow: 0 1px 4px rgba(0, 0, 0, 0.3) !important;
+      display: block;
+      text-align: left; // Keeps form labels aligned to the left side smoothly
+      margin-bottom: 8px;
+    }
+
+    /* --- INPUT FIELD GLASS TRANSFORMATION --- */
+    input[type="email"], input[type="text"], .login-input {
+      background: rgba(255, 255, 255, 0.05) !important;
+      border: 1px solid rgba(255, 255, 255, 0.15) !important;
+      color: #ffffff !important; 
+      border-radius: 12px !important;
+      padding: 14px 16px !important;
+      width: 100% !important;
+      box-sizing: border-box !important;
+      transition: all 0.3s cubic-bezier(0.25, 1, 0.5, 1) !important;
+
+      &::placeholder {
+        color: rgba(255, 255, 255, 0.35) !important; 
+      }
+
+      &:focus {
+        outline: none !important;
+        background: rgba(255, 255, 255, 0.1) !important;
+        border-color: #3b82f6 !important; 
+        box-shadow: 0 0 0 4px rgba(59, 130, 246, 0.25) !important;
+      }
+    }
+
+    /* --- BUTTON INTERACTION SYSTEM --- */
+    button, .submit-btn {
+      background-color: #3b82f6 !important; 
+      color: #ffffff !important;
+      border: none !important;
+      border-radius: 12px !important;
+      font-weight: 600 !important;
+      padding: 14px 20px !important;
+      width: 100% !important;
+      cursor: pointer !important;
+      box-shadow: 0 4px 14px rgba(59, 130, 246, 0.4) !important;
+      transition: transform 0.2s ease, box-shadow 0.2s ease !important;
+      margin-top: 16px !important;
+
+      &:hover {
+        background-color: #2563eb !important;
+        transform: translateY(-2px) !important; 
+        box-shadow: 0 8px 22px rgba(59, 130, 246, 0.55) !important;
+      }
+
+      &:active {
+        transform: translateY(0) !important; 
+        box-shadow: 0 3px 10px rgba(59, 130, 246, 0.4) !important;
+      }
+    }
+  }
 }

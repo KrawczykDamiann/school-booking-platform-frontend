@@ -1,0 +1,29 @@
+{
+  "title": "Katalog Instruktorów",
+  "subtitle": "Zarządzaj i przeglądaj wszystkie dostępne zasoby dydaktyczne",
+  
+  "forgot_password": {
+    "title": "Zapomniałeś hasła?",
+    "description": "Wprowadź swój adres e-mail, a wyślemy Ci bezpieczny link do zresetowania hasła.",
+    "label_email": "Adres e-mail",
+    "placeholder_email": "np. jan.kowalski@school.com",
+    "button_send": "Wyślij link do resetowania",
+    "button_back": "Powrót do logowania",
+    "success_message": "Wiadomość została wysłana! Sprawdź swoją skrzynkę odbiorczą i postępuj zgodnie z instrukcjami.",
+    "error_invalid_email": "Wprowadź poprawny adres e-mail (np. nazwa@domena.pl).",
+    "error_required": "To pole jest wymagane.",
+    "error_user_not_found": "Użytkownik o podanym adresie e-mail nie istnieje w naszym systemie."
+  },
+  "login_magic_link": {
+    "title": "Witaj!",
+    "subtitle": "Wprowadź swój adres e-mail, aby kontynuować",
+    "label_email": "Adres e-mail",
+    "placeholder_email": "student@example.com",
+    "button_continue": "Kontynuuj",
+    "button_sending": "Wysyłanie...",
+    "error_generic": "Coś poszło nie tak. Sprawdź swój e-mail i spróbuj ponownie.",
+    "success_title": "Sprawdź skrzynkę odbiorczą!",
+    "success_text_start": "Wysłaliśmy bezpieczny link do logowania na adres ",
+    "success_text_end": ". Kliknij link w wiadomości e-mail, aby się zalogować."
+  }
+}

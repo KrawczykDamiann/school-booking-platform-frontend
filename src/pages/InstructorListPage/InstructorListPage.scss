@@ -2,126 +2,343 @@
 
 .instructor-page-container {
   padding: 24px;
-  max-width: 1200px;
-  margin: 0 auto; // Centers the container on large screens
+  min-height: 100vh;
   font-family: v.$font-primary;
+  box-sizing: border-box;
+  position: relative; // Anchor point for the absolute carousel side arrows
+
+  /* Wymuszenie 100% szerokości okna przeglądarki (Breakout) */
+  width: 100vw;
+  left: 50%;
+  margin-left: -50vw;
+  overflow-x: hidden; 
+
+  /* PRESERVED: Your exact background path */
+  background-image: url("../../components/icons/Phantom.jpeg");
+  background-size: cover;
+  background-position: center;
+  background-repeat: no-repeat;
+  background-attachment: fixed;
 
   .page-header {
     text-align: center;
-    margin-bottom: 40px;
+    margin-bottom: 20px;
+    max-width: 600px;
+    margin-left: auto;
+    margin-right: auto;
+
+    background-color: rgba(26, 32, 44, 0.7); 
+    backdrop-filter: blur(12px);             
+    -webkit-backdrop-filter: blur(12px);
+    padding: 24px 40px;
+    border-radius: 16px;
+    border: 1px solid rgba(255, 255, 255, 0.08); 
+    box-shadow: v.$shadow-light;
+
+    @media (max-width: v.$breakpoint-tablet) {
+      padding: 16px 24px;
+      margin-top: 60px; 
+    }
 
     h1 {
       font-size: 2rem;
-      color: v.$color-text-medium;
+      color: #ffffff; 
       margin-bottom: 8px;
+      font-weight: 700;
+
+      @media (max-width: v.$breakpoint-tablet) {
+        font-size: 1.5rem; 
+      }
     }
 
     p {
-      color: v.$color-text-light;
+      color: #e2e8f0; 
+      font-size: 0.95rem;
     }
   }
 
-  // Responsive Grid with Global Breakpoints
-  .instructor-grid {
-    display: grid;
-    gap: 24px;
-    grid-template-columns: 1fr;
+  /* Flat 2D Scene space setup */
+  .carousel-2d-scene {
+    position: relative;
+    width: 100%;
+    height: 520px; 
+    margin: 180px auto 20px; 
+    transition: transform 0.3s ease-in-out, margin 0.3s ease-in-out;
 
-    // Tablet breakpoint
-    @media (min-width: v.$breakpoint-tablet) {
-      grid-template-columns: repeat(2, 1fr);
+    /* UPDATED: Optimized tablet media query with 640px height */
+    @media (max-width: 1300px) and (min-width: 769px) {
+      margin: 40px auto 0px !important; 
+      height: 640px !important;         
+      transform: scale(0.82);           
+      transform-origin: top center;     
     }
 
-    // Desktop breakpoint
-    @media (min-width: v.$breakpoint-desktop) {
-      grid-template-columns: repeat(3, 1fr);
-    }
-
-    // Large Desktop breakpoint
-    @media (min-width: v.$breakpoint-desktop-lg) {
-      grid-template-columns: repeat(4, 1fr);
+    /* Mobile responsive override */
+    @media (max-width: v.$breakpoint-tablet) {
+      height: auto !important;
+      margin: 32px auto !important;
     }
   }
 
-  // Card component using style tokens
+  /* Absolute center anchor for the coordinate calculations */
+  .carousel-2d-circle {
+    position: absolute;
+    top: 50%;
+    left: 50%;
+
+    @media (max-width: v.$breakpoint-tablet) {
+      position: static !important;
+      display: flex !important;
+      flex-direction: column !important;
+      gap: 16px !important;
+      width: 100% !important;
+      max-width: 480px !important;
+      margin: 0 auto !important;
+    }
+  }
+
+  /* UPDATED: Volumetric 3D Spheres styling and responsive scaling */
   .instructor-card {
+    position: absolute;
+    width: 260px;
+    height: 260px;
+    border-radius: 50%; 
+    cursor: pointer;
+    overflow: hidden; 
+    box-sizing: border-box;
     display: flex;
     flex-direction: column;
     align-items: center;
+    justify-content: center; 
     text-align: center;
-    background-color: v.$color-bg-main;
-    border: 1px solid v.$color-border;
-    border-radius: 12px;
-    padding: 24px;
-    box-shadow: v.$shadow-light;
-    transition: v.$transition-smooth;
 
-    // Hover animation for the entire card
-    &:hover {
-      transform: translateY(-5px);
-      box-shadow: v.$shadow-hover;
+    /* 1. EFEKT KULI: Radialny gradient imitujący światło padające z lewego górnego rogu */
+    background-image: 
+      radial-gradient(circle at 35% 35%, rgba(255, 255, 255, 0.28) 0%, rgba(0, 0, 0, 0.35) 65%, rgba(0, 0, 0, 0.82) 100%),
+      url("../../components/icons/Luma.jpeg");
+    background-size: cover;
+    background-position: center;
+    background-blend-mode: overlay; // Blends the volumetric lighting map onto your custom Luma background
+    
+    /* 2. TRÓJWYMIAROWY CIEŃ: Głębokie sferyczne cienie wewnętrzne (inset) oraz zewnętrzny cień rzucany */
+    border: 1px solid rgba(255, 255, 255, 0.08); // Subtle glass rim instead of a harsh flat line
+    box-shadow: 
+      inset -12px -12px 30px rgba(0, 0, 0, 0.75),
+      inset 15px 15px 35px rgba(255, 255, 255, 0.22),
+      0 20px 45px rgba(0, 0, 0, 0.55);
+
+    transition:
+      transform 0.6s cubic-bezier(0.25, 1, 0.5, 1),
+      opacity 0.6s,
+      z-index 0.6s,
+      box-shadow 0.6s ease,
+      border-color 0.3s;
+
+    &--active {
+      border-color: v.$color-primary;
+      /* Glowing neon drop-shadow combined with sphere core metrics */
+      box-shadow: 
+        inset -12px -12px 30px rgba(0, 0, 0, 0.8),
+        inset 15px 15px 35px rgba(255, 255, 255, 0.3),
+        0 25px 55px rgba(v.$color-primary, 0.35);
+      cursor: default;
+    }
+
+    /* Beautiful sphere-lift and sheen focus enhancement on hover */
+    &:hover:not(&--active) {
+      box-shadow: 
+        inset -6px -6px 22px rgba(0, 0, 0, 0.65),
+        inset 22px 22px 40px rgba(255, 255, 255, 0.32),
+        0 30px 60px rgba(0, 0, 0, 0.75);
+    }
+
+    /* Mobile responsive override: Reset spheres back to clean flat card blocks */
+    @media (max-width: v.$breakpoint-tablet) {
+      position: static !important;
+      transform: none !important; 
+      width: 100% !important;
+      height: auto !important;
+      border-radius: 16px !important; 
+      opacity: 1 !important; 
+      z-index: 1 !important;
+      display: flex !important;
+      flex-direction: row !important; 
+      align-items: center !important;
+      text-align: left !important;
+      gap: 16px !important;
+      justify-content: flex-start !important;
+      padding: 16px !important;
+
+      /* Reset 3D assets to flat layout properties */
+      background-image: url("../../components/icons/Luma.jpeg") !important;
+      background-blend-mode: normal !important;
+      box-shadow: v.$shadow-light !important;
+      border: 1px solid v.$color-border !important;
     }
 
     .instructor-avatar {
-      width: 90px;
-      height: 90px;
+      width: 75px; 
+      height: 75px;
       border-radius: 50%;
       object-fit: cover;
-      margin-bottom: 16px;
-      border: 3px solid v.$color-bg-light;
+      margin-bottom: 8px;
+      border: 3px solid rgba(255, 255, 255, 0.85); // High-contrast crisp border inside the sphere
+      box-shadow: 0 6px 14px rgba(0, 0, 0, 0.35); // Gives the small image a floating look inside the sphere
+
+      @media (max-width: v.$breakpoint-tablet) {
+        width: 64px !important;
+        height: 64px !important;
+        margin-bottom: 0 !important; 
+        border: 3px solid v.$color-bg-light !important;
+        box-shadow: none !important;
+        flex-shrink: 0;
+      }
     }
 
     .instructor-info {
       display: flex;
       flex-direction: column;
       align-items: center;
+      width: 92%;
+
+      /* Frosted glass capsule overlay to protect font readability over the volumetric gradients */
+      background: rgba(26, 32, 44, 0.45);
+      backdrop-filter: blur(6px);
+      -webkit-backdrop-filter: blur(6px);
+      padding: 12px 8px;
+      border-radius: 20px;
+      border: 1px solid rgba(255, 255, 255, 0.06);
+
+      @media (max-width: v.$breakpoint-tablet) {
+        align-items: flex-start !important;
+        width: 100% !important;
+        background: transparent !important;
+        backdrop-filter: none !important;
+        border: none !important;
+        padding: 0 !important;
+      }
 
       .instructor-name {
-        font-size: 1.25rem;
+        font-size: 1.15rem; 
         font-weight: 600;
-        color: v.$color-text-dark;
-        margin: 0 0 8px 0;
+        color: #ffffff; // Swapped variable text to solid bright white for core sphere contrast
+        margin: 0 0 4px 0;
+        white-space: nowrap;
+        overflow: hidden;
+        text-overflow: ellipsis; 
+        width: 90%;
+
+        @media (max-width: v.$breakpoint-tablet) {
+          color: v.$color-text-dark;
+          text-align: left !important;
+          margin-bottom: 2px !important;
+        }
       }
 
       .instructor-specialization {
-        font-size: 0.9rem;
+        font-size: 0.8rem;
         font-weight: 500;
-        color: v.$color-text-muted;
-        background-color: v.$color-bg-pill;
-        padding: 4px 12px;
+        color: #e2e8f0; // Soft slate white for text clarity
+        background-color: rgba(255, 255, 255, 0.12);
+        padding: 2px 10px;
         border-radius: 999px;
         display: inline-block;
-        margin: 0 0 12px 0;
+        margin: 0 0 8px 0;
+
+        @media (max-width: v.$breakpoint-tablet) {
+          color: v.$color-text-muted;
+          background-color: v.$color-bg-pill;
+          margin-bottom: 6px !important;
+        }
       }
 
-      // Circular button container for the email icon
       .instructor-email-button {
         display: flex;
         align-items: center;
         justify-content: center;
-        width: 44px;
-        height: 44px;
+        width: 38px; 
+        height: 38px;
         border-radius: 50%;
-        background-color: v.$color-bg-light;
-        color: v.$color-primary; // This color flows into the SVG icon
+        background-color: rgba(255, 255, 255, 0.15);
+        color: #ffffff;
         transition:
-          background-color 0.2s ease,
-          color 0.2s ease,
-          transform 0.1s ease;
+          background-color 0.2s,
+          color 0.2s,
+          transform 0.1s;
         text-decoration: none;
+        border: 1px solid rgba(255, 255, 255, 0.1);
 
-        // Styles for the inner nested icon component
         .mail-icon {
-          width: 20px;
-          height: 20px;
+          width: 16px;
+          height: 16px;
         }
 
-        // Hover effect for the email button
         &:hover {
-          background-color: v.$color-primary; // Background turns blue
-          color: v.$color-bg-main; // Icon color changes to white
-          transform: scale(1.05); // Subtle pop-out effect
+          background-color: v.$color-primary;
+          color: v.$color-bg-main;
+          transform: scale(1.05);
+          border-color: v.$color-primary;
         }
+
+        @media (max-width: v.$breakpoint-tablet) {
+          background-color: v.$color-bg-light;
+          color: v.$color-primary;
+          border: none;
+        }
+      }
+    }
+  }
+
+  /* Transformed controls into absolute layout wrapping the sides of the circle */
+  .carousel-controls {
+    position: absolute;
+    top: 55%; 
+    left: 50%;
+    transform: translate(-50%, -50%);
+    width: 100%;
+    max-width: 1220px; 
+    display: flex;
+    justify-content: space-between; 
+    padding: 0 24px;
+    box-sizing: border-box;
+    pointer-events: none; 
+    z-index: 20;
+
+    /* Responsive side adjustment for tablet bounds */
+    @media (max-width: 1300px) and (min-width: 769px) {
+      top: 52% !important;        
+      max-width: 740px !important; 
+    }
+
+    @media (max-width: v.$breakpoint-tablet) {
+      display: none !important;
+    }
+
+    .control-btn {
+      pointer-events: auto; 
+      width: 64px;
+      height: 64px;
+      border-radius: 50%;
+      background-color: transparent;
+      border: 1px solid v.$color-border;
+      color: v.$color-bg-light;
+      font-size: 36px;
+      cursor: pointer;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      box-shadow: v.$shadow-light;
+      transition: v.$transition-smooth;
+      padding-bottom: 4px;
+
+      &:hover {
+        background-color: v.$color-primary;
+        color: v.$color-bg-main;
+        border-color: v.$color-primary-hover;
+      }
+
+      &:active {
+        transform: scale(0.92);
       }
     }
   }

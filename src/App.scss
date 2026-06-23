@@ -1,18 +1,21 @@
+// Importing the global partial stylesheet without the underscore and extension
+@import './styles/variables';
+
 .counter {
   font-size: 16px;
   padding: 5px 10px;
   border-radius: 5px;
-  color: var(--accent);
-  background: var(--accent-bg);
+  color: $color-primary; // Swapped var(--accent) to design system primary color
+  background: $color-bg-pill; // Swapped var(--accent-bg) to design system pill background
   border: 2px solid transparent;
   transition: border-color 0.3s;
   margin-bottom: 24px;
 
   &:hover {
-    border-color: var(--accent-border);
+    border-color: $color-primary-hover; // Swapped var(--accent-border) to primary hover state
   }
   &:focus-visible {
-    outline: 2px solid var(--accent);
+    outline: 2px solid $color-primary; // Swapped var(--accent) to primary token
     outline-offset: 2px;
   }
 }
@@ -42,8 +45,7 @@
     z-index: 1;
     top: 34px;
     height: 28px;
-    transform: perspective(2000px) rotateZ(300deg) rotateX(44deg) rotateY(39deg)
-      scale(1.4);
+    transform: perspective(2000px) rotateZ(300deg) rotateX(44deg) rotateY(39deg) scale(1.4);
   }
 
   .vite {
@@ -51,8 +53,7 @@
     top: 107px;
     height: 26px;
     width: auto;
-    transform: perspective(2000px) rotateZ(300deg) rotateX(40deg) rotateY(39deg)
-      scale(0.8);
+    transform: perspective(2000px) rotateZ(300deg) rotateX(40deg) rotateY(39deg) scale(0.8);
   }
 }
 
@@ -64,7 +65,8 @@
   place-items: center;
   flex-grow: 1;
 
-  @media (max-width: 1024px) {
+  // Swapped hardcoded 1024px with design system desktop breakpoint
+  @media (max-width: $breakpoint-desktop) {
     padding: 32px 20px 24px;
     gap: 18px;
   }
@@ -72,13 +74,14 @@
 
 #next-steps {
   display: flex;
-  border-top: 1px solid var(--border);
+  border-top: 1px solid $color-border; // Swapped var(--border) to system border token
   text-align: left;
 
   & > div {
     flex: 1 1 0;
     padding: 32px;
-    @media (max-width: 1024px) {
+    
+    @media (max-width: $breakpoint-desktop) {
       padding: 24px 20px;
     }
   }
@@ -89,18 +92,18 @@
     height: 22px;
   }
 
-  @media (max-width: 1024px) {
+  @media (max-width: $breakpoint-desktop) {
     flex-direction: column;
     text-align: center;
   }
 }
 
 #docs {
-  border-right: 1px solid var(--border);
+  border-right: 1px solid $color-border; // Swapped var(--border) to system border token
 
-  @media (max-width: 1024px) {
+  @media (max-width: $breakpoint-desktop) {
     border-right: none;
-    border-bottom: 1px solid var(--border);
+    border-bottom: 1px solid $color-border; // Swapped var(--border) to system border token
   }
 }
 
@@ -116,10 +119,10 @@
   }
 
   a {
-    color: var(--text-h);
+    color: $color-text-dark; // Swapped var(--text-h) to design system dark text
     font-size: 16px;
     border-radius: 6px;
-    background: var(--social-bg);
+    background: $color-bg-light; // Swapped var(--social-bg) to system light background
     display: flex;
     padding: 6px 12px;
     align-items: center;
@@ -128,7 +131,7 @@
     transition: box-shadow 0.3s;
 
     &:hover {
-      box-shadow: var(--shadow);
+      box-shadow: $shadow-hover; // Swapped var(--shadow) to design system hover shadow
     }
     .button-icon {
       height: 18px;
@@ -136,7 +139,7 @@
     }
   }
 
-  @media (max-width: 1024px) {
+  @media (max-width: $breakpoint-desktop) {
     margin-top: 20px;
     flex-wrap: wrap;
     justify-content: center;
@@ -155,8 +158,9 @@
 
 #spacer {
   height: 88px;
-  border-top: 1px solid var(--border);
-  @media (max-width: 1024px) {
+  border-top: 1px solid $color-border; // Swapped var(--border) to system border token
+  
+  @media (max-width: $breakpoint-desktop) {
     height: 48px;
   }
 }
@@ -175,10 +179,10 @@
 
   &::before {
     left: 0;
-    border-left-color: var(--border);
+    border-left-color: $color-border; // Swapped var(--border) to system border token
   }
   &::after {
     right: 0;
-    border-right-color: var(--border);
+    border-right-color: $color-border; // Swapped var(--border) to system border token
   }
 }
