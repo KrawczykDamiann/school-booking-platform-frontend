@@ -4,6 +4,8 @@ import { useNavigate } from "react-router-dom";
 import { validation } from "../../utils/validators";
 import eyeOffIcon from "../../assets/EyeOffIcon.svg";
 import eyeIcon from "../../assets/EyeIcon.svg";
+import { login } from "../../api/auth";
+import { tokenService } from "../../utils/tokenService";
 
 export const SignInForm: React.FC = () => {
   const [email, setEmail] = useState("");
@@ -13,6 +15,8 @@ export const SignInForm: React.FC = () => {
 
   const [emailError, setEmailError] = useState("");
   const [passwordError, setPasswordError] = useState("");
+
+  const [serverError, setServerError] = useState("");
 
   const navigate = useNavigate();
 
@@ -32,7 +36,7 @@ export const SignInForm: React.FC = () => {
     }
   };
 
-  const handleSubmit = (event: React.SubmitEvent) => {
+  const handleSubmit = async (event: React.SubmitEvent) => {
     event.preventDefault();
 
     const errors = {
@@ -46,9 +50,32 @@ export const SignInForm: React.FC = () => {
       return;
     }
 
-    // API request
+    try {
+      const response = await login({
+        email,
+        password,
+      });
 
-    navigate("/admin-dashboard");
+      if (response.status === 401) {
+        setServerError("Invalid email or password");
+
+        return;
+      }
+
+      if (response.status === 400) {
+        setServerError("Validation error");
+
+        return;
+      }
+
+      tokenService.save(response.data);
+
+      navigate("/admin-dashboard");
+    } catch (error) {
+      if (error instanceof Error) {
+        setServerError("Something went wrong");
+      }
+    }
   };
 
   return (
@@ -97,6 +124,7 @@ export const SignInForm: React.FC = () => {
             Forgot password?
           </a>
         </div>
+        {serverError && <span className={styles.error}>{serverError}</span>}
         <button type="submit" className={styles.button}>
           Continue
         </button>
