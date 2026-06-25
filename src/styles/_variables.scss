@@ -1,30 +1,44 @@
 // ==========================================================================
-// DESIGN SYSTEM VARIABLES
+// LESSIO - DESIGN SYSTEM VARIABLES
 // ==========================================================================
 
-// 1. Colors
-$color-primary:       #3182ce; // Main blue code
-$color-primary-hover: #2b6cb0;
-$color-bg-main:       #ffffff;
-$color-bg-light:      #f0f4f8;
-$color-bg-pill:       #edf2f7;
-$color-border:        #e0e0e0;
+// --------------------------------------------------------------------------
+// 1. BRAND & ACCENT COLORS
+// --------------------------------------------------------------------------
+$color-primary:         #3182ce; // Standard Lessio blue
+$color-primary-hover:   #2b6cb0;
+$color-accent-blue:     #3b82f6; // Glassmorphism button blue
+$color-accent-hover:    #2563eb;
 
-// Text Colors
-$color-text-dark:     #1a202c;
-$color-text-medium:   #333333;
-$color-text-muted:    #4a5568;
-$color-text-light:    #666666;
+// --------------------------------------------------------------------------
+// 2. NEUTRAL & BACKGROUND COLORS
+// --------------------------------------------------------------------------
+$color-bg-main:         #ffffff;
+$color-bg-light:        #f0f4f8;
+$color-bg-pill:         #edf2f7;
+$color-border:          #e0e0e0;
 
-// Shadows & Animations
-$shadow-light:        0 4px 6px rgba(0, 0, 0, 0.05);
-$shadow-hover:        0 8px 15px rgba(0, 0, 0, 0.1);
-$transition-smooth:   transform 0.2s ease-in-out, box-shadow 0.2s ease-in-out;
+// --------------------------------------------------------------------------
+// 3. TYPOGRAPHY & TEXT COLORS
+// --------------------------------------------------------------------------
+$font-primary:          sans-serif;
 
-// 2. Typography
-$font-primary:        sans-serif;
+$color-text-dark:       #1a202c;
+$color-text-medium:     #333333;
+$color-text-muted:      #4a5568;
+$color-text-light:      #666666;
+$color-text-glass-dark: #595b5d; // Damian's high-visibility dark font
 
-// 3. Responsive Breakpoints (Media Queries)
-$breakpoint-tablet:   768px;
-$breakpoint-desktop:  1024px;
+// --------------------------------------------------------------------------
+// 4. SHADOWS & INTERACTION UTILS
+// --------------------------------------------------------------------------
+$shadow-light:          0 4px 6px rgba(0, 0, 0, 0.05);
+$shadow-hover:          0 8px 15px rgba(0, 0, 0, 0.1);
+$transition-smooth:     transform 0.2s ease-in-out, box-shadow 0.2s ease-in-out;
+
+// --------------------------------------------------------------------------
+// 5. RESPONSIVE BREAKPOINTS
+// --------------------------------------------------------------------------
+$breakpoint-tablet:     768px;
+$breakpoint-desktop:    1024px;
 $breakpoint-desktop-lg: 1440px;

@@ -1,0 +1,144 @@
+@use "../../styles/variables" as v;
+
+.calendarWrapper {
+  display: flex;
+  flex-direction: column;
+  gap: 24px;
+  width: 100%;
+  max-width: 600px;
+  margin: 0 auto;
+  padding: 16px;
+}
+
+.cardsContainer {
+  display: flex;
+  flex-direction: column;
+  gap: 20px;
+  width: 100%;
+}
+
+/* 1. DAY CARD - Glassmorphic horizontal row */
+.dayCard {
+  background: rgba(255, 255, 255, 0.04);
+  backdrop-filter: blur(16px);
+  -webkit-backdrop-filter: blur(16px);
+  
+  border: 1px solid rgba(255, 255, 255, 0.1);
+  border-radius: 20px;
+  padding: 20px;
+  
+  /* Volumetric depth shadows */
+  box-shadow:
+    inset 1px 1px 0px rgba(255, 255, 255, 0.15),
+    inset -1px -1px 0px rgba(0, 0, 0, 0.2),
+    0 8px 24px rgba(0, 0, 0, 0.2);
+    
+  text-align: left;
+
+  .dayHeader {
+    font-size: 1.1rem;
+    font-weight: 600;
+    color: #ffffff;
+    margin-bottom: 14px;
+    text-shadow: 0 2px 4px rgba(0, 0, 0, 0.3);
+    
+    span {
+      font-size: 0.9rem;
+      color: rgba(255, 255, 255, 0.6);
+      margin-left: 8px;
+    }
+  }
+}
+
+/* 2. SLOTS GRID - The container for hour blocks */
+.slotsGrid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(85px, 1fr));
+  gap: 10px;
+}
+
+/* 3. TIME SLOT - Interactive 3D micro-button */
+.timeSlot {
+  background: rgba(255, 255, 255, 0.08) !important;
+  border: 1px solid rgba(255, 255, 255, 0.15) !important;
+  color: #ffffff !important;
+  border-radius: 10px !important;
+  padding: 10px 0 !important;
+  font-weight: 500 !important;
+  font-size: 0.9rem !important;
+  cursor: pointer;
+  text-align: center;
+  transition: all 0.2s cubic-bezier(0.25, 1, 0.5, 1) !important;
+  
+  /* Subtle 3D look for the slot itself */
+  box-shadow: 
+    inset 1px 1px 0px rgba(255, 255, 255, 0.2),
+    0 2px 6px rgba(0, 0, 0, 0.15);
+
+  &:hover {
+    background: rgba(255, 255, 255, 0.15) !important;
+    border-color: v.$color-accent-blue !important;
+    transform: translateY(-3px) scale(1.03) !important; /* Pop-out 3D effect */
+    box-shadow: 
+      0 6px 16px rgba(59, 130, 246, 0.35),
+      inset 1px 1px 0px rgba(255, 255, 255, 0.3);
+  }
+
+  &:active {
+    transform: translateY(-1px) !important;
+    box-shadow: 0 2px 6px rgba(59, 130, 246, 0.2);
+  }
+}
+
+/* 4. ACTIVE SLOT - Glass emerald green 3D glow */
+.timeSlotActive {
+  background: rgba(16, 185, 129, 0.25) !important;
+  border-color: #10b981 !important;
+  color: #10b981 !important;
+  transform: scale(1.02);
+  box-shadow: 
+    0 0 15px rgba(16, 185, 129, 0.4),
+    inset 1px 1px 0px rgba(255, 255, 255, 0.2) !important;
+}
+
+/* 5. SAVE TO SCHEDULE BUTTON - Direct timeline confirmation with 3D depth */
+.saveToScheduleBtn {
+  width: 100%;
+  padding: 14px;
+  margin-top: 10px;
+  border-radius: 12px;
+  font-size: 1rem;
+  font-weight: 600;
+  cursor: pointer;
+  border: 1px solid rgba(255, 255, 255, 0.1);
+  background: #3b82f6; /* Global accent blue theme color */
+  color: #ffffff;
+  transition: all 0.2s ease;
+  
+  /* Volumetric bottom shadow for physical 3D depth */
+  box-shadow: 
+    0 4px 0px #1d4ed8, 
+    0 8px 20px rgba(59, 130, 246, 0.4);
+
+  &:hover:not(:disabled) {
+    transform: translateY(-2px);
+    box-shadow: 
+      0 6px 0px #1d4ed8, 
+      0 12px 24px rgba(59, 130, 246, 0.5);
+  }
+
+  &:active:not(:disabled) {
+    transform: translateY(4px); /* Physically presses downwards */
+    box-shadow: 0 0px 0px transparent;
+  }
+
+  /* Disabled state when no slots are selected */
+  &:disabled {
+    background: rgba(255, 255, 255, 0.05);
+    color: rgba(255, 255, 255, 0.3);
+    border-color: rgba(255, 255, 255, 0.05);
+    cursor: not-allowed;
+    box-shadow: none;
+    transform: none;
+  }
+}

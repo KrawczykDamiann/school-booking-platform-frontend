@@ -25,5 +25,58 @@
     "success_title": "Sprawdź skrzynkę odbiorczą!",
     "success_text_start": "Wysłaliśmy bezpieczny link do logowania na adres ",
     "success_text_end": ". Kliknij link w wiadomości e-mail, aby się zalogować."
+  },
+  "auth": {
+    "callback": {
+      "verifying": "Weryfikuję Twój link, proszę czekać...",
+      "errorTitle": "Błąd autoryzacji",
+      "errorText": "Twój magic link jest nieprawidłowy lub wygasł. Spróbuj zalogować się ponownie.",
+      "backToLogin": "Powrót do logowania"
+    }
+  },
+  "calendar": {
+    "chooseTime": "Wybierz termin lekcji:",
+    "addToCart": "Dodaj do koszyka",
+    "addToCartCount": "Dodaj do koszyka ({{count}})",
+    "addedToStudentCart": "Dodano do Twojego planu zajęć (lekcje z: {{name}}):\n\n{{summary}}",
+    "days": {
+      "monday": "Poniedziałek",
+      "wednesday": "Środa"
+    }
+  },
+  "calendar": {
+  "chooseTime": "Wybierz termin lekcji:",
+  "saveToSchedule": "Zatwierdź terminy",
+  "saveToScheduleCount": "Zatwierdź terminy ({{count}})",
+  "addedToStudentSchedule": "Dodano bezpośrednio do Twojego kalendarza (lekcje z: {{name}}):\n\n{{summary}}",
+    "days": {
+      "monday": "Poniedziałek",
+      "wednesday": "Środa"
+    }
+  },
+  "subjects": {
+    "mathematics": "Matematyka",
+    "physics": "Fizyka",
+    "informatics": "Informatyka",
+    "economics": "Ekonomia",
+    "biology": "Biologia",
+    "chemistry": "Chemia"
+  },
+  "filters": {
+    "title": "Filtruj według przedmiotu",
+    "subtitle": "Wybierz interesującą Cię dyscyplinę, aby odfiltrować listę instruktorów",
+    "allSubjects": "Wszystkie przedmioty",
+    "buttonText": "Filtruj przedmioty",
+    "active": "Filtr"
+  },
+  "header": {
+    "welcome": "Witaj",
+    "tokens": "Tokenów",
+    "nextLesson": "Najbliższa lekcja:",
+    "with": "z"
+  },
+  "dates": {
+    "tomorrow": "Jutro"
   }
 }
+

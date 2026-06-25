@@ -1,28 +1,33 @@
+import React from "react";
 import { Routes, Route, Navigate } from "react-router-dom";
+import styles from "./App.module.scss";
+import { LanguageSwitcher } from "./components/LanguageSwitcher/LanguageSwitcher"; 
 import { LoginPage } from "./pages/LoginPage/LoginPage";
 import { InstructorListPage } from "./pages/InstructorListPage/InstructorListPage";
-import { LanguageSwitcher } from "./components/LanguageSwitcher/LanguageSwitcher";
-import "./App.scss";
+import { AuthCallback } from "./pages/AuthCallback/AuthCallback";
+import calendarIcon from "./components/icons/calendar.png"; 
 
 function App() {
   return (
-    <div className="app-container">
-      {/* Application header containing the dropdown language switcher at the top */}
-      <header className="app-header">
+    <div className={styles.appContainer}>
+      <header className={styles.appHeader}>
+        
+        {/* Interactive student schedule shortcut link */}
+        <div className={styles.calendarIconWrapper}>
+          <img src={calendarIcon} alt="Student Calendar" />
+          <span className={styles.badge}>3</span>
+        </div>
+
         <LanguageSwitcher />
+        
       </header>
 
-      {/* Main content area for rendering application pages */}
-      <main className="app-main">
+      <main className={styles.appMain}>
         <Routes>
-          {/* Przekierowanie ze strony głównej "/" bezpośrednio na logowanie */}
           <Route path="/" element={<Navigate to="/login" replace />} />
-
-          {/* Ekran logowania dostępny pod adresem: /login */}
           <Route path="/login" element={<LoginPage />} />
-
-          {/* Katalog instruktorów dostępny pod adresem: /instructors */}
           <Route path="/instructors" element={<InstructorListPage />} />
+          <Route path="/auth/callback" element={<AuthCallback />} />
         </Routes>
       </main>
     </div>

@@ -25,5 +25,58 @@
     "success_title": "Перевірте пошту!",
     "success_text_start": "Ми надіслали безпечне посилання для входу na ",
     "success_text_end": ". Перейдіть за посиланням в листі, щоб увійти."
+  },
+  "auth": {
+    "callback": {
+      "verifying": "Перевіряємо ваше магічне посилання, будь ласка, зачекайте...",
+      "errorTitle": "Помилка авторизації",
+      "errorText": "Ваше магічне посилання недійсне або термін його дії закінчився. Будь ласка, спробуйте увійти знову.",
+      "backToLogin": "Повернутися до входу"
+    }
+  },
+  "calendar": {
+    "chooseTime": "Виберіть час уроку:",
+    "addToCart": "Додати до кошика",
+    "addToCartCount": "Додати до кошика ({{count}})",
+    "addedToStudentCart": "Додано до вашого розкладу (уроки з {{name}}):\n\n{{summary}}",
+    "days": {
+      "monday": "Понеділок",
+      "wednesday": "Середа"
+    }
+  },
+  "calendar": {
+  "chooseTime": "Виберіть час уроку:",
+  "saveToSchedule": "Підтвердити розклад",
+  "saveToScheduleCount": "Підтвердити розклад ({{count}})",
+  "addedToStudentSchedule": "Додано безпосередньо до вашого календаря (уроки з {{name}}):\n\n{{summary}}",
+    "days": {
+      "monday": "Понеділок",
+      "wednesday": "Середа"
+    }
+  },
+  "subjects": {
+    "mathematics": "Математика",
+    "physics": "Фізика",
+    "informatics": "Інформатика",
+    "economics": "Економіка",
+    "biology": "Біологія",
+    "chemistry": "Хімія"
+  },
+  "filters": {
+    "title": "Фільтр за предметом",
+    "subtitle": "Виберіть дисципліну, яка вас цікавить, щоб відфільтрувати список викладачів",
+    "allSubjects": "Усі предмети",
+    "buttonText": "Фільтрувати предмети",
+    "active": "Фільтр"
+  },
+  "header": {
+    "welcome": "Вітаємо",
+    "tokens": "Токенів",
+    "nextLesson": "Найближчий урок:",
+    "with": "з"
+  },
+  "dates": {
+    "tomorrow": "Завтра"
   }
 }
+

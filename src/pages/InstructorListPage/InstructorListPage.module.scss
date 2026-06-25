@@ -1,0 +1,564 @@
+@use "../../styles/variables" as v;
+
+.instructorPageContainer {
+  padding: 24px;
+  min-height: 100vh;
+  font-family: v.$font-primary;
+  box-sizing: border-box;
+  position: relative;
+
+  /* Force full viewport width breakout layout */
+  width: 100vw;
+  left: 50%;
+  margin-left: -50vw;
+  overflow-x: hidden;
+
+  /* Background image canvas setup */
+  background-image: url("../../components/icons/Phantom.jpeg");
+  background-size: cover;
+  background-position: center;
+  background-repeat: no-repeat;
+  background-attachment: fixed;
+
+  /* Glassmorphic standalone floating logo badge structure */
+  .brandLogo {
+    position: absolute;
+    top: 24px;
+    left: 40px;
+    z-index: 100;
+
+    background-color: rgba(26, 32, 44, 0.6);
+    -webkit-backdrop-filter: blur(16px);
+    backdrop-filter: blur(16px);
+    padding: 10px 24px;
+    border-radius: 14px;
+    border: 1px solid rgba(255, 255, 255, 0.08);
+    box-shadow: v.$shadow-light;
+
+    display: flex;
+    align-items: center;
+    gap: 1px;
+    line-height: 1;
+
+    @media (max-width: v.$breakpoint-tablet) {
+      top: 16px;
+      left: 24px;
+      padding: 8px 18px;
+    }
+
+    .logoText {
+      font-size: 1.8rem; /* Restored to clean, classic baseline */
+      font-weight: 800;
+      letter-spacing: -0.04em;
+      background: linear-gradient(135deg, #ffffff 40%, #00f2fe 100%);
+      -webkit-background-clip: text;
+      background-clip: text;
+      -webkit-text-fill-color: transparent;
+      display: inline-block;
+
+      @media (max-width: v.$breakpoint-tablet) {
+        font-size: 1.3rem;
+      }
+    }
+
+    .logoDot {
+      font-size: 1.6rem;
+      font-weight: 800;
+      background: #00f2fe;
+      -webkit-background-clip: text;
+      background-clip: text;
+      -webkit-text-fill-color: transparent;
+      filter: drop-shadow(0 0 8px rgba(0, 242, 254, 0.8));
+      display: inline-block;
+
+      @media (max-width: v.$breakpoint-tablet) {
+        font-size: 1.3rem;
+      }
+    }
+  }
+
+  /* Frosted summary card glass layout wrapper */
+  .pageHeader {
+    text-align: center;
+    margin-bottom: 20px;
+    max-width: 560px;
+    margin-left: auto;
+    margin-right: auto;
+
+    background-color: rgba(26, 32, 44, 0.65);
+    -webkit-backdrop-filter: blur(12px);
+    backdrop-filter: blur(12px);
+    padding: 16px 28px 20px;
+    border-radius: 16px;
+    border: 1px solid rgba(255, 255, 255, 0.08);
+    box-shadow: v.$shadow-light;
+
+    @media (max-width: v.$breakpoint-tablet) {
+      padding: 16px 20px;
+      margin-top: 75px;
+    }
+
+    /* Account summary metrics horizontal header distribution */
+    .userStatusRow {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      width: 100%;
+      font-size: 0.85rem;
+      color: #e2e8f0;
+
+      .welcomeText {
+        strong {
+          color: #ffffff;
+          font-weight: 600;
+        }
+      }
+
+      /* Illuminated glass gold token badge capsule */
+      .tokenBadge {
+        display: flex;
+        align-items: center;
+        gap: 6px;
+        background: rgba(255, 215, 0, 0.06);
+        border: 1px solid rgba(255, 215, 0, 0.2);
+        padding: 4px 12px;
+        border-radius: 999px;
+        box-shadow: 0 0 10px rgba(255, 215, 0, 0.05);
+
+        .tokenIcon {
+          font-size: 0.95rem;
+          filter: drop-shadow(0 0 4px rgba(255, 215, 0, 0.4));
+        }
+
+        .tokenCount {
+          color: #ffd700;
+          font-size: 0.8rem;
+        }
+      }
+    }
+
+    .headerDivider {
+      border: none;
+      height: 1px;
+      background: linear-gradient(
+        90deg,
+        rgba(255, 255, 255, 0) 0%,
+        rgba(255, 255, 255, 0.08) 50%,
+        rgba(255, 255, 255, 0) 100%
+      );
+      margin: 12px 0;
+      width: 100%;
+    }
+
+    h1 {
+      font-size: 1.45rem;
+      color: #ffffff;
+      margin-top: 4px;
+      margin-bottom: 4px;
+      font-weight: 700;
+
+      @media (max-width: v.$breakpoint-tablet) {
+        font-size: 1.25rem;
+      }
+    }
+
+    p {
+      color: #cbd5e1;
+      font-size: 0.85rem;
+      margin-bottom: 0;
+    }
+
+    /* Cyan glowing notification ribbon container */
+    .upcomingLessonAlert {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 10px;
+      background: rgba(0, 242, 254, 0.04);
+      border: 1px solid rgba(0, 242, 254, 0.12);
+      padding: 6px 14px;
+      border-radius: 10px;
+      margin-top: 12px;
+      text-align: left;
+
+      p {
+        color: #e2e8f0;
+        font-size: 0.8rem;
+        line-height: 1.4;
+        margin-bottom: 0;
+
+        strong {
+          color: #ffffff;
+        }
+      }
+
+      .lessonTime {
+        color: #00f2fe;
+        font-weight: 600;
+      }
+
+      .pulseDot {
+        width: 6px;
+        height: 6px;
+        background-color: #00f2fe;
+        border-radius: 50%;
+        flex-shrink: 0;
+        box-shadow: 0 0 0 0 rgba(0, 242, 254, 0.7);
+        animation: pulseAnimation 2s infinite;
+      }
+    }
+
+    .filterTriggerBtn {
+      background: rgba(255, 255, 255, 0.05);
+      -webkit-backdrop-filter: blur(10px);
+      backdrop-filter: blur(10px);
+      border: 1px solid rgba(255, 255, 255, 0.1);
+      color: #ffffff;
+      padding: 8px 18px;
+      border-radius: 20px;
+      font-weight: 500;
+      font-size: 0.85rem;
+      cursor: pointer;
+      margin-top: 12px;
+      display: inline-block;
+      transition: all 0.2s cubic-bezier(0.25, 1, 0.5, 1);
+      box-shadow:
+        inset 1px 1px 0px rgba(255, 255, 255, 0.1),
+        0 4px 12px rgba(0, 0, 0, 0.2);
+
+      &:hover {
+        background: rgba(255, 255, 255, 0.12);
+        border-color: rgba(255, 255, 255, 0.25);
+        transform: translateY(-2px);
+        box-shadow:
+          0 6px 16px rgba(255, 255, 255, 0.05),
+          inset 1px 1px 0px rgba(255, 255, 255, 0.15);
+      }
+
+      &:active {
+        transform: translateY(0);
+      }
+    }
+  }
+
+  /* Core container mapping out the visual boundaries of the 3D projection area */
+  .carousel2dScene {
+    position: relative;
+    width: 100%;
+    height: 500px;
+    margin: 130px auto 20px; /* FIXED: Increased top margin avoids active card collisions */
+    transition:
+      transform 0.3s ease-in-out,
+      margin 0.3s ease-in-out;
+
+    @media (max-width: 1300px) and (min-width: 769px) {
+      margin: 20px auto 0px !important;
+      height: 640px !important;
+      transform: scale(0.82);
+      transform-origin: top center;
+    }
+
+    @media (max-width: v.$breakpoint-tablet) {
+      height: auto !important;
+      margin: 32px auto !important;
+    }
+  }
+
+  /* Radial coordinate calculation staging anchor node */
+  .carousel2dCircle {
+    position: absolute;
+    top: 50%;
+    left: 50%;
+
+    @media (max-width: v.$breakpoint-tablet) {
+      position: static !important;
+      display: flex !important;
+      flex-direction: column !important;
+      gap: 16px !important;
+      width: 100% !important;
+      max-width: 480px !important;
+      margin: 0 auto !important;
+    }
+  }
+
+  /* Internal navigation control wrappers bound relative to the active matrix wrapper */
+  .carouselControls {
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    width: 100%;
+    max-width: 1180px;
+    min-width: 880px;
+    display: flex;
+    justify-content: space-between;
+    padding: 0 24px;
+    box-sizing: border-box;
+    pointer-events: none;
+    z-index: 20;
+
+    @media (max-width: 1300px) and (min-width: 769px) {
+      max-width: 740px !important;
+    }
+
+    @media (max-width: v.$breakpoint-tablet) {
+      display: none !important;
+    }
+
+    .controlBtn {
+      pointer-events: auto;
+      width: 64px;
+      height: 64px;
+      border-radius: 50%;
+      background-color: transparent;
+      border: 1px solid v.$color-border;
+      color: v.$color-bg-light;
+      font-size: 36px;
+      cursor: pointer;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      box-shadow: v.$shadow-light;
+      transition: v.$transition-smooth;
+      padding-bottom: 4px;
+
+      &:hover {
+        background-color: v.$color-primary;
+        color: v.$color-bg-main;
+        border-color: v.$color-primary-hover;
+      }
+
+      &:active {
+        transform: scale(0.92);
+      }
+    }
+  }
+
+  /* Volumetric orb-shaded profile node items */
+  .instructorCard {
+    position: absolute;
+    width: 260px;
+    height: 260px;
+    border-radius: 50%;
+    cursor: pointer;
+    overflow: hidden;
+    box-sizing: border-box;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    text-align: center;
+
+    background-image:
+      radial-gradient(
+        circle at 35% 35%,
+        rgba(255, 255, 255, 0.28) 0%,
+        rgba(0, 0, 0, 0.35) 65%,
+        rgba(0, 0, 0, 0.82) 100%
+      ),
+      url("../../components/icons/Luma.jpeg");
+    background-size: cover;
+    background-position: center;
+    background-blend-mode: overlay;
+
+    border: 1px solid rgba(255, 255, 255, 0.08);
+    box-shadow:
+      inset -12px -12px 30px rgba(0, 0, 0, 0.75),
+      inset 15px 15px 35px rgba(255, 255, 255, 0.22),
+      0 20px 45px rgba(0, 0, 0, 0.55);
+
+    transition:
+      transform 0.6s cubic-bezier(0.25, 1, 0.5, 1),
+      opacity 0.6s,
+      z-index 0.6s,
+      box-shadow 0.6s ease,
+      border-color 0.3s;
+
+    &Active {
+      border-color: v.$color-primary;
+      box-shadow:
+        inset -12px -12px 30px rgba(0, 0, 0, 0.8),
+        inset 15px 15px 35px rgba(255, 255, 255, 0.3),
+        0 25px 55px rgba(v.$color-primary, 0.35);
+      cursor: default;
+    }
+
+    &:hover:not(&Active) {
+      box-shadow:
+        inset -6px -6px 22px rgba(0, 0, 0, 0.65),
+        inset 22px 22px 40px rgba(255, 255, 255, 0.32),
+        0 30px 60px rgba(0, 0, 0, 0.75);
+    }
+
+    @media (max-width: v.$breakpoint-tablet) {
+      position: static !important;
+      transform: none !important;
+      width: 100% !important;
+      height: auto !important;
+      border-radius: 16px !important;
+      opacity: 1 !important;
+      z-index: 1 !important;
+      display: flex !important;
+      flex-direction: row !important;
+      align-items: center !important;
+      text-align: left !important;
+      gap: 16px !important;
+      justify-content: flex-start !important;
+      padding: 16px !important;
+
+      background-image: url("../../components/icons/Luma.jpeg") !important;
+      background-blend-mode: normal !important;
+      box-shadow: v.$shadow-light !important;
+      border: 1px solid v.$color-border !important;
+    }
+
+    .instructorAvatar {
+      width: 75px;
+      height: 75px;
+      border-radius: 50%;
+      object-fit: cover;
+      margin-bottom: 8px;
+      border: 3px solid rgba(255, 255, 255, 0.85);
+      box-shadow: 0 6px 14px rgba(0, 0, 0, 0.35);
+
+      @media (max-width: v.$breakpoint-tablet) {
+        width: 64px !important;
+        height: 64px !important;
+        margin-bottom: 0 !important;
+        border: 3px solid v.$color-bg-light !important;
+        box-shadow: none !important;
+        flex-shrink: 0;
+      }
+    }
+
+    .instructorInfo {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      width: 92%;
+
+      background: rgba(26, 32, 44, 0.45);
+      -webkit-backdrop-filter: blur(6px);
+      backdrop-filter: blur(6px);
+      padding: 12px 8px;
+      border-radius: 20px;
+      border: 1px solid rgba(255, 255, 255, 0.06);
+
+      @media (max-width: v.$breakpoint-tablet) {
+        align-items: flex-start !important;
+        width: 100% !important;
+        background: transparent !important;
+        -webkit-backdrop-filter: none !important;
+        backdrop-filter: none !important;
+        border: none !important;
+        padding: 0 !important;
+      }
+
+      .instructorName {
+        font-size: 1.15rem;
+        font-weight: 600;
+        color: #ffffff;
+        margin: 0 0 4px 0;
+        white-space: nowrap;
+        overflow: hidden;
+        text-overflow: ellipsis;
+        width: 90%;
+
+        @media (max-width: v.$breakpoint-tablet) {
+          color: v.$color-text-dark;
+          text-align: left !important;
+          margin-bottom: 2px !important;
+        }
+      }
+
+      .instructorSpecialization {
+        font-size: 0.8rem;
+        font-weight: 500;
+        color: #e2e8f0;
+        background-color: rgba(255, 255, 255, 0.12);
+        padding: 2px 10px;
+        border-radius: 999px;
+        display: inline-block;
+        margin: 0 0 8px 0;
+
+        @media (max-width: v.$breakpoint-tablet) {
+          color: v.$color-text-muted;
+          background-color: v.$color-bg-pill;
+          margin-bottom: 6px !important;
+        }
+      }
+
+      .instructorEmailButton {
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        width: 38px;
+        height: 38px;
+        border-radius: 50%;
+        background-color: rgba(255, 255, 255, 0.15);
+        color: #ffffff;
+        transition:
+          background-color 0.2s,
+          color 0.2s,
+          transform 0.1s;
+        text-decoration: none;
+        border: 1px solid rgba(255, 255, 255, 0.1);
+
+        .mailIcon {
+          width: 16px;
+          height: 16px;
+        }
+
+        &:hover {
+          background-color: v.$color-primary;
+          color: v.$color-bg-main;
+          transform: scale(1.05);
+          border-color: v.$color-primary;
+        }
+
+        @media (max-width: v.$breakpoint-tablet) {
+          background-color: v.$color-bg-light;
+          color: v.$color-primary;
+          border: none;
+        }
+      }
+    }
+  }
+}
+
+/* Modal intercept tracking fallback backdrop sheet */
+.loadingContainer {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  min-height: 100vh;
+  width: 100vw;
+  background-color: rgba(26, 32, 44, 0.95);
+  position: fixed;
+  top: 0;
+  left: 0;
+  z-index: 9999;
+
+  h1 {
+    color: #ffffff;
+    font-size: 1.5rem;
+    font-weight: 500;
+    font-family: v.$font-primary;
+  }
+}
+
+/* Periodic visual loop sequence mapping active warning pulses */
+@keyframes pulseAnimation {
+  0% {
+    transform: scale(0.95);
+    box-shadow: 0 0 0 0 rgba(0, 242, 254, 0.5);
+  }
+  70% {
+    transform: scale(1);
+    box-shadow: 0 0 0 6px rgba(0, 242, 254, 0);
+  }
+  100% {
+    transform: scale(0.95);
+    box-shadow: 0 0 0 0 rgba(0, 242, 254, 0);
+  }
+}

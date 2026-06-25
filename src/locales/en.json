@@ -25,5 +25,58 @@
     "success_title": "Check your inbox!",
     "success_text_start": "We have sent a secure magic login link to ",
     "success_text_end": ". Click the link in the email to log in."
+  },
+  "auth": {
+    "callback": {
+      "verifying": "Verifying your magic link, please wait...",
+      "errorTitle": "Authentication Error",
+      "errorText": "Your magic link is invalid or has expired. Please try logging in again.",
+      "backToLogin": "Back to Login"
+    }
+  },
+  "calendar": {
+    "chooseTime": "Choose a lesson time:",
+    "addToCart": "Add to cart",
+    "addToCartCount": "Add to cart ({{count}})",
+    "addedToStudentCart": "Added to your schedule (lessons with {{name}}):\n\n{{summary}}",
+    "days": {
+      "monday": "Monday",
+      "wednesday": "Wednesday"
+    }
+  },
+  "calendar": {
+  "chooseTime": "Choose a lesson time:",
+  "saveToSchedule": "Confirm Schedule",
+  "saveToScheduleCount": "Confirm Schedule ({{count}})",
+  "addedToStudentSchedule": "Added directly to your personal calendar (lessons with {{name}}):\n\n{{summary}}",
+    "days": {
+      "monday": "Monday",
+      "wednesday": "Wednesday"
+    }
+  },
+  "subjects": {
+    "mathematics": "Mathematics",
+    "physics": "Physics",
+    "informatics": "Informatics",
+    "economics": "Economics",
+    "biology": "Biology",
+    "chemistry": "Chemistry"
+  },
+  "filters": {
+    "title": "Filter by Subject",
+    "subtitle": "Select a discipline to narrow down the instructor list",
+    "allSubjects": "All Subjects",
+    "buttonText": "Filter Subjects",
+    "active": "Filter"
+  },
+  "header": {
+    "welcome": "Welcome",
+    "tokens": "Tokens",
+    "nextLesson": "Next lesson:",
+    "with": "with"
+  },
+  "dates": {
+    "tomorrow": "Tomorrow"
   }
 }
+
