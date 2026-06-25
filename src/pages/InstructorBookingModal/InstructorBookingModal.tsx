@@ -1,4 +1,3 @@
-import React from 'react';
 import styles from './InstructorBookingModal.module.scss';
 import { BookingCalendar } from '../BookingCalendar/BookingCalendar';
 import { useTranslation } from 'react-i18next';

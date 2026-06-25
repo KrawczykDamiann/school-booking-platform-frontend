@@ -1,4 +1,3 @@
-import React from "react";
 import { Routes, Route, Navigate } from "react-router-dom";
 import styles from "./App.module.scss";
 import { LanguageSwitcher } from "./components/LanguageSwitcher/LanguageSwitcher"; 
