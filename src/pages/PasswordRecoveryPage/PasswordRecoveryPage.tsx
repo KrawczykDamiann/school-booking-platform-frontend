@@ -22,7 +22,7 @@ export const PasswordRecoveryPage: React.FC = () => {
         {!isEmailSent && (
           <div className={styles.header}>
             <button
-              onClick={() => navigate("/authorization")}
+              onClick={() => navigate("/business-auth")}
               className={styles.buttonBack}
             >
               ←
