@@ -6,6 +6,7 @@ import eyeOffIcon from "../../assets/EyeOffIcon.svg";
 import eyeIcon from "../../assets/EyeIcon.svg";
 import { login } from "../../api/auth";
 import { tokenService } from "../../utils/tokenService";
+import axios from "axios";
 
 export const SignInForm: React.FC = () => {
   const [email, setEmail] = useState("");
@@ -56,25 +57,26 @@ export const SignInForm: React.FC = () => {
         password,
       });
 
-      if (response.status === 401) {
-        setServerError("Invalid email or password");
-
-        return;
-      }
-
-      if (response.status === 400) {
-        setServerError("Validation error");
-
-        return;
-      }
-
       tokenService.save(response.data);
 
       navigate("/admin-dashboard");
     } catch (error) {
-      if (error instanceof Error) {
+      if (axios.isAxiosError(error)) {
+        if (error.response?.status === 403) {
+          setServerError("Invalid email or password");
+          return;
+        }
+
+        if (error.response?.status === 400) {
+          setServerError("Validation error");
+          return;
+        }
+
         setServerError("Something went wrong");
+        return;
       }
+
+      setServerError("Unknown error");
     }
   };
 

@@ -5,6 +5,8 @@ import { LoginPage } from "./pages/LoginPage/LoginPage";
 import { InstructorListPage } from "./pages/InstructorListPage/InstructorListPage";
 import { AuthCallback } from "./pages/AuthCallback/AuthCallback";
 import calendarIcon from "./components/icons/calendar.png"; 
+import { AuthForm } from "./features/AuthForm/AuthForm";
+import { PasswordRecoveryPage } from "./pages/PasswordRecoveryPage/PasswordRecoveryPage";
 
 function App() {
   return (
@@ -27,6 +29,10 @@ function App() {
           <Route path="/login" element={<LoginPage />} />
           <Route path="/instructors" element={<InstructorListPage />} />
           <Route path="/auth/callback" element={<AuthCallback />} />
+
+          {/* Temporary pages */}
+          <Route path="/business-auth" element={<AuthForm />} />
+          <Route path="/recovery-password" element={<PasswordRecoveryPage />} />
         </Routes>
       </main>
     </div>
