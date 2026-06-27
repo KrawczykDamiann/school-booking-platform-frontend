@@ -32,7 +32,7 @@ function App() {
 
           {/* Temporary pages */}
           <Route path="/business-auth" element={<AuthForm />} />
-          <Route path="/recovery-password" element={<PasswordRecoveryPage />} />
+          <Route path="/password-recovery" element={<PasswordRecoveryPage />} />
         </Routes>
       </main>
     </div>
