@@ -8,14 +8,14 @@ interface LoginModalProps {
 
 export default function LoginModal({ onClose }: LoginModalProps) {
   // State to store the email input value
-  const [email, setEmail] = useState<string>("");
-  
+  const [email, setEmail] = useState<string>(" ");
+
   // State to manage loading spinner/disabled status during API call
   const [isLoading, setIsLoading] = useState<boolean>(false);
-  
+
   // State to handle and display any submission errors
   const [error, setError] = useState<string | null>(null);
-  
+
   // State to toggle success view inside the modal
   const [isSubmitted, setIsSubmitted] = useState<boolean>(false);
 
@@ -30,7 +30,7 @@ export default function LoginModal({ onClose }: LoginModalProps) {
       await axios.post(`${import.meta.env.VITE_API_URL}/api/auth/magic-link`, {
         email,
       });
-      
+
       // If successful, switch to the success confirmation view
       setIsSubmitted(true);
     } catch (err) {
@@ -49,10 +49,10 @@ export default function LoginModal({ onClose }: LoginModalProps) {
           <button className={styles.closeBtn} onClick={onClose}>
             ✕
           </button>
-          <div style={{ textAlign: "center", padding: "30px 20px" }}>
-            <span style={{ fontSize: "40px" }}>✉️</span>
-            <h2 style={{ marginTop: "15px" }}>Check your email!</h2>
-            <p style={{ color: "#666", marginTop: "10px" }}>
+          <div className={styles.successContent}>
+            <span className={styles.successIcon}>✉️</span>
+            <h2 className={styles.successTitle}>Check your email!</h2>
+            <p className={styles.successText}>
               We have sent a magic link to <strong>{email}</strong>.
             </p>
           </div>
@@ -67,7 +67,7 @@ export default function LoginModal({ onClose }: LoginModalProps) {
         <button className={styles.closeBtn} onClick={onClose}>
           ✕
         </button>
-        
+
         <h2 className={styles.title}>Student login</h2>
         <p className={styles.subtitle}>Please provide information about you</p>
 
@@ -75,12 +75,12 @@ export default function LoginModal({ onClose }: LoginModalProps) {
           <div className={styles.inputGroup}>
             <label>Contact</label>
             <div className={styles.inputWrapper}>
-              <input 
-                type="email" 
-                placeholder="studentemail@gmail.com" 
+              <input
+                type="email"
+                placeholder="studentemail@gmail.com"
                 value={email}
                 onChange={(e) => setEmail(e.target.value)}
-                required 
+                required
                 disabled={isLoading}
               />
             </div>
@@ -92,15 +92,20 @@ export default function LoginModal({ onClose }: LoginModalProps) {
           </label>
 
           {/* Displaying backend error if something goes wrong */}
-          {error && <p style={{ color: "#e74c3c", fontSize: "14px", margin: "10px 0" }}>{error}</p>}
+          {error && <p className={styles.errorMessage}>{error}</p>}
 
-          <button type="submit" className={styles.submitBtn} disabled={isLoading}>
+          <button
+            type="submit"
+            className={styles.submitBtn}
+            disabled={isLoading}
+          >
             {isLoading ? "Sending..." : "Confirm"}
           </button>
         </form>
 
         <div className={styles.footerNote}>
-          <span className={styles.infoIcon}>ⓘ</span> We will send you a magic link to confirm your email
+          <span className={styles.infoIcon}>ⓘ</span> We will send you a magic
+          link to confirm your email
         </div>
       </div>
     </div>

@@ -62,10 +62,15 @@
   box-sizing: border-box;
 }
 
+/* index.css */
 body {
   margin: 0;
+  padding: 0;
+  background-color: #f7f9fc; /* Jasnoszare tło z Figmy */
+  color: #1a1a1a;
+  font-family: 'Inter', system-ui, -apple-system, sans-serif; /* Czysty font */
+  -webkit-font-smoothing: antialiased;
 }
-
 h1,
 h2 {
   font-family: var(--heading);
