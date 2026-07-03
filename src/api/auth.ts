@@ -13,11 +13,9 @@ export async function login(data: LoginPostBody) {
     return response.data;
   } catch (error) {
     if (axios.isAxiosError(error)) {
-      throw error;
+      throw new Error(error.response?.data.message || "Log in failed", {
+        cause: error,
+      });
     }
-
-    throw new Error("Unknown error", {
-      cause: error,
-    });
   }
 }

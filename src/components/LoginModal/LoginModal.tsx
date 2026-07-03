@@ -8,7 +8,7 @@ interface LoginModalProps {
 
 export default function LoginModal({ onClose }: LoginModalProps) {
   // State to store the email input value
-  const [email, setEmail] = useState<string>("");
+  const [email, setEmail] = useState<string>(" ");
   
   // State to manage loading spinner/disabled status during API call
   const [isLoading, setIsLoading] = useState<boolean>(false);
@@ -49,10 +49,10 @@ export default function LoginModal({ onClose }: LoginModalProps) {
           <button className={styles.closeBtn} onClick={onClose}>
             ✕
           </button>
-          <div style={{ textAlign: "center", padding: "30px 20px" }}>
-            <span style={{ fontSize: "40px" }}>✉️</span>
-            <h2 style={{ marginTop: "15px" }}>Check your email!</h2>
-            <p style={{ color: "#666", marginTop: "10px" }}>
+          <div className={styles.successContent}>
+            <span className={styles.successIcon}>✉️</span>
+            <h2 className={styles.successTitle}>Check your email!</h2>
+            <p className={styles.successText}>
               We have sent a magic link to <strong>{email}</strong>.
             </p>
           </div>
@@ -92,7 +92,7 @@ export default function LoginModal({ onClose }: LoginModalProps) {
           </label>
 
           {/* Displaying backend error if something goes wrong */}
-          {error && <p style={{ color: "#e74c3c", fontSize: "14px", margin: "10px 0" }}>{error}</p>}
+          {error && <p className={styles.errorMessage}>{error}</p>}
 
           <button type="submit" className={styles.submitBtn} disabled={isLoading}>
             {isLoading ? "Sending..." : "Confirm"}

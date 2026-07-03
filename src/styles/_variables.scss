@@ -1,44 +1,36 @@
-// ==========================================================================
-// LESSIO - DESIGN SYSTEM VARIABLES
-// ==========================================================================
+// src/styles/_variables.scss
 
-// --------------------------------------------------------------------------
-// 1. BRAND & ACCENT COLORS
-// --------------------------------------------------------------------------
-$color-primary:         #3182ce; // Standard Lessio blue
-$color-primary-hover:   #2b6cb0;
-$color-accent-blue:     #3b82f6; // Glassmorphism button blue
-$color-accent-hover:    #2563eb;
+// ==========================================
+// NOWA PALETA KOLORÓW (UI KIT)
+// ==========================================
 
-// --------------------------------------------------------------------------
-// 2. NEUTRAL & BACKGROUND COLORS
-// --------------------------------------------------------------------------
-$color-bg-main:         #ffffff;
-$color-bg-light:        #f0f4f8;
-$color-bg-pill:         #edf2f7;
-$color-border:          #e0e0e0;
+// Główny kolor marki (Zielony przycisków i zaznaczeń)
+$color-primary: #1b7a5d; 
+$color-primary-hover: #145e47;
 
-// --------------------------------------------------------------------------
-// 3. TYPOGRAPHY & TEXT COLORS
-// --------------------------------------------------------------------------
-$font-primary:          sans-serif;
+// Akcenty (Koralowy/Pomarańczowy)
+$color-accent: #f26b4d; 
+$color-accent-light: #fef0ed;
 
-$color-text-dark:       #1a202c;
-$color-text-medium:     #333333;
-$color-text-muted:      #4a5568;
-$color-text-light:      #666666;
-$color-text-glass-dark: #595b5d; // Damian's high-visibility dark font
+// Tła i karty
+$color-bg-main: #f7f9fc;    // Jasnoszare tło całej aplikacji
+$color-bg-card: #ffffff;    // Śnieżnobiałe tło paneli i modali
+$color-bg-overlay: rgba(255, 255, 255, 0.6); // Rozmyte tło pod modalami
 
-// --------------------------------------------------------------------------
-// 4. SHADOWS & INTERACTION UTILS
-// --------------------------------------------------------------------------
-$shadow-light:          0 4px 6px rgba(0, 0, 0, 0.05);
-$shadow-hover:          0 8px 15px rgba(0, 0, 0, 0.1);
-$transition-smooth:     transform 0.2s ease-in-out, box-shadow 0.2s ease-in-out;
+// Teksty
+$color-text-main: #1a1a1a;  // Ciemny grafit (nagłówki, główne teksty)
+$color-text-muted: #8c8c8c; // Szary (daty, opisy, placeholder)
+$color-text-light: #ffffff; // Biały tekst (na zielonych przyciskach)
 
-// --------------------------------------------------------------------------
-// 5. RESPONSIVE BREAKPOINTS
-// --------------------------------------------------------------------------
-$breakpoint-tablet:     768px;
-$breakpoint-desktop:    1024px;
-$breakpoint-desktop-lg: 1440px;
+// Obramowania i linie
+$color-border: #e6e6e6;
+$color-border-focus: #1b7a5d;
+
+// Cienie
+$shadow-sm: 0 2px 8px rgba(0, 0, 0, 0.04);
+$shadow-md: 0 12px 32px rgba(0, 0, 0, 0.08);
+
+// Zaokrąglenia
+$radius-sm: 8px;
+$radius-md: 16px;
+$radius-lg: 24px;
