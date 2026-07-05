@@ -6,7 +6,7 @@ function email(value: string) {
   const emailPattern = /^[\w.+-]+@([\w-]+\.){1,3}[\w-]{2,}$/;
 
   if (!emailPattern.test(value)) {
-    return 'Wrong format';
+    return 'Please enter a valid email';
   }
 
   return '';

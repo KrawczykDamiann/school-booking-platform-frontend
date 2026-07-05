@@ -12,6 +12,20 @@ $color-primary-hover: #145e47;
 $color-accent: #f26b4d; 
 $color-accent-light: #fef0ed;
 
+// Secondary
+$color-secondary: #FFF5E4;
+$color-secondary-shadow: #FFA17A;
+
+// Gray
+$color-black: #08060F;
+$color-gray80: #404043;
+$color-gray60: #87888A;
+$color-gray30: #B6B8BA;
+$color-gray30-transparent: #B7B7B733;
+$color-gray20: #E1E1E1;
+$color-gray10: #F3F3F3;
+$color-white: #FDFDFF;
+
 // Tła i karty
 $color-bg-main: #f7f9fc;    // Jasnoszare tło całej aplikacji
 $color-bg-card: #ffffff;    // Śnieżnobiałe tło paneli i modali
@@ -25,6 +39,13 @@ $color-text-light: #ffffff; // Biały tekst (na zielonych przyciskach)
 // Obramowania i linie
 $color-border: #e6e6e6;
 $color-border-focus: #1b7a5d;
+
+// System
+$color-system-error: #B34143;
+$color-system-success: #73AF50;
+$color-system-warning: #D3B84D;
+$color-system-info: #405790;
+
 
 // Cienie
 $shadow-sm: 0 2px 8px rgba(0, 0, 0, 0.04);
