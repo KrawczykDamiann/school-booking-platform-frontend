@@ -1,6 +1,11 @@
 import { useState } from "react";
 import axios from "axios";
 import styles from "./LoginModal.module.scss";
+import { Input } from "../ui/Input/Input";
+import { Checkbox } from "../ui/Checkbox/Checkbox";
+import emailIcon from "../../assets/email.svg";
+import warningIcon from "../../assets/warning.svg";
+import { validation } from "../../utils/validators";
 
 interface LoginModalProps {
   onClose: () => void;
@@ -14,16 +19,48 @@ export default function LoginModal({ onClose }: LoginModalProps) {
   const [isLoading, setIsLoading] = useState<boolean>(false);
 
   // State to handle and display any submission errors
+  const [hasConfirmedAge, setHasConfirmedAge] = useState<boolean>(false);
+
+  // State for server error and hasConfirmedAge error
   const [error, setError] = useState<string | null>(null);
+
+  const [emailError, setEmailError] = useState("");
 
   // State to toggle success view inside the modal
   const [isSubmitted, setIsSubmitted] = useState<boolean>(false);
 
+  const handleEmailChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+    setEmail(e.target.value);
+
+    if (emailError) {
+      setEmailError("");
+    }
+  };
+
+  // Regexp that checks email validity
+  const emailPattern = validation.emailPattern;
+
+  const handleEmailBlur = () => {
+    if (!email) {
+      return;
+    }
+
+    if (!emailPattern.test(email)) {
+      setEmailError("Wrong email format");
+    } else {
+      setEmailError("");
+    }
+  };
+
   // Function to handle the form submission
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
-    setIsLoading(true);
     setError(null);
+
+    if (!hasConfirmedAge) {
+      setError("Please confirm that you are at least 16 years old.");
+      return;
+    }
 
     try {
       // Sending the POST request to Kamil's backend magic-link endpoint
@@ -64,48 +101,59 @@ export default function LoginModal({ onClose }: LoginModalProps) {
   return (
     <div className={styles.overlay} onClick={onClose}>
       <div className={styles.modal} onClick={(e) => e.stopPropagation()}>
-        <button className={styles.closeBtn} onClick={onClose}>
-          ✕
-        </button>
-
-        <h2 className={styles.title}>Student login</h2>
+        <div className={styles.modalHeader}>
+          <h2 className={styles.title}>Student login</h2>
+          <button className={styles.closeBtn} onClick={onClose}>
+            ✕
+          </button>
+        </div>
         <p className={styles.subtitle}>Please provide information about you</p>
 
-        <form className={styles.form} onSubmit={handleSubmit}>
-          <div className={styles.inputGroup}>
-            <label>Contact</label>
-            <div className={styles.inputWrapper}>
-              <input
-                type="email"
-                placeholder="studentemail@gmail.com"
-                value={email}
-                onChange={(e) => setEmail(e.target.value)}
-                required
-                disabled={isLoading}
-              />
-            </div>
-          </div>
+        <form
+          className={styles.form}
+          onSubmit={handleSubmit}
+          id="student-login-form"
+        >
+          <Input
+            label="Contact"
+            type="email"
+            placeholder="studentemail@gmail.com"
+            value={email}
+            onChange={(e) => handleEmailChange(e)}
+            onBlur={handleEmailBlur}
+            required
+            disabled={isLoading}
+            error={emailError}
+            leftIcon={emailIcon}
+          />
 
-          <label className={styles.checkboxLabel}>
-            <input type="checkbox" required disabled={isLoading} />
-            <span>I confirm that I'm over 16 years old.</span>
-          </label>
+          <Checkbox
+            label="I confirm that I’m over 16 years old."
+            checked={hasConfirmedAge}
+            onChange={(e) => setHasConfirmedAge(e.target.checked)}
+            error={error}
+          />
 
           {/* Displaying backend error if something goes wrong */}
           {error && <p className={styles.errorMessage}>{error}</p>}
-
-          <button
-            type="submit"
-            className={styles.submitBtn}
-            disabled={isLoading}
-          >
-            {isLoading ? "Sending..." : "Confirm"}
-          </button>
         </form>
 
+        <button
+          type="submit"
+          form="student-login-form"
+          className={styles.submitBtn}
+          disabled={isLoading}
+        >
+          {isLoading ? "Sending..." : "Confirm"}
+        </button>
+
         <div className={styles.footerNote}>
-          <span className={styles.infoIcon}>ⓘ</span> We will send you a magic
-          link to confirm your email
+          <img
+            src={warningIcon}
+            alt="Warning icon"
+            className={styles.infoIcon}
+          />
+          We will send you a magic link to confirm your email
         </div>
       </div>
     </div>

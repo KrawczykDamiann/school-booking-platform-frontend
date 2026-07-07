@@ -1,13 +1,5 @@
 @use '../../styles/variables' as v;
 
-// Keep autofilled inputs visually consistent with the default input styles.
-input:-webkit-autofill,
-input:-webkit-autofill:hover,
-input:-webkit-autofill:focus {
-  -webkit-text-fill-color: v.$color-gray80;
-  -webkit-box-shadow: 0 0 0 1000px v.$color-white inset;
-}
-
 .wrapper {
     display: flex;
     flex-direction: column;
@@ -41,25 +33,10 @@ input:-webkit-autofill:focus {
     gap: 28px;
 }
 
-
-.inputField {
-    position: relative;
-    max-width: 100%;
-}
-
-.inputWrapper {
-    position: relative;
-}
-
-.inputField label {
-    position: absolute;
-    top: -8px;
-    left: 12px;
-    padding: 0 5px;
-    background: v.$color-white;
-    font-size: 12px;
-    line-height: 16px;
-    z-index: 1;
+.formOptions {
+    display: flex;
+    flex-direction: column;
+    gap: 24px;
 }
 
 .icon {
@@ -79,33 +56,6 @@ input:-webkit-autofill:focus {
   color: v.$color-system-error;
 }
 
-.input {
-    &::placeholder {
-        color: v.$color-gray60;
-    }
-}
-
-.input {
-    box-sizing: border-box;
-    background: v.$color-white;
-    border: 1px solid v.$color-gray20;
-    background: v.$color-white;
-    border-radius: 8px;
-    padding: 10px 32px;
-    height: 44px;
-    width: 100%;
-    outline: none;
-
-    color: v.$color-gray80;
-    font-size: 16px;
-    line-height: 24px;
-    font-weight: 400;
-
-    &:focus {
-        outline: 1px solid v.$color-gray80;
-    }
-}
-
 .toggleButton {
     border: none;
     background: none;
@@ -118,24 +68,6 @@ input:-webkit-autofill:focus {
     top: 50%;
     transform: translateY(-50%);
     padding: 0;
-}
-
-.inputError {
-    outline: 1px solid v.$color-system-error;
-}
-
-.labelError {
-    color: v.$color-system-error;
-}
-
-.error {
-    display: block;
-    text-align: left;
-    font-size: 12px;
-    line-height: 16px;
-    color: v.$color-system-error;
-    margin-top: 4px;
-    margin-left: 12px;
 }
 
 .serverError {
@@ -173,76 +105,6 @@ input:-webkit-autofill:focus {
     &:hover {
         color: v.$color-gray80;
     }
-}
-
-.checkboxField {
-    align-self: start;
-    height: 40px;
-    margin-top: 24px;
-}
-
-.checkboxField .error {
-    align-self: start;
-}
-
-.container {
-    display: block;
-    position: relative;
-    padding-left: 35px;
-    margin-bottom: 12px;
-    cursor: pointer;
-    font-size: 16px;
-    line-height: 150%;
-    color: v.$color-gray60;
-}
-
-.container input {
-    position: absolute;
-    opacity: 0;
-    cursor: pointer;
-    height: 0;
-    width: 0;
-}
-
-.checkmark {
-    position: absolute;
-    top: 0;
-    left: 0;
-    height: 18px;
-    width: 18px;
-    border-radius: 2px;
-    background-color: transparent;
-    border: 2px solid v.$color-primary;
-}
-
-.container:hover input ~ .checkmark {
-    background-color: #137B6B1A;
-}
-
-.container input:checked ~ .checkmark {
-        background-color: v.$color-primary;
-}
-
-.checkmark:after {
-    content: "";
-    position: absolute;
-    display: none;
-}
-
-.container input:checked ~ .checkmark:after {
-    display: block;
-}
-
-.container .checkmark:after {
-    left: 6px;
-    top: 1.5px;
-    width: 5px;
-    height: 12px;
-    border: solid v.$color-white;
-    border-width: 0 2px 2px 0;
-    -webkit-transform: rotate(45deg);
-    -ms-transform: rotate(45deg);
-    transform: rotate(45deg);
 }
 
 .button {

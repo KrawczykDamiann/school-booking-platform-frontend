@@ -5,23 +5,21 @@ import { login } from "../../api/auth";
 import { tokenService } from "../../utils/tokenService";
 import axios from "axios";
 import { validation } from "../../utils/validators";
-import eyeOffIcon from "../../assets/EyeOffIcon.svg";
-import eyeIcon from "../../assets/EyeIcon.svg";
 import emailIcon from "../../assets/email.svg";
-import passIcon from "../../assets/pass.svg";
+import passwordIcon from "../../assets/pass.svg";
+import { Input } from "../../components/ui/Input/Input";
+import { Checkbox } from "../../components/ui/Checkbox/Checkbox";
 
 export const AdminAuthForm: React.FC = () => {
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
-
-  const [showPassword, setShowPassword] = useState(false);
 
   const [emailError, setEmailError] = useState("");
   const [passwordError, setPasswordError] = useState("");
 
   const [serverError, setServerError] = useState("");
 
-  const [isTermsAccepted, setIsTermsAccepted] = useState(false);
+  const [isRememberMe, setIsRememberMe] = useState(false);
 
   const navigate = useNavigate();
 
@@ -35,7 +33,8 @@ export const AdminAuthForm: React.FC = () => {
     }
   };
 
-  const emailPattern = /^[\w.+-]+@([\w-]+\.){1,3}[\w-]{2,}$/;
+  // Regexp that checks email validity
+  const emailPattern = validation.emailPattern;
 
   const handleEmailBlur = () => {
     if (!email) {
@@ -110,76 +109,38 @@ export const AdminAuthForm: React.FC = () => {
       </span>
       <form onSubmit={handleSubmit} className={styles.form} id="login-form">
         <div className={styles.inputsContainer}>
-          <div className={styles.inputField}>
-            <label
-              htmlFor="email"
-              className={`${styles.label} ${emailError ? styles.labelError : ""}`}
-            >
-              Email*
-            </label>
-            <img src={emailIcon} alt="Email icon" className={styles.icon} />
-            <input
-              type="email"
-              name="email"
-              id="email"
-              placeholder="admin@email.com"
-              className={`${styles.input} ${emailError && styles.inputError}`}
-              value={email}
-              onChange={(e) => handleEmailChange(e)}
-              onBlur={handleEmailBlur}
-            />
-            {emailError && <span className={styles.error}>{emailError}</span>}
-          </div>
-          <div className={styles.inputField}>
-            <label
-              htmlFor="password"
-              className={`${styles.label} ${passwordError ? styles.labelError : ""}`}
-            >
-              Password*
-            </label>
-            <img src={passIcon} alt="Password icon" className={styles.icon} />
-            <div className={styles.inputWrapper}>
-              <input
-                type={showPassword ? "text" : "password"}
-                name="password"
-                id="password"
-                placeholder="pass1234"
-                className={`${styles.input} ${passwordError && styles.inputError}`}
-                value={password}
-                onChange={(e) => handlePasswordChange(e)}
-              />
-              <button
-                type="button"
-                className={styles.toggleButton}
-                onClick={() => setShowPassword((prev) => !prev)}
-              >
-                <img
-                  src={showPassword ? eyeIcon : eyeOffIcon}
-                  alt="Show password"
-                />
-              </button>
-            </div>
-
-            {passwordError && (
-              <span className={styles.error}>{passwordError}</span>
-            )}
-          </div>
+          <Input
+            label="Email"
+            type="email"
+            placeholder="admin@email.com"
+            value={email}
+            onChange={(e) => handleEmailChange(e)}
+            onBlur={handleEmailBlur}
+            required
+            error={emailError}
+            leftIcon={emailIcon}
+          />
+          <Input
+            label="Password"
+            type="password"
+            placeholder="pass1234"
+            value={password}
+            onChange={(e) => handlePasswordChange(e)}
+            required
+            error={passwordError}
+            leftIcon={passwordIcon}
+          />
         </div>
-        <Link to="/password-recovery" className={styles.link} state={{ email }}>
-          Forgot your password?
-          <span className={styles.linkText}>Request recovery</span>
-        </Link>
-        <div className={styles.checkboxField}>
-          <label className={styles.container}>
-            Remember me
-            <input
-              type="checkbox"
-              id="remember-me"
-              checked={isTermsAccepted}
-              onChange={(e) => setIsTermsAccepted(e.target.checked)}
-            />
-            <span className={styles.checkmark}></span>
-          </label>
+        <div className={styles.formOptions}>
+          <Link to="/password-recovery" className={styles.link} state={{ email }}>
+            Forgot your password?
+            <span className={styles.linkText}>Request recovery</span>
+          </Link>
+          <Checkbox
+            label="Remember me"
+            checked={isRememberMe}
+            onChange={(e) => setIsRememberMe(e.target.checked)}
+          />
         </div>
       </form>
       <button

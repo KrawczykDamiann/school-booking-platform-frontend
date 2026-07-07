@@ -1,0 +1,76 @@
+@use '../../../styles/variables' as v;
+
+.checkboxWrapper {
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    height: 40px;
+}
+
+.checkboxField {
+    align-self: start;
+}
+
+.checkboxField .error {
+    align-self: start;
+}
+
+.checkboxContainer {
+    display: block;
+    position: relative;
+    padding-left: 35px;
+    cursor: pointer;
+    font-size: 16px;
+    line-height: 150%;
+    color: v.$color-gray60;
+}
+
+.checkboxContainer input {
+    position: absolute;
+    opacity: 0;
+    cursor: pointer;
+    height: 0;
+    width: 0;
+}
+
+.checkmark {
+    position: absolute;
+    top: 0;
+    left: 0;
+    height: 18px;
+    width: 18px;
+    border-radius: 2px;
+    background-color: transparent;
+    border: 2px solid v.$color-primary;
+}
+
+.checkboxContainer:hover input ~ .checkmark {
+    background-color: #137B6B1A;
+}
+
+.checkboxContainer input:checked ~ .checkmark {
+    background-color: v.$color-primary;
+}
+
+.checkmark:after {
+    content: "";
+    position: absolute;
+    display: none;
+}
+
+.checkboxContainer input:checked ~ .checkmark:after {
+    display: block;
+}
+
+.checkboxContainer .checkmark:after {
+    left: 6px;
+    top: 1px;
+    width: 5px;
+    height: 12px;
+    border: solid v.$color-white;
+    border-width: 0 2px 2px 0;
+    -webkit-transform: rotate(45deg);
+    -ms-transform: rotate(45deg);
+    transform: rotate(45deg);
+}

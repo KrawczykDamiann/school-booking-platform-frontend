@@ -2,9 +2,9 @@ import axios from "axios";
 import { api } from "./api";
 
 type LoginPostBody = {
-    email: string,
-    password: string,
-}
+  email: string;
+  password: string;
+};
 
 export async function login(data: LoginPostBody) {
   try {
@@ -17,5 +17,7 @@ export async function login(data: LoginPostBody) {
         cause: error,
       });
     }
+
+    throw error;
   }
 }

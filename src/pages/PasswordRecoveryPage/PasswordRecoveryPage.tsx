@@ -3,8 +3,9 @@ import styles from "./PasswordRecoveryPage.module.scss";
 import { useState } from "react";
 import returnIcon from "../../assets/return.svg";
 import emailIcon from "../../assets/email.svg";
-import infoIcon from "../../assets/info.svg";
+import warningIcon from "../../assets/warning.svg";
 import { validation } from "../../utils/validators";
+import { Input } from "../../components/ui/Input/Input";
 
 export const PasswordRecoveryPage: React.FC = () => {
   const navigate = useNavigate();
@@ -61,7 +62,9 @@ export const PasswordRecoveryPage: React.FC = () => {
       </div>
       <div className={styles.formWrapper}>
         {isEmailSent ? (
-          <h3 className={styles.title}>If account exists, it will receive a recovery link</h3>
+          <h3 className={styles.title}>
+            If account exists, it will receive a recovery link
+          </h3>
         ) : (
           <>
             <div className={styles.headerWrapper}>
@@ -88,36 +91,21 @@ export const PasswordRecoveryPage: React.FC = () => {
               id="recovery-password"
             >
               <div className={styles.inputsContainer}>
-                <div className={styles.inputField}>
-                  <label
-                    htmlFor="email"
-                    className={`${styles.label} ${emailError ? styles.labelError : ""}`}
-                  >
-                    Email*
-                  </label>
-                  <img
-                    src={emailIcon}
-                    alt="Email icon"
-                    className={styles.icon}
-                  />
-                  <input
-                    type="email"
-                    name="email"
-                    id="email"
-                    placeholder="admin@email.com"
-                    className={`${styles.input} ${emailError && styles.inputError}`}
-                    value={email}
-                    onChange={(e) => handleEmailChange(e)}
-                    onBlur={handleEmailBlur}
-                  />
-                  {emailError && (
-                    <span className={styles.error}>{emailError}</span>
-                  )}
-                </div>
+                <Input
+                  label="Email"
+                  type="email"
+                  placeholder="admin@email.com"
+                  value={email}
+                  onChange={(e) => handleEmailChange(e)}
+                  onBlur={handleEmailBlur}
+                  required
+                  error={emailError}
+                  leftIcon={emailIcon}
+                />
               </div>
               <div className={styles.infoContainer}>
                 <img
-                  src={infoIcon}
+                  src={warningIcon}
                   alt="Info icon"
                   className={styles.iconInfo}
                 />

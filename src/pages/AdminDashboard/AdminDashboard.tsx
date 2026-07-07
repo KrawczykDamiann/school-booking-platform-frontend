@@ -1,5 +1,5 @@
 export const AdminDashboard: React.FC = () => {
     return (
-        <h2>Admin Dashboard</h2>
+        <h2 style={{color: "black"}}>Admin Dashboard</h2>
     );
 }
