@@ -252,7 +252,10 @@ export const TeacherListPage: React.FC = () => {
                 <div className={styles.rowInputs}>
                   <div className={styles.inputGroup}>
                     <label>Collaboration type*</label>
-                    <select value={collabType} onChange={(e) => setCollabType(e.target.value as any)}>
+                    <select
+                      value={collabType}
+                      onChange={(e: React.ChangeEvent<HTMLSelectElement>) => setCollabType(e.target.value as 'Contract' | 'Freelance')}
+                    >
                       <option value="Contract">Contract</option>
                       <option value="Freelance">Freelance</option>
                     </select>
