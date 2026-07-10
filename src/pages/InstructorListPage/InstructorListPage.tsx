@@ -1,4 +1,3 @@
-import React, { useState } from "react";
 import styles from "./InstructorListPage.module.scss";
 
 interface Teacher {

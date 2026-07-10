@@ -5,10 +5,9 @@ import { AdminLoginPage } from "./pages/AdminLoginPage/AdminLoginPage";
 import { PasswordRecoveryPage } from "./pages/PasswordRecoveryPage/PasswordRecoveryPage";
 import { AdminDashboard } from "./pages/AdminDashboard/AdminDashboard";
 import { TeacherListPage } from './pages/TeacherListPage/TeacherListPage';
-// 1. Add import for the new booking page
 import { BookingLandingPage } from './pages/BookingLandingPage/BookingLandingPage';
 
-function App() {
+export default function App() {
   return (
     <Routes>
       <Route path="/" element={<Navigate to="/login" replace />} />
@@ -18,11 +17,7 @@ function App() {
       <Route path="/admin-dashboard" element={<AdminDashboard />} />
       <Route path="/instructors" element={<InstructorListPage />} />
       <Route path="/teachers" element={<TeacherListPage />} />
-      
-      {/* 2. Add route for the booking landing page */}
       <Route path="/booking" element={<BookingLandingPage />} />
     </Routes>
   );
 }
-
-export default App;
