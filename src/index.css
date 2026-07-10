@@ -1,4 +1,5 @@
 :root {
+  /* Theme variables */
   --text: #6b6375;
   --text-h: #08060d;
   --bg: #fff;
@@ -51,7 +52,8 @@
 }
 
 #root {
-  width: 1126px;
+  /* Changed from 1126px to 100% to ensure full screen mobile responsive behavior */
+  width: 100%;
   max-width: 100%;
   margin: 0 auto;
   text-align: center;
@@ -62,15 +64,15 @@
   box-sizing: border-box;
 }
 
-/* index.css */
 body {
   margin: 0;
   padding: 0;
-  background-color: #f7f9fc; /* Jasnoszare tło z Figmy */
+  background-color: #f7f9fc; 
   color: #1a1a1a;
-  font-family: 'Inter', system-ui, -apple-system, sans-serif; /* Czysty font */
+  font-family: 'Inter', system-ui, -apple-system, sans-serif; 
   -webkit-font-smoothing: antialiased;
 }
+
 h1,
 h2 {
   font-family: var(--heading);
@@ -87,6 +89,7 @@ h1 {
     margin: 20px 0;
   }
 }
+
 h2 {
   font-size: 24px;
   line-height: 118%;
@@ -96,6 +99,7 @@ h2 {
     font-size: 20px;
   }
 }
+
 p {
   margin: 0;
 }

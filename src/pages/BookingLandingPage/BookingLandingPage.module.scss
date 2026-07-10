@@ -1,0 +1,235 @@
+$primary-color: #0e7054;
+$text-dark: #1e293b;
+$text-light: #64748b;
+$bg-white: #ffffff;
+$breakpoint-md: 768px;
+$breakpoint-lg: 1024px;
+
+.landingContainer {
+  font-family: 'Inter', sans-serif;
+  background-color: #f8fafc;
+  min-height: 100vh;
+}
+
+// --- Navbar (Responsive) ---
+.navbar {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 1.25rem 2rem;
+  background-color: $bg-white;
+  border-bottom: 1px solid #e2e8f0;
+
+  .logo {
+    font-size: 1.5rem;
+    font-weight: 800;
+    color: $text-dark;
+    span { color: #e67e22; }
+  }
+
+  .navLinks {
+    display: flex;
+    align-items: center;
+    gap: 1.5rem;
+
+    a {
+      text-decoration: none;
+      color: $text-light;
+      font-weight: 500;
+      font-size: 0.95rem;
+      &:hover { color: $primary-color; }
+    }
+
+    @media (max-width: $breakpoint-md) {
+      a { display: none; } // Hidden on mobile for simple design
+    }
+  }
+}
+
+.loginBtn {
+  background-color: transparent;
+  border: 1px solid $primary-color;
+  color: $primary-color;
+  padding: 0.5rem 1.25rem;
+  border-radius: 20px;
+  font-weight: 600;
+  cursor: pointer;
+  transition: all 0.2s;
+
+  &:hover {
+    background-color: $primary-color;
+    color: white;
+  }
+}
+
+// --- Hero Section ---
+.heroSection {
+  background: linear-gradient(135deg, #f0fdf4 0%, #dcfce7 100%);
+  padding: 4rem 2rem;
+  text-align: center;
+}
+
+.heroContent {
+  max-width: 800px;
+  margin: 0 auto;
+
+  h1 {
+    font-size: 2.5rem;
+    color: $text-dark;
+    margin-bottom: 1rem;
+
+    @media (max-width: $breakpoint-md) {
+      font-size: 2rem;
+    }
+  }
+
+  p {
+    font-size: 1.1rem;
+    color: $text-light;
+    margin-bottom: 2.5rem;
+  }
+}
+
+// --- Search Bar (Flex/Grid Responsive Layout) ---
+.searchBar {
+  display: flex;
+  background: white;
+  padding: 0.5rem;
+  border-radius: 12px;
+  box-shadow: 0 10px 15px -3px rgba(0, 0, 0, 0.05);
+  gap: 0.5rem;
+
+  input, select {
+    border: none;
+    padding: 0.75rem 1rem;
+    font-size: 1rem;
+    outline: none;
+    color: $text-dark;
+  }
+
+  input { flex: 2; border-right: 1px solid #e2e8f0; }
+  select { flex: 1; background: transparent; cursor: pointer; }
+
+  button {
+    background-color: $primary-color;
+    color: white;
+    border: none;
+    padding: 0.75rem 1.5rem;
+    border-radius: 8px;
+    font-weight: 600;
+    cursor: pointer;
+    transition: opacity 0.2s;
+
+    &:hover { opacity: 0.9; }
+  }
+
+  @media (max-width: $breakpoint-md) {
+    flex-direction: column;
+    padding: 1rem;
+    
+    input, select {
+      border-right: none;
+      border-bottom: 1px solid #e2e8f0;
+    }
+  }
+}
+
+// --- Main Content Grid ---
+.mainContent {
+  max-width: 1200px;
+  margin: 0 auto;
+  padding: 3rem 2rem;
+}
+
+.sectionHeader {
+  margin-bottom: 2rem;
+  h2 { font-size: 1.75rem; color: $text-dark; margin: 0 0 0.25rem 0; }
+  p { margin: 0; color: $text-light; }
+}
+
+// --- Responsive Grid Layout ---
+.teachersGrid {
+  display: grid;
+  grid-template-columns: repeat(1, minmax(0, 1fr));
+  gap: 1.5rem;
+
+  @media (min-width: $breakpoint-md) {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+  }
+
+  @media (min-width: $breakpoint-lg) {
+    grid-template-columns: repeat(3, minmax(0, 1fr));
+  }
+}
+
+// --- Card Component ---
+.teacherCard {
+  background: white;
+  border-radius: 16px;
+  padding: 1.5rem;
+  border: 1px solid #e2e8f0;
+  box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.02);
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+}
+
+.cardHeader {
+  display: flex;
+  align-items: center;
+  gap: 1rem;
+  margin-bottom: 1.25rem;
+
+  h3 { margin: 0 0 0.25rem 0; font-size: 1.15rem; color: $text-dark; }
+}
+
+.avatarCircle {
+  width: 48px;
+  height: 48px;
+  background-color: #e2e8f0;
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-weight: 700;
+  color: $text-dark;
+}
+
+.subjectTag {
+  background-color: #f1f5f9;
+  color: $text-light;
+  padding: 0.25rem 0.5rem;
+  border-radius: 6px;
+  font-size: 0.8rem;
+  font-weight: 600;
+}
+
+.cardBody {
+  border-top: 1px solid #f1f5f9;
+  padding-top: 1rem;
+  margin-bottom: 1.25rem;
+}
+
+.infoRow {
+  display: flex;
+  justify-content: space-between;
+  margin-bottom: 0.5rem;
+  font-size: 0.95rem;
+  color: $text-light;
+
+  .rating, .price { font-weight: 600; color: $text-dark; }
+}
+
+.bookBtn {
+  width: 100%;
+  background-color: $primary-color;
+  color: white;
+  border: none;
+  padding: 0.75rem;
+  border-radius: 10px;
+  font-weight: 600;
+  cursor: pointer;
+  transition: background-color 0.2s;
+
+  &:hover { background-color: #0b5942; }
+}

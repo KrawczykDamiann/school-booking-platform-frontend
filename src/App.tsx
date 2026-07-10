@@ -1,28 +1,26 @@
 import { Routes, Route, Navigate } from "react-router-dom";
-// Importujemy nasze dwa nowe, jasne widoki:
 import LandingPage from "./pages/LandingPage/LandingPage";
 import InstructorListPage from "./pages/InstructorListPage/InstructorListPage";
 import { AdminLoginPage } from "./pages/AdminLoginPage/AdminLoginPage";
 import { PasswordRecoveryPage } from "./pages/PasswordRecoveryPage/PasswordRecoveryPage";
 import { AdminDashboard } from "./pages/AdminDashboard/AdminDashboard";
+import { TeacherListPage } from './pages/TeacherListPage/TeacherListPage';
+// 1. Add import for the new booking page
+import { BookingLandingPage } from './pages/BookingLandingPage/BookingLandingPage';
 
 function App() {
   return (
     <Routes>
-      {/* Jeśli użytkownik wejdzie na czysty adres, przekierowujemy go na /login */}
       <Route path="/" element={<Navigate to="/login" replace />} />
-      
-      {/* Nasz nowy Landing Page z modalem obsługuje adres /login */}
       <Route path="/login" element={<LandingPage />} />
-
       <Route path="/login/admin" element={<AdminLoginPage />} />
-
       <Route path="/password-recovery" element={<PasswordRecoveryPage />} />
-      
       <Route path="/admin-dashboard" element={<AdminDashboard />} />
-      
-      {/* Nowa tablica nauczycieli dostępna pod adresem /instructors */}
       <Route path="/instructors" element={<InstructorListPage />} />
+      <Route path="/teachers" element={<TeacherListPage />} />
+      
+      {/* 2. Add route for the booking landing page */}
+      <Route path="/booking" element={<BookingLandingPage />} />
     </Routes>
   );
 }

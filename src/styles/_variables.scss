@@ -1,22 +1,16 @@
-// src/styles/_variables.scss
-
-// ==========================================
-// NOWA PALETA KOLORÓW (UI KIT)
-// ==========================================
-
-// Główny kolor marki (Zielony przycisków i zaznaczeń)
+// UI Kit Color Palette
 $color-primary: #1b7a5d; 
 $color-primary-hover: #145e47;
 
-// Akcenty (Koralowy/Pomarańczowy)
+// Accent colors
 $color-accent: #f26b4d; 
 $color-accent-light: #fef0ed;
 
-// Secondary
+// Secondary colors
 $color-secondary: #FFF5E4;
 $color-secondary-shadow: #FFA17A;
 
-// Gray
+// Gray scale
 $color-black: #08060F;
 $color-gray80: #404043;
 $color-gray60: #87888A;
@@ -26,32 +20,31 @@ $color-gray20: #E1E1E1;
 $color-gray10: #F3F3F3;
 $color-white: #FDFDFF;
 
-// Tła i karty
-$color-bg-main: #f7f9fc;    // Jasnoszare tło całej aplikacji
-$color-bg-card: #ffffff;    // Śnieżnobiałe tło paneli i modali
-$color-bg-overlay: rgba(255, 255, 255, 0.6); // Rozmyte tło pod modalami
+// Backgrounds and cards
+$color-bg-main: #f7f9fc;    
+$color-bg-card: #ffffff;    
+$color-bg-overlay: rgba(255, 255, 255, 0.6); 
 
-// Teksty
-$color-text-main: #1a1a1a;  // Ciemny grafit (nagłówki, główne teksty)
-$color-text-muted: #8c8c8c; // Szary (daty, opisy, placeholder)
-$color-text-light: #ffffff; // Biały tekst (na zielonych przyciskach)
+// Text colors
+$color-text-main: #1a1a1a;  
+$color-text-muted: #8c8c8c; 
+$color-text-light: #ffffff; 
 
-// Obramowania i linie
+// Borders
 $color-border: #e6e6e6;
 $color-border-focus: #1b7a5d;
 
-// System
+// System statuses
 $color-system-error: #B34143;
 $color-system-success: #73AF50;
 $color-system-warning: #D3B84D;
 $color-system-info: #405790;
 
-
-// Cienie
+// Shadows
 $shadow-sm: 0 2px 8px rgba(0, 0, 0, 0.04);
 $shadow-md: 0 12px 32px rgba(0, 0, 0, 0.08);
 
-// Zaokrąglenia
+// Border radius
 $radius-sm: 8px;
 $radius-md: 16px;
 $radius-lg: 24px;

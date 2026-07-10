@@ -1,0 +1,512 @@
+@import "../../styles/variables";
+
+.dashboardContainer {
+  font-family: 'Inter', sans-serif;
+  background-color: $color-bg-main;
+  min-height: 100vh;
+  width: 100%;
+  overflow-x: hidden;
+}
+
+.topNav {
+  background-color: $color-white;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 0.75rem 1.5rem;
+  border-bottom: 1px solid $color-border;
+
+  .logo {
+    font-size: 1.5rem;
+    font-weight: 800;
+    color: $color-text-main;
+    span { color: $color-accent; }
+  }
+
+  .navLinks {
+    display: flex;
+    gap: 1.5rem;
+
+    button {
+      background: none;
+      border: none;
+      font-size: 0.95rem;
+      font-weight: 500;
+      color: $color-gray60;
+      cursor: pointer;
+      padding: 0.5rem;
+
+      &.activeTab {
+        color: $color-text-main;
+        border-bottom: 2px solid $color-text-main;
+      }
+    }
+
+    @media (max-width: 768px) {
+      display: none;
+    }
+  }
+
+  .userProfile {
+    background-color: $color-gray10;
+    width: 36px;
+    height: 36px;
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-weight: 600;
+    font-size: 0.85rem;
+    color: $color-text-main;
+  }
+}
+
+.mainContent {
+  display: flex;
+  flex-direction: row;
+  padding: 2rem;
+  gap: 2rem;
+  max-width: 1400px;
+  margin: 0 auto;
+  width: 100%;
+  box-sizing: border-box;
+
+  @media (max-width: 1024px) {
+    flex-direction: column;
+    padding: 1rem;
+    gap: 1rem;
+  }
+}
+
+.listSection {
+  flex: 1;
+  background: $color-white;
+  border-radius: $radius-md;
+  padding: 1.5rem;
+  box-shadow: $shadow-sm;
+  width: 100%;
+  box-sizing: border-box;
+  overflow: hidden;
+
+  @media (max-width: 480px) {
+    padding: 1rem;
+  }
+}
+
+.tableHeader {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 1.5rem;
+  gap: 1rem;
+
+  h2 {
+    font-size: 1.6rem;
+    margin: 0;
+    color: $color-text-main;
+  }
+
+  @media (max-width: 480px) {
+    flex-direction: column;
+    align-items: flex-start;
+  }
+}
+
+.addTeacherBtn {
+  background-color: $color-primary;
+  color: $color-text-light;
+  border: none;
+  padding: 0.6rem 1.2rem;
+  border-radius: 20px;
+  font-weight: 600;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  white-space: nowrap;
+
+  &:hover { background-color: $color-primary-hover; }
+}
+
+.tableWrapper {
+  width: 100%;
+  overflow-x: auto;
+  -webkit-overflow-scrolling: touch;
+}
+
+.teachersTable {
+  width: 100%;
+  border-collapse: collapse;
+  text-align: left;
+  min-width: 600px;
+
+  th {
+    padding: 0.75rem 1rem;
+    color: $color-gray60;
+    font-weight: 500;
+    font-size: 0.85rem;
+    border-bottom: 1px solid $color-border;
+  }
+
+  td {
+    padding: 1rem;
+    border-bottom: 1px solid $color-gray10;
+    font-size: 0.95rem;
+    color: $color-gray80;
+    vertical-align: middle;
+  }
+
+  .activeRow {
+    background-color: $color-gray10;
+  }
+
+  tr {
+    cursor: pointer;
+    &:hover { background-color: $color-gray10; }
+  }
+}
+
+.nameCell {
+  display: flex;
+  align-items: center;
+  gap: 0.75rem;
+  font-weight: 600;
+  color: $color-text-main;
+}
+
+.avatarMock {
+  width: 32px;
+  height: 32px;
+  border-radius: 50%;
+  background-color: $color-secondary;
+  color: $color-secondary-shadow;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 0.8rem;
+  font-weight: 700;
+}
+
+.subjectWrapper {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.5rem;
+}
+
+.colorDot {
+  width: 10px;
+  height: 10px;
+  border-radius: 50%;
+}
+
+.termsCell {
+  display: flex;
+  flex-direction: column;
+  .collabType { font-weight: 500; color: $color-text-main; }
+  .dueDate { font-size: 0.8rem; color: $color-gray60; }
+}
+
+.actionsCell {
+  text-align: right;
+  white-space: nowrap;
+  
+  .actionIconButton {
+    background: none;
+    border: none;
+    cursor: pointer;
+    padding: 0.25rem;
+    margin-left: 0.5rem;
+    opacity: 0.6;
+    &:hover { opacity: 1; }
+  }
+}
+
+.detailsCard {
+  width: 300px;
+  background: $color-white;
+  border-radius: $radius-md;
+  padding: 1.5rem;
+  position: relative;
+  box-shadow: $shadow-md;
+  align-self: flex-start;
+  box-sizing: border-box;
+
+  @media (max-width: 1024px) {
+    width: 100%;
+  }
+
+  .closeDetails {
+    position: absolute;
+    top: 1rem;
+    right: 1rem;
+    background: none;
+    border: none;
+    font-size: 1.2rem;
+    cursor: pointer;
+  }
+
+  h3 {
+    margin: 0 0 0.5rem 0;
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+    color: $color-text-main;
+  }
+
+  .miniDot {
+    width: 8px;
+    height: 8px;
+    border-radius: 50%;
+  }
+
+  .detailsEmail {
+    font-size: 0.85rem;
+    color: $color-text-muted;
+    margin-bottom: 1.5rem;
+  }
+}
+
+.nextLessonsSection {
+  background-color: $color-gray10;
+  border-radius: $radius-sm;
+  padding: 1rem;
+  margin-bottom: 1.5rem;
+
+  h4 { margin: 0 0 0.5rem 0; font-size: 0.9rem; color: $color-text-main; }
+  ul { padding-left: 1.2rem; margin: 0; font-size: 0.85rem; color: $color-gray80; }
+}
+
+.teacherPageLink {
+  color: $color-accent;
+  text-decoration: none;
+  font-weight: 600;
+  font-size: 0.9rem;
+  &:hover { text-decoration: underline; }
+}
+
+.modalOverlay {
+  position: fixed;
+  top: 0; left: 0; right: 0; bottom: 0;
+  background-color: $color-gray30-transparent;
+  backdrop-filter: blur(4px);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  z-index: 1000;
+  padding: 1rem;
+}
+
+.modalCard {
+  background: $color-white;
+  width: 100%;
+  max-width: 460px;
+  border-radius: $radius-lg;
+  padding: 2rem;
+  position: relative;
+  box-shadow: $shadow-md;
+  box-sizing: border-box;
+  max-height: 90vh;
+  overflow-y: auto;
+
+  @media (max-width: 480px) {
+    padding: 1.5rem;
+  }
+
+  .closeModal {
+    position: absolute;
+    top: 1.5rem;
+    right: 1.5rem;
+    background: none;
+    border: none;
+    font-size: 1.5rem;
+    cursor: pointer;
+  }
+
+  h3 {
+    margin: 0;
+    font-size: 1.4rem;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    color: $color-text-main;
+  }
+}
+
+.stepIndicator {
+  font-size: 0.8rem;
+  color: $color-text-muted;
+  font-weight: 400;
+}
+
+.subtitle {
+  font-size: 0.9rem;
+  color: $color-text-muted;
+  margin: 0.25rem 0 1.5rem 0;
+}
+
+.inputGroup {
+  display: flex;
+  flex-direction: column;
+  gap: 0.4rem;
+  margin-bottom: 1.2rem;
+
+  label {
+    font-size: 0.85rem;
+    font-weight: 600;
+    color: $color-text-main;
+  }
+
+  input, select {
+    padding: 0.75rem;
+    border: 1px solid $color-border;
+    border-radius: 10px;
+    font-size: 0.95rem;
+    outline: none;
+    background-color: $color-white;
+    color: $color-text-main;
+
+    &:focus { border-color: $color-border-focus; }
+  }
+}
+
+.selectWithColor {
+  position: relative;
+  display: flex;
+  align-items: center;
+  width: 100%;
+
+  select { width: 100%; padding-right: 2.5rem; }
+}
+
+.selectedColorPreview {
+  position: absolute;
+  right: 1rem;
+  width: 14px;
+  height: 14px;
+  border-radius: 50%;
+}
+
+.hint {
+  font-size: 0.75rem;
+  color: $color-text-muted;
+  margin: 0;
+}
+
+.colorPalette {
+  display: flex;
+  gap: 0.5rem;
+  margin-bottom: 1.5rem;
+  flex-wrap: wrap;
+}
+
+.paletteDot {
+  width: 24px;
+  height: 24px;
+  border-radius: 50%;
+  border: 2px solid transparent;
+  cursor: pointer;
+
+  &:hover { transform: scale(1.1); }
+}
+
+.activePaletteDot {
+  border-color: $color-black;
+  transform: scale(1.1);
+}
+
+.errorState {
+  input { border-color: $color-system-error; background-color: $color-accent-light; }
+}
+
+.errorText {
+  font-size: 0.8rem;
+  color: $color-system-error;
+  font-weight: 500;
+}
+
+.rowInputs {
+  display: flex;
+  gap: 1rem;
+  div { flex: 1; }
+  
+  @media (max-width: 480px) {
+    flex-direction: column;
+    gap: 0;
+  }
+}
+
+.sectionDivider {
+  font-size: 0.95rem;
+  border-bottom: 1px solid $color-border;
+  padding-bottom: 0.4rem;
+  margin: 1.5rem 0 1rem 0;
+  color: $color-text-muted;
+}
+
+.availabilityRow {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 1rem;
+  font-size: 0.95rem;
+  color: $color-text-main;
+  gap: 1rem;
+}
+
+.timeInputs {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+
+  input {
+    padding: 0.4rem;
+    border: 1px solid $color-border;
+    border-radius: 6px;
+    text-align: center;
+    background-color: $color-white;
+    color: $color-text-main;
+  }
+}
+
+.infoLink {
+  font-size: 0.8rem;
+  color: $color-text-muted;
+  margin-top: 1.5rem;
+  text-align: center;
+}
+
+.accentText {
+  color: $color-primary;
+  font-weight: 600;
+  cursor: pointer;
+}
+
+.primaryModalBtn {
+  background-color: $color-primary;
+  color: $color-text-light;
+  border: none;
+  width: 100%;
+  padding: 0.85rem;
+  border-radius: 12px;
+  font-weight: 600;
+  font-size: 1rem;
+  cursor: pointer;
+  margin-top: 1rem;
+
+  &:hover { background-color: $color-primary-hover; }
+}
+
+.secondaryModalBtn {
+  background: none;
+  border: 1px solid $color-border;
+  color: $color-gray60;
+  width: 100%;
+  padding: 0.85rem;
+  border-radius: 12px;
+  font-weight: 600;
+  font-size: 1rem;
+  cursor: pointer;
+  margin-top: 0.5rem;
+
+  &:hover { background-color: $color-gray10; }
+}

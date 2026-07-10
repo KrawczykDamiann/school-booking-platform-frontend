@@ -1,280 +1,329 @@
-@use "../../styles/variables" as v;
+@import "../../styles/variables";
 
 .dashboardContainer {
+  font-family: 'Inter', sans-serif;
+  background-color: $color-bg-main;
   min-height: 100vh;
-  background-color: v.$color-bg-main;
+  width: 100%;
   display: flex;
   flex-direction: column;
-  font-family: sans-serif;
+  overflow-x: hidden;
 }
 
-// NAWIGACJA
 .topNav {
+  background-color: $color-white;
   display: flex;
   justify-content: space-between;
   align-items: center;
-  background-color: v.$color-bg-card;
-  margin: 16px 24px;
-  padding: 12px 32px;
-  border-radius: v.$radius-lg;
-  box-shadow: v.$shadow-sm;
+  padding: 0.75rem 1.5rem;
+  border-bottom: 1px solid $color-border;
+  width: 100%;
+  box-sizing: border-box;
+
+  .logo {
+    font-size: 1.5rem;
+    font-weight: 800;
+    color: $color-text-main;
+    white-space: nowrap;
+    .logoAccent { color: $color-accent; }
+  }
+
+  .menuLinks {
+    display: flex;
+    gap: 1rem;
+
+    .navLink {
+      background: none;
+      border: none;
+      font-size: 0.95rem;
+      font-weight: 500;
+      color: $color-gray60;
+      cursor: pointer;
+      padding: 0.5rem;
+      white-space: nowrap;
+
+      &.activeLink {
+        color: $color-text-main;
+        font-weight: 600;
+      }
+    }
+
+    @media (max-width: 768px) {
+      display: none !important;
+    }
+  }
+
+  .userProfile {
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+
+    .avatarCircle {
+      background-color: $color-gray10;
+      width: 32px;
+      height: 32px;
+      border-radius: 50%;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-weight: 600;
+      font-size: 0.85rem;
+    }
+
+    .username {
+      font-size: 0.9rem;
+      color: $color-text-main;
+      white-space: nowrap;
+      @media (max-width: 480px) {
+        display: none !important;
+      }
+    }
+  }
 }
 
-.logo {
-  font-size: 22px;
-  font-weight: 700;
-  color: v.$color-text-main;
-  .logoAccent { color: v.$color-accent; }
-}
-
-.menuLinks {
-  display: flex;
-  gap: 24px;
-}
-
-.navLink {
-  background: none;
-  border: none;
-  font-size: 14px;
-  font-weight: 500;
-  color: v.$color-text-muted;
-  cursor: pointer;
-  padding: 6px 12px;
-
-  &:hover { color: v.$color-text-main; }
-}
-
-.activeLink {
-  color: v.$color-accent !important;
-}
-
-.userProfile {
-  display: flex;
-  align-items: center;
-  gap: 10px;
-  cursor: pointer;
-}
-
-.avatarCircle {
-  width: 36px;
-  height: 36px;
-  background-color: #e0e0e0;
-  border-radius: 50%;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  font-size: 12px;
-  font-weight: bold;
-  color: v.$color-text-main;
-}
-
-.username {
-  font-size: 14px;
-  font-weight: 500;
-  color: v.$color-text-main;
-}
-
-// UKŁAD ZAWARTOSCI
 .mainContent {
-  flex: 1;
   display: flex;
-  gap: 24px;
-  padding: 0 24px 24px 24px;
-  align-items: flex-start;
+  flex-direction: row;
+  padding: 2rem;
+  gap: 2rem;
+  max-width: 1400px;
+  margin: 0 auto;
+  width: 100%;
+  box-sizing: border-box;
+  min-width: 0; /* Critical: forces flex items to respect parent width bounds */
+
+  @media (max-width: 1150px) {
+    flex-direction: column !important; /* Stack elements earlier for tablets and iPads */
+    padding: 1rem;
+    gap: 1rem;
+  }
 }
 
 .tableSection {
   flex: 1;
-  background-color: v.$color-bg-card;
-  border-radius: v.$radius-lg;
-  padding: 32px;
-  box-shadow: v.$shadow-sm;
+  background: $color-white;
+  border-radius: $radius-md;
+  padding: 1.5rem;
+  box-shadow: $shadow-sm;
+  width: 100%;
+  max-width: 100%;
+  box-sizing: border-box;
+  overflow: hidden;
+  min-width: 0; /* Prevents text and inner tables from stretching the card */
+
+  @media (max-width: 480px) {
+    padding: 1rem;
+  }
 }
 
 .tableHeader {
   display: flex;
   justify-content: space-between;
   align-items: center;
-  margin-bottom: 24px;
-}
+  margin-bottom: 1.5rem;
+  gap: 1rem;
+  width: 100%;
 
-.pageTitle {
-  font-size: 28px;
-  color: v.$color-text-main;
-  margin: 0;
+  .pageTitle {
+    font-size: 1.6rem;
+    margin: 0;
+    color: $color-text-main;
+  }
+
+  @media (max-width: 480px) {
+    flex-direction: column;
+    align-items: flex-start;
+  }
 }
 
 .addTeacherBtn {
-  background-color: v.$color-primary;
-  color: v.$color-text-light;
+  background-color: $color-primary;
+  color: $color-text-light;
   border: none;
-  padding: 10px 20px;
-  border-radius: v.$radius-lg;
-  font-weight: 500;
+  padding: 0.6rem 1.2rem;
+  border-radius: 20px;
+  font-weight: 600;
   cursor: pointer;
   display: flex;
   align-items: center;
-  gap: 8px;
+  gap: 0.5rem;
+  white-space: nowrap;
 
-  &:hover { background-color: v.$color-primary-hover; }
+  &:hover { background-color: $color-primary-hover; }
 }
 
-// TABELA
 .tableWrapper {
-  overflow-x: auto;
+  width: 100%;
+  max-width: 100%;
+  overflow-x: auto !important; 
+  -webkit-overflow-scrolling: touch;
 }
 
 .teachersTable {
   width: 100%;
   border-collapse: collapse;
   text-align: left;
+  min-width: 650px; 
 
   th {
-    color: v.$color-text-muted;
-    font-size: 13px;
+    padding: 0.75rem 1rem;
+    color: $color-gray60;
     font-weight: 500;
-    padding: 12px 16px;
-    border-bottom: 1px solid v.$color-border;
+    font-size: 0.85rem;
+    border-bottom: 1px solid $color-border;
   }
 
   td {
-    padding: 16px;
-    font-size: 14px;
-    color: v.$color-text-main;
-    border-bottom: 1px solid v.$color-border;
+    padding: 1rem;
+    border-bottom: 1px solid $color-gray10;
+    font-size: 0.95rem;
+    color: $color-gray80;
     vertical-align: middle;
   }
 
-  tbody tr {
-    cursor: pointer;
-    transition: background 0.2s;
-
-    &:hover {
-      background-color: v.$color-bg-main;
-    }
+  .selectedRow {
+    background-color: $color-gray10;
   }
-}
 
-.selectedRow {
-  background-color: #f4f7f6;
+  tr {
+    cursor: pointer;
+    &:hover { background-color: $color-gray10; }
+  }
 }
 
 .teacherNameCell {
   display: flex;
   align-items: center;
-  gap: 12px;
-  font-weight: 500;
-}
+  gap: 0.75rem;
+  font-weight: 600;
+  color: $color-text-main;
 
-.tableAvatar {
-  width: 32px;
-  height: 32px;
-  border-radius: 50%;
-  background-color: #eceff1;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  font-size: 11px;
-  color: v.$color-text-muted;
+  .tableAvatar {
+    width: 32px;
+    height: 32px;
+    border-radius: 50%;
+    background-color: $color-secondary;
+    color: $color-secondary-shadow;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 0.8rem;
+    font-weight: 700;
+  }
 }
 
 .subjectBadge {
-  display: flex;
+  display: inline-flex;
   align-items: center;
-  gap: 8px;
-}
+  gap: 0.5rem;
 
-.dot {
-  width: 8px;
-  height: 8px;
-  border-radius: 50%;
-  display: inline-block;
+  .dot {
+    width: 10px;
+    height: 10px;
+    border-radius: 50%;
+  }
 }
 
 .termsCell {
-  display: flex;
+  display: inline-flex;
   align-items: center;
-  gap: 8px;
+  gap: 0.5rem;
+  white-space: nowrap;
+  
+  .termsIcon { font-size: 1rem; }
+  .termsText { font-weight: 500; color: $color-text-main; }
+  .dateText { 
+    font-size: 0.85rem; 
+    color: $color-gray60; 
+    
+    &.alertDate {
+      color: $color-system-error;
+      font-weight: 600;
+    }
+  }
 }
-
-.termsIcon { font-size: 14px; color: v.$color-text-muted; }
-.termsText { color: v.$color-text-muted; margin-right: 12px; }
-.dateText { color: v.$color-text-muted; }
-.alertDate { color: v.$color-accent; font-weight: 500; }
 
 .actionBtn {
   background: none;
   border: none;
   cursor: pointer;
-  font-size: 16px;
+  padding: 0.25rem;
+  font-size: 1rem;
 }
 
-// PANEL BOCZNY (SIDEBAR)
 .detailsSidebar {
   width: 320px;
-  background-color: v.$color-bg-card;
-  border-radius: v.$radius-lg;
-  padding: 32px;
-  box-shadow: v.$shadow-md;
+  background: $color-white;
+  border-radius: $radius-md;
+  padding: 1.5rem;
   position: relative;
-  display: flex;
-  flex-direction: column;
-  gap: 16px;
-}
+  box-shadow: $shadow-md;
+  align-self: flex-start;
+  box-sizing: border-box;
+  flex-shrink: 0;
 
-.closeSidebarBtn {
-  position: absolute;
-  top: 24px;
-  right: 24px;
-  background: none;
-  border: none;
-  cursor: pointer;
-  color: v.$color-text-muted;
-}
+  @media (max-width: 1150px) {
+    width: 100% !important; /* Take full width below the table when stacked */
+  }
 
-.sidebarHeader {
-  display: flex;
-  align-items: center;
-  gap: 8px;
-  margin-top: 12px;
+  .closeSidebarBtn {
+    position: absolute;
+    top: 1rem;
+    right: 1rem;
+    background: none;
+    border: none;
+    font-size: 1.2rem;
+    cursor: pointer;
+  }
 
-  h2 { font-size: 20px; margin: 0; color: v.$color-text-main; }
-}
+  .sidebarHeader {
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+    margin-bottom: 0.5rem;
+    
+    h2 {
+      margin: 0;
+      font-size: 1.3rem;
+      color: $color-text-main;
+    }
 
-.statusIndicator {
-  width: 8px;
-  height: 8px;
-  border-radius: 50%;
-  background-color: #4caf50; // Zielona kropka statusu online
-}
+    .statusIndicator {
+      width: 8px;
+      height: 8px;
+      border-radius: 50%;
+      background-color: $color-system-success;
+    }
+  }
 
-.sidebarEmail {
-  font-size: 14px;
-  color: v.$color-text-muted;
+  .sidebarEmail {
+    font-size: 0.85rem;
+    color: $color-text-muted;
+    margin-bottom: 1.5rem;
+  }
 }
 
 .nextLessonsSection {
-  background-color: v.$color-bg-main;
-  padding: 16px;
-  border-radius: v.$radius-md;
-  margin-top: 8px;
+  background-color: $color-gray10;
+  border-radius: $radius-sm;
+  padding: 1rem;
+  margin-bottom: 1.5rem;
+  text-align: left;
 
-  h3 { font-size: 13px; color: v.$color-text-muted; margin: 0 0 8px 0; font-weight: 500; }
+  h3 { margin: 0 0 0.5rem 0; font-size: 0.9rem; color: $color-text-main; }
+  .lessonsList { margin: 0; font-size: 0.85rem; color: $color-gray80; }
+  .noLessons { margin: 0; font-size: 0.85rem; color: $color-text-muted; }
 }
 
-.lessonsList { font-size: 14px; color: v.$color-text-main; margin: 0; font-weight: 500; }
-.noLessons { font-size: 13px; color: v.$color-text-muted; margin: 0; }
-
 .teacherPageLink {
+  width: 100%;
   background: none;
   border: none;
-  color: v.$color-accent;
-  font-size: 14px;
-  font-weight: 500;
-  cursor: pointer;
+  color: $color-accent;
+  font-weight: 600;
+  font-size: 0.9rem;
   text-align: left;
+  cursor: pointer;
   padding: 0;
-  margin-top: auto;
-
   &:hover { text-decoration: underline; }
 }
