@@ -1,53 +1,10 @@
 @use "../../styles/variables" as v;
 
 .landingContainer {
-  min-height: 100vh;
   display: flex;
   flex-direction: column;
-  background-color: v.$color-bg-main;
-  
-  // Ten fragment kodu tworzy tę ładną siatkę (grid) z Figmy w tle
-  background-image: 
-    linear-gradient(to right, v.$color-border 1px, transparent 1px),
-    linear-gradient(to bottom, v.$color-border 1px, transparent 1px);
-  background-size: 100px 100px;
-  background-position: center center;
-}
-
-.header {
-  display: flex;
-  justify-content: space-between;
   align-items: center;
-  padding: 24px 48px;
-  background-color: transparent;
-}
-
-.logo {
-  font-size: 24px;
-  font-weight: 700;
-  color: v.$color-text-main;
-
-  .accent {
-    color: v.$color-accent; // Koralowa końcówka "io"
-  }
-}
-
-.nav {
-  display: flex;
-  gap: 32px;
-}
-
-.navLink {
-  background: none;
-  border: none;
-  color: v.$color-text-main;
-  font-size: 14px;
-  font-weight: 500;
-  cursor: pointer;
-  
-  &:hover {
-    color: v.$color-primary;
-  }
+  justify-content: center;
 }
 
 .loginBtn {
@@ -65,41 +22,41 @@
   }
 }
 
-.hero {
-  flex: 1;
-  display: flex;
-  align-items: center;
-  padding: 0 10%;
-}
-
 .heroContent {
   max-width: 600px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
 }
 
 .title {
-  font-size: 64px;
-  line-height: 1.1;
-  color: v.$color-text-main;
-  margin-bottom: 24px;
+  font-size: 80px;
+  font-weight: 500;
+  line-height: 100%;
+  color: v.$color-black;
+  margin-bottom: 12px;
+  margin-top: 0;
 }
 
 .subtitle {
   font-size: 18px;
-  color: v.$color-text-muted;
-  margin-bottom: 40px;
-  line-height: 1.5;
+  color: v.$color-gray60;
+  margin-bottom: 48px;
+  line-height: 135%;
 }
 
 .actions {
+  align-self: center;
   display: flex;
-  gap: 16px;
+  gap: 20px;
 }
 
 .primaryBtn {
+  height: 44px;
   background: v.$color-primary;
-  color: v.$color-text-light;
+  color: v.$color-white;
   border: none;
-  padding: 14px 32px;
+  padding: 8px 32px;
   border-radius: v.$radius-lg;
   font-size: 16px;
   cursor: pointer;
@@ -110,18 +67,16 @@
 }
 
 .secondaryBtn {
+  height: 44px;
   background: transparent;
   color: v.$color-text-main;
-  border: 1px solid v.$color-border;
-  padding: 14px 32px;
+  border: 1px solid v.$color-secondary-shadow;
+  padding: 8px 20px;
   border-radius: v.$radius-lg;
   font-size: 16px;
   cursor: pointer;
-}
 
-.footer {
-  text-align: center;
-  padding: 24px;
-  color: v.$color-text-muted;
-  font-size: 12px;
+  &:hover {
+    background: v.$color-accent-light;
+  }
 }

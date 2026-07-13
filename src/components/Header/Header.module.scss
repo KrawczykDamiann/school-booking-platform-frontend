@@ -1,0 +1,82 @@
+@use '../../styles/variables' as v;
+
+.header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  height: 76px;
+  padding: 18px 32px;
+  background-color: v.$color-white;
+  border-radius: 1000px;
+  box-shadow: 0px 8px 20px 0px #0000001F;
+  box-sizing: border-box;
+}
+
+.logo {
+  font-size: 36px;
+  font-weight: 500;
+  letter-spacing: -2px;
+  color: v.$color-text-main;
+  text-decoration: none;
+
+  .accent {
+    color: v.$color-accent;
+  }
+}
+
+.nav {
+  display: flex;
+  gap: 12px;
+}
+
+.navLinkWrapper {
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  gap: 4px;
+  padding: 8px 12px;
+}
+
+.navLink {
+  background: none;
+  border: none;
+  padding: 0;
+  color: v.$color-gray80;
+  font-size: 16px;
+  font-weight: 400;
+  line-height: 150%;
+  cursor: pointer;
+  text-decoration: none;
+
+  &Active {
+    color: v.$color-secondary-shadow;
+  }
+  
+  &:hover {
+    color: v.$color-secondary-shadow;
+  }
+}
+
+.navLinkActive {
+    color: v.$color-secondary-shadow;
+}
+
+.navLinkIcon {
+  height: 16px;
+  width: 16px;
+}
+
+.loginBtn {
+  background: transparent;
+  border: 1px solid v.$color-accent;
+  color: v.$color-text-main;
+  padding: 10px 24px;
+  border-radius: v.$radius-lg;
+  font-weight: 500;
+  cursor: pointer;
+  transition: all 0.2s;
+
+  &:hover {
+    background: v.$color-accent-light;
+  }
+}

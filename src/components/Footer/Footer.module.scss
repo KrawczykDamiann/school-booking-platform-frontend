@@ -1,0 +1,14 @@
+@use '../../styles/variables' as v;
+
+.footer {
+    box-sizing: border-box;
+    height: 92px;
+    background: v.$color-gray80;
+    color: v.$color-white;
+    padding: 24px 80px;
+
+    display: flex;
+    flex-direction: row;
+    justify-content: space-between;
+    align-items: center;
+}

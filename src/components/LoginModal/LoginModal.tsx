@@ -6,6 +6,7 @@ import { Checkbox } from "../ui/Checkbox/Checkbox";
 import emailIcon from "../../assets/email.svg";
 import warningIcon from "../../assets/warning.svg";
 import { validation } from "../../utils/validators";
+import { useInput } from "../../hooks/useInput";
 
 interface LoginModalProps {
   onClose: () => void;
@@ -13,7 +14,8 @@ interface LoginModalProps {
 
 export default function LoginModal({ onClose }: LoginModalProps) {
   // State to store the email input value
-  const [email, setEmail] = useState<string>(" ");
+  const emailInput = useInput({ validator: validation.validateEmail });
+  const email = emailInput.value;
 
   // State to manage loading spinner/disabled status during API call
   const [isLoading, setIsLoading] = useState<boolean>(false);
@@ -22,40 +24,22 @@ export default function LoginModal({ onClose }: LoginModalProps) {
   const [hasConfirmedAge, setHasConfirmedAge] = useState<boolean>(false);
 
   // State for server error and hasConfirmedAge error
-  const [error, setError] = useState<string | null>(null);
-
-  const [emailError, setEmailError] = useState("");
+  const [error, setError] = useState<string | null>("");
 
   // State to toggle success view inside the modal
   const [isSubmitted, setIsSubmitted] = useState<boolean>(false);
-
-  const handleEmailChange = (e: React.ChangeEvent<HTMLInputElement>) => {
-    setEmail(e.target.value);
-
-    if (emailError) {
-      setEmailError("");
-    }
-  };
-
-  // Regexp that checks email validity
-  const emailPattern = validation.emailPattern;
-
-  const handleEmailBlur = () => {
-    if (!email) {
-      return;
-    }
-
-    if (!emailPattern.test(email)) {
-      setEmailError("Wrong email format");
-    } else {
-      setEmailError("");
-    }
-  };
 
   // Function to handle the form submission
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
     setError(null);
+
+    const error = validation.validateEmail(email);
+
+    if (error) {
+      emailInput.setError(error);
+      return;
+    }
 
     if (!hasConfirmedAge) {
       setError("Please confirm that you are at least 16 years old.");
@@ -119,11 +103,11 @@ export default function LoginModal({ onClose }: LoginModalProps) {
             type="email"
             placeholder="studentemail@gmail.com"
             value={email}
-            onChange={(e) => handleEmailChange(e)}
-            onBlur={handleEmailBlur}
+            onChange={emailInput.onChange}
+            onBlur={emailInput.onBlur}
             required
             disabled={isLoading}
-            error={emailError}
+            error={emailInput.error}
             leftIcon={emailIcon}
           />
 
