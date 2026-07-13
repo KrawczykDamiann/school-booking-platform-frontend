@@ -90,18 +90,8 @@ export const TeacherListPage: React.FC = () => {
 
   return (
     <div className={styles.dashboardContainer}>
-      <nav className={styles.topNav}>
-        <span className={styles.logo}>Less<span>io</span></span>
-        <div className={styles.navLinks}>
-          <button>Dashboard</button>
-          <button className={styles.activeTab}>Teachers</button>
-          <button>Students</button>
-          <button>More options ▾</button>
-        </div>
-        <div className={styles.userProfile}>VU</div>
-      </nav>
 
-      <main className={styles.mainContent}>
+      <section className={styles.mainContent}>
         <div className={styles.listSection}>
           <div className={styles.tableHeader}>
             <h2>Teachers</h2>
@@ -174,7 +164,7 @@ export const TeacherListPage: React.FC = () => {
             <a href="#teacher-page" className={styles.teacherPageLink}>Teacher's page →</a>
           </aside>
         )}
-      </main>
+      </section>
 
       {/* Creation wizard modal */}
       {isModalOpen && (

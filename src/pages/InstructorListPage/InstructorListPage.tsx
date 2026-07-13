@@ -27,22 +27,6 @@ export default function InstructorListPage() {
 
   return (
     <div className={styles.dashboardContainer}>
-      {/* Top navigation bar */}
-      <header className={styles.topNav}>
-        <div className={styles.logo}>
-          Less<span className={styles.logoAccent}>io</span>
-        </div>
-        <nav className={styles.menuLinks}>
-          <button className={styles.navLink}>Dashboard</button>
-          <button className={`${styles.navLink} ${styles.activeLink}`}>Teachers</button>
-          <button className={styles.navLink}>Students</button>
-          <button className={styles.navLink}>More options ▾</button>
-        </nav>
-        <div className={styles.userProfile}>
-          <div className={styles.avatarCircle}>VU</div>
-          <span className={styles.username}>VesUp ▾</span>
-        </div>
-      </header>
 
       <main className={styles.mainContent}>
         

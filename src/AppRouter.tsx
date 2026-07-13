@@ -5,7 +5,7 @@ import { AdminLoginPage } from "./pages/AdminLoginPage/AdminLoginPage";
 import { PasswordRecoveryPage } from "./pages/PasswordRecoveryPage/PasswordRecoveryPage";
 import { AdminDashboard } from "./pages/AdminDashboard/AdminDashboard";
 import { TeacherListPage } from "./pages/TeacherListPage/TeacherListPage";
-import { BookingLandingPage } from "./pages/BookingLandingPage/BookingLandingPage";
+// import { BookingLandingPage } from "./pages/BookingLandingPage/BookingLandingPage";
 import PublicLayout from "./layouts/PublicLayout/PublicLayout";
 import AdminLayout from "./layouts/AdminLayout/AdminLayout";
 
@@ -26,7 +26,7 @@ export function AppRouter() {
       <Route element={<PublicLayout />}>
         <Route path="/" element={<Navigate to="/login" replace />} />
         <Route path="/login" element={<LandingPage />} />
-        <Route path="/booking" element={<BookingLandingPage />} />
+        {/* <Route path="/booking" element={<BookingLandingPage />} /> */}
         <Route path="/instructors" element={<InstructorListPage />} />
       </Route>
 
