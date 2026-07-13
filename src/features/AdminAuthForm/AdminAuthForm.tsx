@@ -52,7 +52,7 @@ export const AdminAuthForm: React.FC = () => {
 
       tokenService.save(response.data);
 
-      navigate("/admin-dashboard");
+      navigate("/admin");
     } catch (error) {
       if (axios.isAxiosError(error)) {
         if (error.response?.status === 403) {
