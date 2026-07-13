@@ -1,18 +1,18 @@
-export const emailPattern = /^[\w.+-]+@([\w-]+\.){1,3}[\w-]{2,}$/;
+export const EMAIL_REGEX = /^[\w.+-]+@([\w-]+\.){1,3}[\w-]{2,}$/;
 
-function email(value: string) {
+function validateEmail(value: string) {
   if (!value) {
     return 'Email is required';
   }
 
-  if (!emailPattern.test(value)) {
+  if (!EMAIL_REGEX.test(value)) {
     return 'Please enter a valid email';
   }
 
   return '';
 }
 
-function password(value: string) {
+function validatePassword(value: string) {
   if (!value) {
     return 'Password is required';
   }
@@ -24,4 +24,4 @@ function password(value: string) {
   return '';
 }
 
-export const validation = { email, password, emailPattern };
+export const validation = { validateEmail, validatePassword, EMAIL_REGEX };

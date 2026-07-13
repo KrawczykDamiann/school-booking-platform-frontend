@@ -9,13 +9,14 @@ import emailIcon from "../../assets/email.svg";
 import passwordIcon from "../../assets/pass.svg";
 import { Input } from "../../components/ui/Input/Input";
 import { Checkbox } from "../../components/ui/Checkbox/Checkbox";
+import { useInput } from "../../hooks/useInput";
 
 export const AdminAuthForm: React.FC = () => {
-  const [email, setEmail] = useState("");
-  const [password, setPassword] = useState("");
+  const emailInput = useInput({ validator: validation.validateEmail });
+  const passwordInput = useInput({ validator: validation.validatePassword });
 
-  const [emailError, setEmailError] = useState("");
-  const [passwordError, setPasswordError] = useState("");
+  const email = emailInput.value;
+  const password = passwordInput.value;
 
   const [serverError, setServerError] = useState("");
 
@@ -23,50 +24,23 @@ export const AdminAuthForm: React.FC = () => {
 
   const navigate = useNavigate();
 
-  const isButtonDisabled = !email || !password;
-
-  const handleEmailChange = (e: React.ChangeEvent<HTMLInputElement>) => {
-    setEmail(e.target.value);
-
-    if (emailError) {
-      setEmailError("");
-    }
-  };
-
-  // Regexp that checks email validity
-  const emailPattern = validation.emailPattern;
-
-  const handleEmailBlur = () => {
-    if (!email) {
-      return;
-    }
-
-    if (!emailPattern.test(email)) {
-      setEmailError("Wrong email format");
-    } else {
-      setEmailError("");
-    }
-  };
-
-  const handlePasswordChange = (e: React.ChangeEvent<HTMLInputElement>) => {
-    setPassword(e.target.value);
-
-    if (passwordError) {
-      setPasswordError("");
-    }
-  };
+  const isButtonDisabled = !emailInput.value || !passwordInput.value;
 
   const handleSubmit = async (event: React.SubmitEvent) => {
     event.preventDefault();
 
     const errors = {
-      email: validation.email(email),
-      password: validation.password(password),
+      email: validation.validateEmail(email),
+      password: validation.validatePassword(password),
     };
 
-    if (errors.email || errors.password) {
-      setEmailError(errors.email);
-      setPasswordError(errors.password);
+    if (errors.email) {
+      emailInput.setError(errors.email);
+      return;
+    }
+
+    if (errors.password) {
+      passwordInput.setError(errors.password);
       return;
     }
 
@@ -114,10 +88,10 @@ export const AdminAuthForm: React.FC = () => {
             type="email"
             placeholder="admin@email.com"
             value={email}
-            onChange={(e) => handleEmailChange(e)}
-            onBlur={handleEmailBlur}
+            onChange={emailInput.onChange}
+            onBlur={emailInput.onBlur}
             required
-            error={emailError}
+            error={emailInput.error}
             leftIcon={emailIcon}
           />
           <Input
@@ -125,14 +99,19 @@ export const AdminAuthForm: React.FC = () => {
             type="password"
             placeholder="pass1234"
             value={password}
-            onChange={(e) => handlePasswordChange(e)}
+            onChange={passwordInput.onChange}
+            onBlur={passwordInput.onBlur}
             required
-            error={passwordError}
+            error={passwordInput.error}
             leftIcon={passwordIcon}
           />
         </div>
         <div className={styles.formOptions}>
-          <Link to="/password-recovery" className={styles.link} state={{ email }}>
+          <Link
+            to="/password-recovery"
+            className={styles.link}
+            state={{ email: emailInput.value }}
+          >
             Forgot your password?
             <span className={styles.linkText}>Request recovery</span>
           </Link>

@@ -6,47 +6,28 @@ import emailIcon from "../../assets/email.svg";
 import warningIcon from "../../assets/warning.svg";
 import { validation } from "../../utils/validators";
 import { Input } from "../../components/ui/Input/Input";
+import { useInput } from "../../hooks/useInput";
 
 export const PasswordRecoveryPage: React.FC = () => {
+  const location = useLocation();
   const navigate = useNavigate();
+
+  const emailInput = useInput({
+    initialValue: location.state?.email ?? "",
+    validator: validation.validateEmail,
+  });
+
+  const email = emailInput.value;
+
   const [isEmailSent, setIsEmailSent] = useState(false);
-
-  const { state } = useLocation();
-
-  const [email, setEmail] = useState(state?.email ?? "");
-  const [emailError, setEmailError] = useState("");
-
-  const handleEmailChange = (e: React.ChangeEvent<HTMLInputElement>) => {
-    setEmail(e.target.value);
-
-    if (emailError) {
-      setEmailError("");
-    }
-  };
-
-  const emailPattern = /^[\w.+-]+@([\w-]+\.){1,3}[\w-]{2,}$/;
-
-  const isButtonDisabled = !email || !emailPattern.test(email);
-
-  const handleEmailBlur = () => {
-    if (!email) {
-      return;
-    }
-
-    if (!emailPattern.test(email)) {
-      setEmailError("Please enter a valid email address");
-    } else {
-      setEmailError("");
-    }
-  };
 
   const handleSubmit = (event: React.SubmitEvent) => {
     event.preventDefault();
 
-    const error = validation.email(email);
+    const error = validation.validateEmail(email);
 
     if (error) {
-      setEmailError(error);
+      emailInput.setError(error);
       return;
     }
 
@@ -62,9 +43,12 @@ export const PasswordRecoveryPage: React.FC = () => {
       </div>
       <div className={styles.formWrapper}>
         {isEmailSent ? (
-          <h3 className={styles.title}>
-            If account exists, it will receive a recovery link
-          </h3>
+          <div className={styles.emailSent}>
+            <h3 className={styles.title}>
+              If account exists, it will receive a recovery link
+            </h3>
+            <a href="/login/admin" className={styles.emailSentLink}>Back to login</a>
+          </div>
         ) : (
           <>
             <div className={styles.headerWrapper}>
@@ -96,10 +80,10 @@ export const PasswordRecoveryPage: React.FC = () => {
                   type="email"
                   placeholder="admin@email.com"
                   value={email}
-                  onChange={(e) => handleEmailChange(e)}
-                  onBlur={handleEmailBlur}
+                  onChange={emailInput.onChange}
+                  onBlur={emailInput.onBlur}
                   required
-                  error={emailError}
+                  error={emailInput.error}
                   leftIcon={emailIcon}
                 />
               </div>
@@ -118,7 +102,7 @@ export const PasswordRecoveryPage: React.FC = () => {
               type="submit"
               className={styles.button}
               form="recovery-password"
-              disabled={isButtonDisabled}
+              disabled={!emailInput.isValid}
             >
               Request recovery
             </button>
