@@ -113,7 +113,6 @@ export const AdminAuthForm: React.FC = () => {
             state={{ email: emailInput.value }}
           >
             Forgot your password?
-            <span className={styles.linkText}>Request recovery</span>
           </Link>
           <Checkbox
             label="Remember me"
