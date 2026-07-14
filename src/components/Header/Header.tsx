@@ -48,7 +48,7 @@ export const Header: React.FC<HeaderProps> = ({ onLoginClick }) => {
         </div>
       </nav>
       {/* Przycisk otwierający modal logowania */}
-      <button className={styles.loginBtn} onClick={() => onLoginClick()}>
+      <button className={styles.loginBtn} onClick={() => onLoginClick?.()}>
         Student login
       </button>
     </header>
