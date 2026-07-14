@@ -2,7 +2,11 @@ import axios from "axios";
 // import { tokenService } from '../utils/tokenService';
 
 export const api = axios.create({
+<<<<<<< Updated upstream
   baseURL: import.meta.env.VITE_SBP_BACKEND_BASE_URL,
+=======
+  baseURL: import.meta.env.VITE_SBP_BACKEND_BASE_URL || 'http://localhost:8082',
+>>>>>>> Stashed changes
   withCredentials: true,
 });
 
