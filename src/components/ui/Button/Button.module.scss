@@ -1,0 +1,16 @@
+@use '../../../styles/variables' as v;
+
+.button {
+  width: 100%;
+  height: 44px;
+  border: none;
+  border-radius: 100px;
+  background: v.$color-primary;
+  color: v.$color-white;
+  padding-block: 8px;
+  cursor: pointer;
+
+  &:hover {
+    background: v.$color-primary-hover;
+  }
+}

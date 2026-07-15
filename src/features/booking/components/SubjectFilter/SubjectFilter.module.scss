@@ -1,0 +1,31 @@
+@use '../../../../styles/variables' as v;
+
+.subjectFilterWrapper {
+    margin-top: 28px;
+}
+
+.subjectFilterList {
+    display: flex;
+    flex-direction: row;
+    gap: 12px;
+
+    list-style: none;
+    margin: 0;
+    padding: 0;
+}
+
+.subjectFilterItem {
+    padding: 8px 16px;
+    border: 1px solid v.$color-gray20;
+    border-radius: 100px;
+
+    color: v.$color-gray80;
+    font-weight: 400;
+    font-size: 14px;
+    line-height: 145%;
+    cursor: pointer;
+
+    &:hover {
+        background: v.$color-secondary;
+    }
+}

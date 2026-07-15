@@ -5,6 +5,7 @@
   flex-direction: column;
   align-items: center;
   justify-content: center;
+  margin-top: 136px;
 }
 
 .loginBtn {
@@ -60,6 +61,8 @@
   border-radius: v.$radius-lg;
   font-size: 16px;
   cursor: pointer;
+  text-decoration: none;
+  box-sizing: border-box;
 
   &:hover {
     background: v.$color-primary-hover;

@@ -1,0 +1,25 @@
+@use '../../styles/variables' as v;
+
+.bookingPage {
+    background: v.$color-gray10;
+    height: 100dvh;
+    margin-top: 20px;
+}
+
+.returnLink {
+    text-decoration: none;
+    color: v.$color-black;
+    font-weight: 500;
+    font-size: 32px;
+    line-height: 100%;
+
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+    gap: 6px;
+}
+
+.returnIcon {
+    height: 24px;
+    width: 24px;
+}

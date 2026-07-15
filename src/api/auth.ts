@@ -21,3 +21,19 @@ export async function login(data: LoginPostBody) {
     throw error;
   }
 }
+
+export async function getLessons() {
+  try {
+    const response = await api.get("/api/lessons");
+
+    return response.data;
+  } catch (error) {
+    if (axios.isAxiosError(error)) {
+      throw new Error(error.response?.data.message || "Log in failed", {
+        cause: error,
+      });
+    }
+
+    throw error;
+  }
+}

@@ -1,3 +1,4 @@
+import { Link } from "react-router-dom";
 import styles from "./LandingPage.module.scss";
 
 export default function LandingPage() {
@@ -16,7 +17,7 @@ export default function LandingPage() {
         </p>
         <div className={styles.actions}>
           {/* TODO: Integrate with the new Booking Landing Page routing */}
-          <button className={styles.primaryBtn}>Book a lesson</button>
+          <Link to="/booking" className={styles.primaryBtn}>Book a lesson</Link>
           <button className={styles.secondaryBtn}>Manage booking</button>
         </div>
       </div>

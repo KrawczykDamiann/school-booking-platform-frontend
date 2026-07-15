@@ -8,6 +8,9 @@ import { TeacherListPage } from "./pages/TeacherListPage/TeacherListPage";
 // import { BookingLandingPage } from "./pages/BookingLandingPage/BookingLandingPage";
 import PublicLayout from "./layouts/PublicLayout/PublicLayout";
 import AdminLayout from "./layouts/AdminLayout/AdminLayout";
+// import { BookingLandingPage } from "./pages/BookingLandingPage/BookingLandingPage";
+// import { BookingCalendar } from "./pages/BookingCalendar/BookingCalendar";
+import { BookingPage } from "./pages/BookingPage/BookingPage";
 
 export function AppRouter() {
   return (
@@ -26,7 +29,7 @@ export function AppRouter() {
       <Route element={<PublicLayout />}>
         <Route path="/" element={<Navigate to="/login" replace />} />
         <Route path="/login" element={<LandingPage />} />
-        {/* <Route path="/booking" element={<BookingLandingPage />} /> */}
+        <Route path="/booking" element={<BookingPage />} />
         <Route path="/instructors" element={<InstructorListPage />} />
       </Route>
 

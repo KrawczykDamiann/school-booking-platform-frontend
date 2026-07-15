@@ -24,8 +24,8 @@ export const Header: React.FC<HeaderProps> = ({ onLoginClick }) => {
             className={styles.navLinkIcon}
           />
           <Link
-            to="/booking-calendar"
-            className={`${styles.navLink} ${pathname === "/booking-calendar" ? styles.navLinkActive : ""}`}
+            to="/booking"
+            className={`${styles.navLink} ${pathname === "/booking" ? styles.navLinkActive : ""}`}
           >
             Book a lesson
           </Link>

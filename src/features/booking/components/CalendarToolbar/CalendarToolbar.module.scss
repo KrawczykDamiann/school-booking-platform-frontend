@@ -1,0 +1,62 @@
+@use '../../../../styles/variables' as v;
+
+.calendarToolbar {
+    display: flex;
+    flex-direction: column;
+    gap: 8px;
+}
+
+.toolbarHeader {
+    display: flex;
+    flex-direction: row;
+    justify-content: space-between;
+}
+
+.timeFilterList {
+  display: flex;
+  flex-direction: row;
+  gap: 16px;  
+}
+
+.timeFilterItem {
+    font-weight: 400;
+    font-size: 14px;
+    line-height: 145%;
+    color: v.$color-gray80;
+    cursor: pointer;
+
+    padding: 8px 16px;
+    border: 1px solid v.$color-gray20;
+    border-radius: 100px;
+
+    &:hover {
+        background: v.$color-secondary;
+    }
+}
+
+.timePeriod {
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+    gap: 8px;
+}
+
+.calendarIcon {
+    width: 20px;
+    height: 20px;
+}
+
+.periodText {
+    font-weight: 500;
+    font-size: 18px;
+    line-height: 135%;
+    color: v.$color-gray60;
+}
+
+.toolbarText {
+    font-weight: 400;
+    font-size: 14px;
+    line-height: 145%;
+    color: v.$color-gray30;
+    text-align: left;
+}
