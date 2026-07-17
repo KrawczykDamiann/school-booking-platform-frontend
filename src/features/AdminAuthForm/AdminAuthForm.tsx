@@ -1,4 +1,5 @@
 import { Link, useNavigate } from "react-router-dom";
+import { useTranslation } from "react-i18next";
 import styles from "./AdminAuthForm.module.scss";
 import { useState } from "react";
 import { login } from "../../api/auth";
@@ -12,6 +13,7 @@ import { Checkbox } from "../../components/ui/Checkbox/Checkbox";
 import { useInput } from "../../hooks/useInput";
 
 export const AdminAuthForm: React.FC = () => {
+  const { t } = useTranslation();
   const emailInput = useInput({ validator: validation.validateEmail });
   const passwordInput = useInput({ validator: validation.validatePassword });
 
@@ -56,26 +58,26 @@ export const AdminAuthForm: React.FC = () => {
     } catch (error) {
       if (axios.isAxiosError(error)) {
         if (error.response?.status === 403) {
-          setServerError("Incorrect email or password");
+          setServerError(t("adminAuthForm.errors.invalidCredentials"));
           return;
         }
 
         if (error.response?.status === 400) {
-          setServerError("Validation error");
+          setServerError(t("adminAuthForm.errors.validation"));
           return;
         }
 
-        setServerError("Something went wrong");
+        setServerError(t("adminAuthForm.errors.generic"));
         return;
       }
 
-      setServerError("Unknown error");
+      setServerError(t("adminAuthForm.errors.unknown"));
     }
   };
 
   return (
     <div className={styles.wrapper}>
-      <h3 className={styles.title}>Login</h3>
+      <h3 className={styles.title}>{t("adminAuthForm.title")}</h3>
       <span
         className={`${styles.serverError} ${serverError ? styles.serverErrorActive : ""}`}
       >
@@ -84,9 +86,9 @@ export const AdminAuthForm: React.FC = () => {
       <form onSubmit={handleSubmit} className={styles.form} id="login-form">
         <div className={styles.inputsContainer}>
           <Input
-            label="Email"
+            label={t("adminAuthForm.emailLabel")}
             type="email"
-            placeholder="admin@email.com"
+            placeholder={t("adminAuthForm.emailPlaceholder")}
             value={email}
             onChange={emailInput.onChange}
             onBlur={emailInput.onBlur}
@@ -95,9 +97,9 @@ export const AdminAuthForm: React.FC = () => {
             leftIcon={emailIcon}
           />
           <Input
-            label="Password"
+            label={t("adminAuthForm.passwordLabel")}
             type="password"
-            placeholder="pass1234"
+            placeholder={t("adminAuthForm.passwordPlaceholder")}
             value={password}
             onChange={passwordInput.onChange}
             onBlur={passwordInput.onBlur}
@@ -112,10 +114,10 @@ export const AdminAuthForm: React.FC = () => {
             className={styles.link}
             state={{ email: emailInput.value }}
           >
-            Forgot your password?
+            {t("adminAuthForm.forgotPassword")}
           </Link>
           <Checkbox
-            label="Remember me"
+            label={t("adminAuthForm.rememberMe")}
             checked={isRememberMe}
             onChange={(e) => setIsRememberMe(e.target.checked)}
           />
@@ -127,7 +129,7 @@ export const AdminAuthForm: React.FC = () => {
         form="login-form"
         disabled={isButtonDisabled}
       >
-        Login
+        {t("adminAuthForm.submit")}
       </button>
     </div>
   );

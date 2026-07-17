@@ -1,4 +1,5 @@
 import { useLocation, useNavigate } from "react-router-dom";
+import { useTranslation } from "react-i18next";
 import styles from "./PasswordRecoveryPage.module.scss";
 import { useState } from "react";
 import returnIcon from "../../assets/return.svg";
@@ -11,6 +12,7 @@ import { useInput } from "../../hooks/useInput";
 export const PasswordRecoveryPage: React.FC = () => {
   const location = useLocation();
   const navigate = useNavigate();
+  const { t } = useTranslation();
 
   const emailInput = useInput({
     initialValue: location.state?.email ?? "",
@@ -44,10 +46,10 @@ export const PasswordRecoveryPage: React.FC = () => {
       <div className={styles.formWrapper}>
         {isEmailSent ? (
           <div className={styles.emailSent}>
-            <h3 className={styles.title}>
-              If account exists, it will receive a recovery link
-            </h3>
-            <a href="/login/admin" className={styles.emailSentLink}>Back to login</a>
+            <h3 className={styles.title}>{t("passwordRecovery.success")}</h3>
+            <a href="/login/admin" className={styles.emailSentLink}>
+              {t("passwordRecovery.backToLogin")}
+            </a>
           </div>
         ) : (
           <>
@@ -63,11 +65,9 @@ export const PasswordRecoveryPage: React.FC = () => {
                     className={styles.buttonIcon}
                   />
                 </button>
-                <h3 className={styles.title}>Forgot your password?</h3>
+                <h3 className={styles.title}>{t("passwordRecovery.title")}</h3>
               </div>
-              <p className={styles.text}>
-                Enter your email to request recovery
-              </p>
+              <p className={styles.text}>{t("passwordRecovery.description")}</p>
             </div>
             <form
               onSubmit={handleSubmit}
@@ -76,9 +76,9 @@ export const PasswordRecoveryPage: React.FC = () => {
             >
               <div className={styles.inputsContainer}>
                 <Input
-                  label="Email"
+                  label={t("passwordRecovery.emailLabel")}
                   type="email"
-                  placeholder="admin@email.com"
+                  placeholder={t("passwordRecovery.emailPlaceholder")}
                   value={email}
                   onChange={emailInput.onChange}
                   onBlur={emailInput.onBlur}
@@ -93,9 +93,7 @@ export const PasswordRecoveryPage: React.FC = () => {
                   alt="Info icon"
                   className={styles.iconInfo}
                 />
-                <p className={styles.text}>
-                  We will send a recovery link to your email
-                </p>
+                <p className={styles.text}>{t("passwordRecovery.info")}</p>
               </div>
             </form>
             <button
@@ -104,7 +102,7 @@ export const PasswordRecoveryPage: React.FC = () => {
               form="recovery-password"
               disabled={!emailInput.isValid}
             >
-              Request recovery
+              {t("passwordRecovery.submit")}
             </button>
           </>
         )}

@@ -58,7 +58,7 @@
 }
 
 .navLinkActive {
-    color: v.$color-secondary-shadow;
+  color: v.$color-secondary-shadow;
 }
 
 .navLinkIcon {
@@ -78,5 +78,131 @@
 
   &:hover {
     background: v.$color-accent-light;
+  }
+}
+
+// Floating admin header
+.headerAdmin {
+  max-width: 1280px;
+  width: calc(100% - 80px);
+  height: 76px;
+  background: v.$color-white;
+  border-radius: 1000px;
+  margin: 12px auto 0 auto;
+  padding: 16px 32px;
+  box-shadow: 0px 8px 20px rgba(0, 0, 0, 0.05);
+  border-bottom: none !important;
+  box-sizing: border-box;
+
+  @media (max-width: 1280px) {
+    width: calc(100% - 32px);
+    border-radius: 16px;
+    margin: 12px auto;
+  }
+}
+
+// Admin profile
+.adminProfileWrapper {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+}
+
+.avatar {
+  width: 36px;
+  height: 36px;
+  background: #e5e7eb;
+  color: #4b5563;
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-weight: 700;
+  font-size: 13px;
+}
+
+.profileName {
+  font-size: 14px;
+  font-weight: 600;
+  color: v.$color-text-main;
+}
+
+.dropdownArrow {
+  font-size: 10px;
+  color: #9ca3af;
+}
+
+// Right utilities
+.rightSection {
+  display: flex;
+  align-items: center;
+  gap: 24px;
+}
+
+// Language switcher
+.translatorContainer {
+  position: relative;
+  display: inline-block;
+  width: 72px;
+}
+
+.activeLangBtn {
+  width: 100%;
+  box-sizing: border-box;
+  background: none;
+  border: none;
+  font-size: 14px;
+  font-weight: 700;
+  color: v.$color-accent;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 4px;
+  padding: 8px 0;
+  border-radius: 8px;
+  transition: background-color 0.2s ease;
+
+  &:hover {
+    background-color: v.$color-accent-light;
+  }
+}
+
+.langDropdown {
+  position: absolute;
+  top: 100%;
+  right: 0;
+  left: 0;
+  margin-top: 6px;
+  background: v.$color-white;
+  border-radius: 12px;
+  box-shadow: 0px 8px 24px rgba(0, 0, 0, 0.08);
+  padding: 6px;
+  list-style: none;
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+  min-width: 70px;
+  z-index: 1000;
+  border: 1px solid #f3f4f6;
+  box-sizing: border-box;
+}
+
+.dropdownLangBtn {
+  width: 100%;
+  background: none;
+  border: none;
+  padding: 8px 0;
+  text-align: center;
+  font-size: 13px;
+  font-weight: 600;
+  color: v.$color-gray80;
+  cursor: pointer;
+  border-radius: 8px;
+  transition: all 0.2s ease;
+
+  &:hover {
+    background-color: #f3f4f6;
+    color: v.$color-text-main;
   }
 }

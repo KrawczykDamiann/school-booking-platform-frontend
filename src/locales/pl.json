@@ -1,54 +1,48 @@
 {
   "title": "Katalog Instruktorów",
-  "subtitle": "Zarządzaj i przeglądaj wszystkie dostępne zasoby dydaktyczne",
+  "subtitle": "Zarządzaj wszystkimi dostępnymi zasobami dydaktycznymi i przeglądaj je",
   
   "forgot_password": {
     "title": "Zapomniałeś hasła?",
     "description": "Wprowadź swój adres e-mail, a wyślemy Ci bezpieczny link do zresetowania hasła.",
     "label_email": "Adres e-mail",
-    "placeholder_email": "np. jan.kowalski@school.com",
+    "placeholder_email": "np. jan.kowalski@szkola.com",
     "button_send": "Wyślij link do resetowania",
     "button_back": "Powrót do logowania",
-    "success_message": "Wiadomość została wysłana! Sprawdź swoją skrzynkę odbiorczą i postępuj zgodnie z instrukcjami.",
-    "error_invalid_email": "Wprowadź poprawny adres e-mail (np. nazwa@domena.pl).",
+    "success_message": "E-mail został wysłany pomyślnie! Sprawdź swoją skrzynkę odbiorczą i postępuj zgodnie z instrukcjami.",
+    "error_invalid_email": "Wprowadź poprawny adres e-mail.",
     "error_required": "To pole jest wymagane.",
-    "error_user_not_found": "Użytkownik o podanym adresie e-mail nie istnieje w naszym systemie."
+    "error_user_not_found": "Nie znaleziono użytkownika o tym adresie e-mail w naszym systemie."
   },
   "login_magic_link": {
     "title": "Witaj!",
-    "subtitle": "Wprowadź swój adres e-mail, aby kontynuować",
+    "subtitle": "Wpisz swój e-mail, aby kontynuować",
     "label_email": "Adres e-mail",
-    "placeholder_email": "student@example.com",
+    "placeholder_email": "uczen@example.com",
     "button_continue": "Kontynuuj",
     "button_sending": "Wysyłanie...",
-    "error_generic": "Coś poszło nie tak. Sprawdź swój e-mail i spróbuj ponownie.",
+    "error_generic": "Coś poszło nie tak. Sprawdź swój adres e-mail i spróbuj ponownie.",
+    "ageConfirmation": "Potwierdź, że masz co najmniej 16 lat.",
+    "ageConfirmationCheckbox": "Potwierdzam, że mam ukończone 16 lat.",
+    "footerNote": "Wyślemy Ci link magiczny, aby potwierdzić adres e-mail",
+    "warningIconAlt": "Ikona ostrzeżenia",
     "success_title": "Sprawdź skrzynkę odbiorczą!",
-    "success_text_start": "Wysłaliśmy bezpieczny link do logowania na adres ",
-    "success_text_end": ". Kliknij link w wiadomości e-mail, aby się zalogować."
+    "success_text_start": "Wysłaliśmy bezpieczny link logowania na adres ",
+    "success_text_end": ". Kliknij w link w wiadomości e-mail, aby się zalogować."
   },
   "auth": {
     "callback": {
-      "verifying": "Weryfikuję Twój link, proszę czekać...",
-      "errorTitle": "Błąd autoryzacji",
-      "errorText": "Twój magic link jest nieprawidłowy lub wygasł. Spróbuj zalogować się ponownie.",
+      "verifying": "Weryfikacja linku logowania, proszę czekać...",
+      "errorTitle": "Błąd uwierzytelniania",
+      "errorText": "Twój link logowania jest nieprawidłowy lub wygasł. Spróbuj zalogować się ponownie.",
       "backToLogin": "Powrót do logowania"
     }
   },
   "calendar": {
-    "chooseTime": "Wybierz termin lekcji:",
-    "addToCart": "Dodaj do koszyka",
-    "addToCartCount": "Dodaj do koszyka ({{count}})",
-    "addedToStudentCart": "Dodano do Twojego planu zajęć (lekcje z: {{name}}):\n\n{{summary}}",
-    "days": {
-      "monday": "Poniedziałek",
-      "wednesday": "Środa"
-    }
-  },
-  "calendar": {
-  "chooseTime": "Wybierz termin lekcji:",
-  "saveToSchedule": "Zatwierdź terminy",
-  "saveToScheduleCount": "Zatwierdź terminy ({{count}})",
-  "addedToStudentSchedule": "Dodano bezpośrednio do Twojego kalendarza (lekcje z: {{name}}):\n\n{{summary}}",
+    "chooseTime": "Wybierz godzinę lekcji:",
+    "saveToSchedule": "Zatwierdź harmonogram",
+    "saveToScheduleCount": "Zatwierdź harmonogram ({{count}})",
+    "addedToStudentSchedule": "Dodano bezpośrednio do Twojego kalendarza (lekcje z {{name}}):\n\n{{summary}}",
     "days": {
       "monday": "Poniedziałek",
       "wednesday": "Środa"
@@ -60,23 +54,146 @@
     "informatics": "Informatyka",
     "economics": "Ekonomia",
     "biology": "Biologia",
-    "chemistry": "Chemia"
+    "chemistry": "Chemia",
+    "history": "Historia",
+    "english": "Angielski"
   },
   "filters": {
     "title": "Filtruj według przedmiotu",
-    "subtitle": "Wybierz interesującą Cię dyscyplinę, aby odfiltrować listę instruktorów",
+    "subtitle": "Wybierz dyscyplinę, aby zawęzić listę instruktorów",
     "allSubjects": "Wszystkie przedmioty",
     "buttonText": "Filtruj przedmioty",
     "active": "Filtr"
   },
   "header": {
     "welcome": "Witaj",
-    "tokens": "Tokenów",
-    "nextLesson": "Najbliższa lekcja:",
-    "with": "z"
+    "tokens": "Żetony",
+    "nextLesson": "Następna lekcja:",
+    "with": "z",
+    "dashboard": "Dashboard",
+    "teachers": "Nauczyciele",
+    "students": "Uczniowie",
+    "moreOptions": "Więcej opcji",
+    "bookLesson": "Zarezerwuj lekcję",
+    "manageBooking": "Zarządzaj rezerwacją",
+    "aboutUs": "O nas",
+    "studentLogin": "Logowanie ucznia"
+  },
+  "dashboard": {
+    "schedule": "Harmonogram",
+    "allTeachers": "Wszyscy nauczyciele",
+    "lunchBreak": "Przerwa obiadowa",
+    "pendingRequests": "Oczekujące zgłoszenia",
+    "pendingSub": "Zaakceptuj lub odrzuć zgłoszenia rezerwacji, które wymagają uwagi administratora.",
+    "statusActive": "Aktywne",
+    "statusNew": "Nowe",
+    "btnDetails": "Szczegóły",
+    "btnAccept": "Akceptuj",
+    "moreAttention": "2 kolejne aktywne zgłoszenia wymagają Twojej uwagi",
+    "viewAll": "Zobacz wszystkie"
+  },
+  "landingPage": {
+    "title": "Planowanie z łatwością",
+    "subtitle": "Rezerwuj, przełóż lub anuluj lekcje w zaledwie kilku krokach.",
+    "bookLesson": "Zarezerwuj lekcję",
+    "manageBooking": "Zarządzaj rezerwacją"
+  },
+  "passwordRecovery": {
+    "title": "Zapomniałeś hasła?",
+    "description": "Wpisz swój e-mail, aby wysłać prośbę o odzyskanie dostępu",
+    "emailLabel": "E-mail",
+    "emailPlaceholder": "admin@email.com",
+    "info": "Wyślemy link do odzyskania hasła na Twój e-mail",
+    "submit": "Wyślij prośbę",
+    "success": "Jeśli konto istnieje, otrzyma link do odzyskania dostępu",
+    "backToLogin": "Powrót do logowania"
+  },
+  "adminAuthForm": {
+    "title": "Logowanie",
+    "emailLabel": "E-mail",
+    "emailPlaceholder": "admin@email.com",
+    "passwordLabel": "Hasło",
+    "passwordPlaceholder": "pass1234",
+    "forgotPassword": "Zapomniałeś hasła?",
+    "rememberMe": "Zapamiętaj mnie",
+    "submit": "Zaloguj się",
+    "errors": {
+      "invalidCredentials": "Nieprawidłowy e-mail lub hasło",
+      "validation": "Błąd walidacji",
+      "generic": "Coś poszło nie tak",
+      "unknown": "Nieznany błąd"
+    }
+  },
+  "instructorListPage": {
+    "title": "Nauczyciele",
+    "table": {
+      "teacherName": "Imię nauczyciela",
+      "subject": "Przedmiot",
+      "workTerms": "Warunki pracy i data końca"
+    },
+    "details": {
+      "nextLessons": "Następne lekcje:",
+      "noLessons": "Brak zaplanowanych lekcji",
+      "teacherPage": "Strona nauczyciela →"
+    }
+  },
+  "teacherListPage": {
+    "title": "Nauczyciele",
+    "addTeacher": "Dodaj nauczyciela",
+    "teachers": {
+      "katarynaNovak": "Kataryna Novak",
+      "andriiShevchenko": "Andrii Szewczenko",
+      "sofiaKoval": "Sofia Koval",
+      "nataliiaIvanenko": "Nataliia Iwanenko",
+      "olenaMelnyk": "Olena Melnyk",
+      "dmytroKozak": "Dmytro Kozak",
+      "maksymBondarenko": "Maksym Bondarenko",
+      "annaKowalska": "Anna Kowalska"
+    },
+    "table": {
+      "teacherName": "Imię nauczyciela",
+      "subject": "Przedmiot",
+      "workTerms": "Warunki pracy i data końca"
+    },
+    "details": {
+      "nextLessons": "Następne lekcje:",
+      "noLessons": "Brak zaplanowanych lekcji.",
+      "teacherPage": "Strona nauczyciela →"
+    },
+    "modal": {
+      "title": "Dodaj nauczyciela",
+      "step1": "Krok 1 z 2",
+      "step2": "Krok 2 z 2",
+      "subtitle": "Uzupełnij podstawowe informacje",
+      "nameLabel": "Imię*",
+      "subjectLabel": "Przedmiot (wymagane)",
+      "subjectPlaceholder": "Wybierz przedmiot",
+      "subjectHint": "Wybierz przedmiot i kolor, żeby oznaczyć go w harmonogramie",
+      "emailLabel": "E-mail*",
+      "emailExists": "Ten adres e-mail już istnieje na Twojej liście",
+      "withoutTerm": "Bez terminu",
+      "subjectOptions": {
+        "chemistry": "Chemia",
+        "mathematics": "Matematyka",
+        "physics": "Fizyka"
+      },
+      "continue": "Przejdź do dostępności",
+      "saveLater": "Zapisz i uzupełnij później",
+      "availabilitySubtitle": "Ustaw dostępność nauczyciela",
+      "workTerms": "Warunki pracy",
+      "collaborationType": "Typ współpracy*",
+      "contract": "Umowa",
+      "freelance": "Wolny strzelec",
+      "dueDate": "Data końca*",
+      "regularAvailability": "Regularna dostępność",
+      "workdays": "💼 Dni robocze",
+      "lunchBreak": "🍽️ Przerwa obiadowa",
+      "info": "Możesz ustawić indywidualne godziny później lub",
+      "infoLink": "dodaj teraz",
+      "saveTeacher": "Zapisz nauczyciela"
+    }
   },
   "dates": {
     "tomorrow": "Jutro"
   }
 }
-

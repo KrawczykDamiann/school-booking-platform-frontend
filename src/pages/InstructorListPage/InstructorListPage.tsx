@@ -1,12 +1,13 @@
 import { useState } from "react";
+import { useTranslation } from "react-i18next";
 import styles from "./InstructorListPage.module.scss";
 
 interface Teacher {
   id: number;
-  name: string;
-  subject: string;
+  nameKey: string;
+  subjectKey: string;
   color: string;
-  terms: string;
+  termsKey: string;
   date: string;
   status: string;
   email: string;
@@ -15,60 +16,129 @@ interface Teacher {
 }
 
 const MOCK_TEACHERS: Teacher[] = [
-  { id: 1, name: "Kataryna Novak", subject: "Chemistry", color: "#2f80ed", terms: "Contract", date: "Without term", status: "online", email: "knowakchemistry@onlineschool.com", nextLessons: ["30/06 at 14:00", "15:00", "17:00"] },
-  { id: 2, name: "Andrii Shevchenko", subject: "Maths", color: "#00bfa5", terms: "Freelance", date: "Without term", status: "online", email: "ashevchenko@onlineschool.com", nextLessons: [] },
-  { id: 3, name: "Sofia Koval", subject: "Physics", color: "#4caf50", terms: "Contract", date: "26/06/26", alert: true, status: "offline", email: "skoval@onlineschool.com", nextLessons: [] },
-  { id: 4, name: "Natalia Ivanenko", subject: "Biology", color: "#9c27b0", terms: "Contract", date: "31/8/27", status: "online", email: "nivanenko@onlineschool.com", nextLessons: [] },
-  { id: 5, name: "Olena Melnyk", subject: "Literature", color: "#ffb300", terms: "Contract", date: "31/12/27", status: "online", email: "omelnyk@onlineschool.com", nextLessons: [] },
+  {
+    id: 1,
+    nameKey: "teacherListPage.teachers.katarynaNovak",
+    subjectKey: "subjects.chemistry",
+    color: "#2f80ed",
+    termsKey: "teacherListPage.modal.contract",
+    date: "teacherListPage.modal.withoutTerm",
+    status: "online",
+    email: "knowakchemistry@onlineschool.com",
+    nextLessons: ["30/06 at 14:00", "15:00", "17:00"],
+  },
+  {
+    id: 2,
+    nameKey: "teacherListPage.teachers.andriiShevchenko",
+    subjectKey: "subjects.mathematics",
+    color: "#00bfa5",
+    termsKey: "teacherListPage.modal.freelance",
+    date: "teacherListPage.modal.withoutTerm",
+    status: "online",
+    email: "ashevchenko@onlineschool.com",
+    nextLessons: [],
+  },
+  {
+    id: 3,
+    nameKey: "teacherListPage.teachers.sofiaKoval",
+    subjectKey: "subjects.physics",
+    color: "#4caf50",
+    termsKey: "teacherListPage.modal.contract",
+    date: "26/06/26",
+    alert: true,
+    status: "offline",
+    email: "skoval@onlineschool.com",
+    nextLessons: [],
+  },
+  {
+    id: 4,
+    nameKey: "teacherListPage.teachers.nataliiaIvanenko",
+    subjectKey: "subjects.biology",
+    color: "#9c27b0",
+    termsKey: "teacherListPage.modal.contract",
+    date: "31/8/27",
+    status: "online",
+    email: "nivanenko@onlineschool.com",
+    nextLessons: [],
+  },
+  {
+    id: 5,
+    nameKey: "teacherListPage.teachers.olenaMelnyk",
+    subjectKey: "subjects.english",
+    color: "#ffb300",
+    termsKey: "teacherListPage.modal.contract",
+    date: "31/12/27",
+    status: "online",
+    email: "omelnyk@onlineschool.com",
+    nextLessons: [],
+  },
 ];
 
 export default function InstructorListPage() {
-  const [selectedTeacher, setSelectedTeacher] = useState<Teacher | null>(MOCK_TEACHERS[0]);
+  const { t } = useTranslation();
+  const [selectedTeacherId, setSelectedTeacherId] = useState<number | null>(1);
+
+  const selectedTeacher =
+    MOCK_TEACHERS.find((teacher) => teacher.id === selectedTeacherId) ?? null;
 
   return (
     <div className={styles.dashboardContainer}>
-
       <main className={styles.mainContent}>
-        
-        {/* Left section: Teachers catalog for student */}
         <section className={styles.tableSection}>
           <div className={styles.tableHeader}>
-            <h1 className={styles.pageTitle}>Teachers</h1>
+            <h1 className={styles.pageTitle}>
+              {t("instructorListPage.title")}
+            </h1>
           </div>
 
           <div className={styles.tableWrapper}>
             <table className={styles.teachersTable}>
               <thead>
                 <tr>
-                  <th>Teacher's name</th>
-                  <th>Subject</th>
-                  <th>Work terms & Due date</th>
+                  <th>{t("instructorListPage.table.teacherName")}</th>
+                  <th>{t("instructorListPage.table.subject")}</th>
+                  <th>{t("instructorListPage.table.workTerms")}</th>
                 </tr>
               </thead>
               <tbody>
                 {MOCK_TEACHERS.map((teacher) => (
-                  <tr 
+                  <tr
                     key={teacher.id}
-                    className={selectedTeacher?.id === teacher.id ? styles.selectedRow : ""}
-                    onClick={() => setSelectedTeacher(teacher)}
+                    className={
+                      selectedTeacherId === teacher.id ? styles.selectedRow : ""
+                    }
+                    onClick={() => setSelectedTeacherId(teacher.id)}
                   >
                     <td className={styles.teacherNameCell}>
                       <div className={styles.tableAvatar}>
-                        {teacher.name.split(" ").map(n => n[0]).join("")}
+                        {t(teacher.nameKey)
+                          .split(" ")
+                          .map((n) => n[0])
+                          .join("")}
                       </div>
-                      {teacher.name}
+                      {t(teacher.nameKey)}
                     </td>
                     <td>
                       <span className={styles.subjectBadge}>
-                        <span className={styles.dot} style={{ backgroundColor: teacher.color }}></span>
-                        {teacher.subject}
+                        <span
+                          className={styles.dot}
+                          style={{ backgroundColor: teacher.color }}
+                        ></span>
+                        {t(teacher.subjectKey)}
                       </span>
                     </td>
                     <td className={styles.termsCell}>
                       <span className={styles.termsIcon}>📋</span>
-                      <span className={styles.termsText}>{teacher.terms}</span>
-                      <span className={`${styles.dateText} ${teacher.alert ? styles.alertDate : ""}`}>
-                        {teacher.date} {teacher.alert && "⚠️"}
+                      <span className={styles.termsText}>
+                        {t(teacher.termsKey)}
+                      </span>
+                      <span
+                        className={`${styles.dateText} ${teacher.alert ? styles.alertDate : ""}`}
+                      >
+                        {teacher.date.startsWith("teacherListPage")
+                          ? t(teacher.date)
+                          : teacher.date}{" "}
+                        {teacher.alert && "⚠️"}
                       </span>
                     </td>
                   </tr>
@@ -78,37 +148,42 @@ export default function InstructorListPage() {
           </div>
         </section>
 
-        {/* Right section: Sidebar details panel */}
         {selectedTeacher && (
           <aside className={styles.detailsSidebar}>
-            <button className={styles.closeSidebarBtn} onClick={() => setSelectedTeacher(null)}>✕</button>
-            
+            <button
+              className={styles.closeSidebarBtn}
+              onClick={() => setSelectedTeacherId(null)}
+            >
+              ✕
+            </button>
+
             <div className={styles.sidebarHeader}>
-              <h2>{selectedTeacher.name}</h2>
+              <h2>{t(selectedTeacher.nameKey)}</h2>
               <span className={styles.statusIndicator}></span>
             </div>
-            
+
             <div className={styles.sidebarEmail}>
               ✉️ {selectedTeacher.email}
             </div>
 
             <div className={styles.nextLessonsSection}>
-              <h3>Next lessons:</h3>
+              <h3>{t("instructorListPage.details.nextLessons")}</h3>
               {selectedTeacher.nextLessons.length > 0 ? (
                 <p className={styles.lessonsList}>
                   {selectedTeacher.nextLessons.join(", ")}
                 </p>
               ) : (
-                <p className={styles.noLessons}>No lessons scheduled</p>
+                <p className={styles.noLessons}>
+                  {t("instructorListPage.details.noLessons")}
+                </p>
               )}
             </div>
 
             <button className={styles.teacherPageLink}>
-              Teacher's page →
+              {t("instructorListPage.details.teacherPage")}
             </button>
           </aside>
         )}
-
       </main>
     </div>
   );
