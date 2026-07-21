@@ -1,30 +1,38 @@
-import style from "./CalendarToolbar.module.scss";
+import styles from "./CalendarToolbar.module.scss";
 import calendarIcon from "../../../../assets/calendar.svg";
+import { TIME_PERIODS, type TimePeriod } from "../../constants/timePeriods";
 
 type CalendarToolbarProps = {
   periodOfDays: string;
+  selectedTimePeriod: TimePeriod | null;
+  onSelectTimePeriod: (period: TimePeriod) => void;
 };
 
 export const CalendarToolbar: React.FC<CalendarToolbarProps> = ({
   periodOfDays,
+  selectedTimePeriod,
+  onSelectTimePeriod,
 }) => {
   return (
-    <div className={style.calendarToolbar}>
-      <div className={style.toolbarHeader}>
-        <ul className={style.timeFilterList}>
-          <li className={style.timeFilterItem}>Afternoon</li>
-          <li className={style.timeFilterItem}>Evening</li>
+    <div className={styles.calendarToolbar}>
+      <div className={styles.toolbarHeader}>
+        <ul className={styles.timeFilterList}>
+          {TIME_PERIODS.map((period) => (
+            <li className={styles.timeFilterItem} key={period.id} data-selected={period.value === selectedTimePeriod}>
+              <button className={styles.timeFilterButton} onClick={() => onSelectTimePeriod(period.value)}>{period.label}</button>
+            </li>
+          ))}
         </ul>
-        <div className={style.timePeriod}>
+        <div className={styles.timePeriod}>
           <img
             src={calendarIcon}
             alt="Calendar icon"
-            className={style.calendarIcon}
+            className={styles.calendarIcon}
           />
-          <span className={style.periodText}>{periodOfDays}</span>
+          <span className={styles.periodText}>{periodOfDays}</span>
         </div>
       </div>
-      <span className={style.toolbarText}>Select preferred period of time</span>
+      <span className={styles.toolbarText}>Select preferred period of time</span>
     </div>
   );
 };

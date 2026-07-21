@@ -3,6 +3,7 @@ import { CalendarGrid } from "../CalendarGrid/CalendarGrid";
 import { CalendarToolbar } from "../CalendarToolbar/CalendarToolbar";
 import styles from "./BookingCalendar.module.scss";
 import warningIcon from "../../../../assets/warning.svg";
+import type { TimePeriod } from "../../constants/timePeriods";
 
 type BookingCalendarProps = {
   periodOfDays: string;
@@ -12,6 +13,8 @@ type BookingCalendarProps = {
   handleNextDate: () => void;
   handlePrevDate: () => void;
   isPrevDisabled: boolean;
+  selectedTimePeriod: TimePeriod | null;
+  onSelectTimePeriod: (period: TimePeriod) => void;
 };
 
 export const BookingCalendar: React.FC<BookingCalendarProps> = ({
@@ -22,10 +25,16 @@ export const BookingCalendar: React.FC<BookingCalendarProps> = ({
   handleNextDate,
   handlePrevDate,
   isPrevDisabled,
+  onSelectTimePeriod,
+  selectedTimePeriod,
 }) => {
   return (
     <div className={styles.bookingCalendar}>
-      <CalendarToolbar periodOfDays={periodOfDays} />
+      <CalendarToolbar
+        periodOfDays={periodOfDays}
+        onSelectTimePeriod={onSelectTimePeriod}
+        selectedTimePeriod={selectedTimePeriod}
+      />
       <CalendarGrid
         currentWeek={currentWeek}
         availableHours={availableHours}

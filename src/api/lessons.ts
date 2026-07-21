@@ -1,14 +1,9 @@
 import axios from "axios";
 import { api } from "./api";
 
-type LoginPostBody = {
-  email: string;
-  password: string;
-};
-
-export async function login(data: LoginPostBody) {
+export async function fetchLessons() {
   try {
-    const response = await api.post("/api/auth/login", data);
+    const response = await api.get("/api/lessons");
 
     return response.data;
   } catch (error) {

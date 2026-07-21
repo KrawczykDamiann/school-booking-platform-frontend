@@ -5,12 +5,29 @@
   height: 44px;
   border: none;
   border-radius: 100px;
-  background: v.$color-primary;
-  color: v.$color-white;
   padding-block: 8px;
   cursor: pointer;
 
-  &:hover {
-    background: v.$color-primary-hover;
+  color: v.$color-white;
+  font-weight: 500;
+  font-size: 18px;
+  line-height: 135%;
+}
+
+.primaryButton {
+    background: v.$color-primary;
+
+    &:hover {
+      background: v.$color-primary-hover;
+  }
+}
+
+.secondaryButton {
+    background: v.$color-white;
+    border: 1px solid v.$color-secondary-shadow;
+    color: v.$color-gray80;
+
+    &:hover {
+      background: v.$color-secondary;
   }
 }

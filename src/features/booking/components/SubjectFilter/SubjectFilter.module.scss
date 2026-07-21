@@ -28,4 +28,8 @@
     &:hover {
         background: v.$color-secondary;
     }
+
+    &[data-selected="true"] {
+        background: v.$color-secondary;
+    }
 }

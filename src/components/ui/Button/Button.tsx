@@ -1,12 +1,23 @@
-import type { ButtonHTMLAttributes } from 'react';
-import styles from './Button.module.scss';
+import type { ButtonHTMLAttributes, ReactNode } from "react";
+import styles from "./Button.module.scss";
+
+type ButtonVariant = "primary" | "secondary";
 
 type ButtonProps = ButtonHTMLAttributes<HTMLButtonElement> & {
-    text: string;
+  variant: ButtonVariant;
+  children: ReactNode;
 };
 
-export const Button: React.FC<ButtonProps> = ({ text, ...props }) => {
-    return (
-        <button className={styles.button} {...props}>{text}</button>
-    );
+export const Button: React.FC<ButtonProps> = ({
+  variant,
+  children,
+  ...props
+}) => {
+  const buttonStyle = styles[`${variant}Button`];
+
+  return (
+    <button className={`${styles.button} ${buttonStyle}`} {...props}>
+      {children}
+    </button>
+  );
 };

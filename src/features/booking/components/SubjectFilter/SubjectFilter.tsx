@@ -1,60 +1,28 @@
+import type { SubjectFilterType } from "../../../../types/SubjectFilterType";
+import { mockSubjects } from "../../mocks/subjects";
 import styles from "./SubjectFilter.module.scss";
 
-export const SubjectFilter: React.FC = () => {
-  // Test subject data
-  const subjects = [
-    {
-      id: 1,
-      name: "Chemistry",
-      description: "Basic Chemistry",
-    },
-    {
-      id: 2,
-      name: "Ukrainian",
-      description: "Ukrainian",
-    },
-    {
-      id: 3,
-      name: "Physics",
-      description: "Basic Physics",
-    },
+type SubjectFilterProps = {
+  onSelectSubject: (subject: SubjectFilterType) => void;
+  selectedSubject: SubjectFilterType | null;
+};
 
-    {
-      id: 4,
-      name: "Biology",
-      description: "Basic Biology",
-    },
-
-    {
-      id: 5,
-      name: "History",
-      description: "History",
-    },
-
-    {
-      id: 6,
-      name: "Literature",
-      description: "Literature",
-    },
-
-    {
-      id: 7,
-      name: "English",
-      description: "Basic English",
-    },
-
-    {
-      id: 8,
-      name: "Mathematics",
-      description: "Basic Mathematics",
-    },
-  ];
-
+export const SubjectFilter: React.FC<SubjectFilterProps> = ({
+  onSelectSubject,
+  selectedSubject,
+}) => {
   return (
     <div className={styles.subjectFilterWrapper}>
       <ul className={styles.subjectFilterList}>
-        {subjects.map((subject) => (
-          <li key={subject.id} className={styles.subjectFilterItem}>{subject.name}</li>
+        {mockSubjects.map((subject) => (
+          <li
+            key={subject.id}
+            className={styles.subjectFilterItem}
+            onClick={() => onSelectSubject(subject.name)}
+            data-selected={subject.name === selectedSubject}
+          >
+            {subject.name}
+          </li>
         ))}
       </ul>
     </div>

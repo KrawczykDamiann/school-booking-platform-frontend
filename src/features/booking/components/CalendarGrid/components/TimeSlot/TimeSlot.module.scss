@@ -22,6 +22,7 @@
     background: none;
     border: none;
     color: transparent;
+    border-radius: 8px;
 
     &[data-available="available"] {
         color: v.$color-gray60;
@@ -33,5 +34,6 @@
 
     &[data-selected="true"] {
         background: v.$color-secondary;
+        color: v.$color-black;
     }
 }
