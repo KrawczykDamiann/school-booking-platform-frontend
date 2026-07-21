@@ -18,6 +18,12 @@
   flex: 1;
   padding-inline: 80px;
   padding-top: 12px;
+
   display: flex;
   flex-direction: column;
+  min-height: 100%;
+}
+
+.main {
+  margin-block: auto;
 }
