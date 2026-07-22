@@ -12,6 +12,7 @@ type CalendarGridProps = {
   handleNextDate: () => void;
   handlePrevDate: () => void;
   isPrevDisabled: boolean;
+  hasLessonsOnDay: (day: Date) => boolean;
 };
 
 export const CalendarGrid: React.FC<CalendarGridProps> = ({
@@ -21,6 +22,7 @@ export const CalendarGrid: React.FC<CalendarGridProps> = ({
   handleNextDate,
   handlePrevDate,
   isPrevDisabled,
+  hasLessonsOnDay,
 }) => {
   return (
     <div className={styles.calendarGrid}>
@@ -34,7 +36,7 @@ export const CalendarGrid: React.FC<CalendarGridProps> = ({
       <ul className={styles.daysList}>
         {currentWeek.map((day) => (
           <li key={day.toISOString()} className={styles.daysItem}>
-            <div className={styles.headerColumn}>
+            <div className={`${styles.headerColumn} ${!hasLessonsOnDay(day) ? styles.headerColumnEmpty : ""}`}>
               <span className={styles.date}>{format(day, "d")}</span>
               <span className={styles.weekDay}>{format(day, "EEEE")}</span>
             </div>

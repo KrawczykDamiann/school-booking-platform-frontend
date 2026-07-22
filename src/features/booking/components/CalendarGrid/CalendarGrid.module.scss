@@ -16,20 +16,19 @@
     display: flex;
     flex-direction: column;
     width: 100px;
+    color: v.$color-gray30
 }
 
 .date {
     font-weight: 500;
     font-size: 18px;
     line-height: 135%;
-    color: v.$color-gray30;
 }
 
 .weekDay {
     font-weight: 400;
     font-size: 14px;
     line-height: 145%;
-    color: v.$color-gray30;
 }
 
 .listHours {
@@ -52,4 +51,8 @@
 .calendarPrevButton:disabled {
     color: v.$color-gray20;
     cursor: default;
+}
+
+.headerColumnEmpty {
+    color: v.$color-gray20;
 }

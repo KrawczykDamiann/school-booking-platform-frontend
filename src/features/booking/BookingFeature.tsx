@@ -1,4 +1,4 @@
-import { useContext, useEffect, useMemo, useState } from "react";
+import { useCallback, useContext, useEffect, useMemo, useState } from "react";
 import styles from "./BookingFeature.module.scss";
 import { BookingCalendar } from "./components/BookingCalendar/BookingCalendar";
 import { LessonPreview } from "./components/LessonPreview/LessonPreview";
@@ -8,6 +8,7 @@ import {
   format,
   isBefore,
   isSameDay,
+  isSunday,
   startOfDay,
   subDays,
 } from "date-fns";
@@ -33,7 +34,7 @@ export const BookingFeature: React.FC = () => {
     }
 
     setSelectedSubject(subject);
-  }
+  };
 
   // Tracks active time period filter, allowing users to select or toggle off a period
   const [selectedTimePeriod, setSelectedTimePeriod] =
@@ -58,14 +59,27 @@ export const BookingFeature: React.FC = () => {
 
   // Navigates the calendar to the next day.
   const handleNextDate = () => {
-    setStartDate((prev) => addDays(prev, 1));
+    setStartDate((prev) => {
+      const nextDate = addDays(prev, 1);
+
+      return isSunday(nextDate) ? addDays(nextDate, 1) : nextDate;
+    });
   };
 
   // Navigates the calendar to the previous day.
   // Includes a safety guard that prevents selecting past dates.
+  const getValidStartDate = (date: Date): Date => {
+    return isSunday(date) ? addDays(date, 1) : date;
+  };
+
   const handlePrevDate = () => {
-    const previousDate = subDays(startDate, 1);
-    const today = startOfDay(new Date());
+    const today = getValidStartDate(startOfDay(new Date()));
+
+    let previousDate = subDays(startDate, 1);
+
+    if (isSunday(previousDate)) {
+      previousDate = subDays(previousDate, 1);
+    }
 
     setStartDate(
       isBefore(startOfDay(previousDate), today) ? today : previousDate,
@@ -75,13 +89,23 @@ export const BookingFeature: React.FC = () => {
   // Disables backward navigation if the calendar view is already on today's date.
   const isPrevDisabled = isSameDay(startDate, new Date());
 
-  // Generates an array of 6 consecutive days starting from the startDate.
+  // Generates an array of 6 consecutive days starting from the startDate, excluding Sunday.
   const currentWeek = useMemo(() => {
-    return Array.from({ length: 6 }, (_, index) => addDays(startDate, index));
+    const days: Date[] = [];
+    let currentDate = startDate;
+
+    while (days.length < 6) {
+      if (!isSunday(currentDate)) {
+        days.push(currentDate);
+      }
+      currentDate = addDays(currentDate, 1);
+    }
+
+    return days;
   }, [startDate]);
 
   // Defines the operational schedule hours (12 PM to 8 PM) for the calendar grid.
-  const availableHours = Array.from({ length: 13 }, (_, i) => i + 8);
+  // const availableHours = Array.from({ length: 13 }, (_, i) => i + 8);
 
   // Captures the start and end dates of the currently rendered 6-day week.
   const start = currentWeek[0];
@@ -127,6 +151,26 @@ export const BookingFeature: React.FC = () => {
     }
   });
 
+  // Dynamically generates and memoizes hour ranges (8 AM to 9 PM) to filter grid time rows.
+  const getAvailableHours = useCallback(() => {
+    if (selectedTimePeriod) {
+      switch (selectedTimePeriod) {
+        case "morning":
+          return Array.from({ length: 4 }, (_, i) => i + 8);
+        case "afternoon":
+          return Array.from({ length: 5 }, (_, i) => i + 12);
+        case "evening":
+          return Array.from({ length: 4 }, (_, i) => i + 17);
+      }
+    } else {
+      return Array.from({ length: 13 }, (_, i) => i + 8);
+    }
+  }, [selectedTimePeriod]);
+
+  const availableHours = useMemo(() => {
+    return getAvailableHours();
+  }, [getAvailableHours]);
+
   // Indexes lessons by date and hour to easily map them to their corresponding calendar slots.
   const lessonsMap = new Map();
 
@@ -143,6 +187,12 @@ export const BookingFeature: React.FC = () => {
     const key = `${format(day, "yyyy-MM-dd")}-${hour}`;
 
     return lessonsMap.get(key);
+  };
+
+  // Check if there is at least one lesson in the selected available hours for a specific day
+  const hasLessonsOnDay = (day: Date) => {
+    const key = format(day, "yyyy-MM-dd");
+    return availableHours.some((hour) => lessonsMap.has(`${key}-${hour}`));
   };
 
   // Opens the lesson status modal when the user confirms their selection.
@@ -174,6 +224,7 @@ export const BookingFeature: React.FC = () => {
           isPrevDisabled={isPrevDisabled}
           onSelectTimePeriod={handleSelectTimePeriod}
           selectedTimePeriod={selectedTimePeriod}
+          hasLessonsOnDay={hasLessonsOnDay}
         />
         {selectedLesson && (
           <LessonPreview

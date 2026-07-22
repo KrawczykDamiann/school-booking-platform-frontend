@@ -15,6 +15,7 @@ type BookingCalendarProps = {
   isPrevDisabled: boolean;
   selectedTimePeriod: TimePeriod | null;
   onSelectTimePeriod: (period: TimePeriod) => void;
+  hasLessonsOnDay: (day: Date) => boolean;
 };
 
 export const BookingCalendar: React.FC<BookingCalendarProps> = ({
@@ -27,6 +28,7 @@ export const BookingCalendar: React.FC<BookingCalendarProps> = ({
   isPrevDisabled,
   onSelectTimePeriod,
   selectedTimePeriod,
+  hasLessonsOnDay,
 }) => {
   return (
     <div className={styles.bookingCalendar}>
@@ -42,6 +44,7 @@ export const BookingCalendar: React.FC<BookingCalendarProps> = ({
         handleNextDate={handleNextDate}
         handlePrevDate={handlePrevDate}
         isPrevDisabled={isPrevDisabled}
+        hasLessonsOnDay={hasLessonsOnDay}
       />
       <div className={styles.warningMessage}>
         <img
