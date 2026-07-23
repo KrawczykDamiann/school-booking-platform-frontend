@@ -1,3 +1,5 @@
+@import './styles/_fonts.scss';
+
 :root {
   /* Theme variables */
   --text: #6b6375;
@@ -69,13 +71,12 @@ body {
   padding: 0;
   background-color: #f7f9fc; 
   color: #1a1a1a;
-  font-family: 'Inter', system-ui, -apple-system, sans-serif; 
+  font-family: 'Inter', sans-serif, system-ui, -apple-system; 
   -webkit-font-smoothing: antialiased;
 }
 
 h1,
 h2 {
-  font-family: var(--heading);
   font-weight: 500;
   color: var(--text-h);
 }
@@ -106,7 +107,6 @@ p {
 
 code,
 .counter {
-  font-family: var(--mono);
   display: inline-flex;
   border-radius: 4px;
   color: var(--text-h);
@@ -123,4 +123,8 @@ ul {
   list-style: none;
   padding: 0;
   margin: 0;
+}
+
+button {
+  font-family: 'Inter', sans-serif;
 }
