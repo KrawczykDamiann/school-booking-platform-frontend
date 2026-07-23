@@ -17,7 +17,9 @@ import { mockLessons } from "./mocks/lessons";
 import type { SubjectFilterType } from "../../types/SubjectFilterType";
 import { LessonBookingModal } from "../../components/LessonBookingModal/LessonBookingModal";
 import { fetchLessons } from "../../api/lessons";
+// import { bookLesson, createLesson } from "../../api/lessons";
 import type { TimePeriod } from "./constants/timePeriods";
+import { fetchSubjects } from "../../api/subjects";
 
 export const BookingFeature: React.FC = () => {
   // State to manage the active starting date of the currently viewed calendar period.
@@ -129,6 +131,22 @@ export const BookingFeature: React.FC = () => {
     init();
   }, []);
 
+  // Loads initial subjects list once when the component first renders
+  useEffect(() => {
+    async function init() {
+      try {
+        const subjectsData = await fetchSubjects();
+        console.log(subjectsData);
+      } catch (error) {
+        console.log(error);
+      }
+    }
+
+    init();
+  }, []);
+
+  
+
   // Filters the lessons array to include only those that match the currently selected subject.
   const filteredBySubject = mockLessons.filter(
     (lesson) => lesson.subject === selectedSubject,
@@ -196,8 +214,28 @@ export const BookingFeature: React.FC = () => {
   };
 
   // Opens the lesson status modal when the user confirms their selection.
-  const handleConfirm = () => {
+  const handleConfirm = async () => {
     setIsLessonBookingModalOpen(true);
+
+     // Сurrently commented, needs to be tested
+
+    // const data = {
+    //   availabilitySlotUuid: "0086ba20-0dea-4306-b2ae-14997c5237bb",
+    //   teacherUuid: "63ba6e46-ca7c-4622-983b-95c9eaab0312",
+    //   maxEnrolled: 1,
+    // }
+
+    // const lessonUuid = "20e5adf3-fed8-4eff-87ab-fbddc488fa03";
+
+    // try {
+    //   // const response = await createLesson(data);
+
+    //   const response = await bookLesson(lessonUuid);
+
+    //   console.log(response.data);
+    // } catch (error) {
+    //   console.log(error);
+    // }
   };
 
   // Clears active selection, resets subject filters, and closes the booking modal.

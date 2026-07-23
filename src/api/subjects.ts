@@ -1,14 +1,9 @@
 import axios from "axios";
 import { api } from "./api";
 
-type LoginPostBody = {
-  email: string;
-  password: string;
-};
-
-export async function login(data: LoginPostBody) {
+export async function fetchSubjects() {
   try {
-    const response = await api.post("/api/auth/login", data);
+    const response = await api.get("/api/subjects");
 
     return response.data;
   } catch (error) {

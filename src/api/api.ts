@@ -6,10 +6,11 @@ export const api = axios.create({
   withCredentials: true,
 });
 
-// Сurrently commented, needs to be tested
+
+ // Сurrently commented, needs to be tested
 
 // api.interceptors.request.use((config) => {
-//   const token = tokenService.get();
+//   const token = "eyJhbGciOiJIUzI1NiJ9.eyJzdWIiOiJhZG1pbkBleGFtcGxlLmNvbSIsImlhdCI6MTc4NDc4NzQ5MywiZXhwIjoxNzg0NzkxMDkzfQ.jHOOgDZgrLoPbBRvLV2xwuUs-SsiQRT1-dIdo8tatAo";
 
 //   if (token) {
 //     config.headers.Authorization = `Bearer ${token}`;
