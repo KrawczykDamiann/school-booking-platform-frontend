@@ -1,9 +1,9 @@
 import { Outlet } from "react-router-dom";
-import { Header } from "../../components/Header/Header";
 import { Footer } from "../../components/Footer/Footer";
 import styles from "./PublicLayout.module.scss";
 import { useState } from "react";
 import LoginModal from "../../components/LoginModal/LoginModal";
+import { PublicHeader } from "../../components/Header/PublicHeader/PublicHeader";
 
 export default function PublicLayout() {
   const [isLoginModalOpen, setIsLoginModalOpen] = useState(false);
@@ -11,7 +11,8 @@ export default function PublicLayout() {
   return (
     <div className={styles.layout}>
       <div className={styles.content}>
-        <Header onLoginClick={() => setIsLoginModalOpen(true)} />
+        <PublicHeader onLoginClick={() => setIsLoginModalOpen(true)} />
+        {/* <Header variant="student" onLoginClick={() => setIsLoginModalOpen(true)} /> */}
         <main className={styles.main}>
           <Outlet />
         </main>

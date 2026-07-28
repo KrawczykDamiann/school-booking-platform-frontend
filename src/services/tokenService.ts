@@ -1,4 +1,4 @@
-const TOKEN_KEY = "lessio_user_session";
+const TOKEN_KEY = "lessio_accessToken";
 
 export const tokenService = {
   /**

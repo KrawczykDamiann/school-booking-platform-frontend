@@ -1,8 +1,8 @@
 import { Link, useNavigate } from "react-router-dom";
 import styles from "./AdminAuthForm.module.scss";
-import { useState } from "react";
+import { useContext, useState } from "react";
 import { login } from "../../api/auth";
-import { tokenService } from "../../utils/tokenService";
+
 import axios from "axios";
 import { validation } from "../../utils/validators";
 import emailIcon from "../../assets/email.svg";
@@ -10,6 +10,8 @@ import passwordIcon from "../../assets/pass.svg";
 import { Input } from "../../components/ui/Input/Input";
 import { Checkbox } from "../../components/ui/Checkbox/Checkbox";
 import { useInput } from "../../hooks/useInput";
+import { tokenService } from "../../services/tokenService";
+import { AuthContext } from "../../context/AuthContext";
 
 export const AdminAuthForm: React.FC = () => {
   const emailInput = useInput({ validator: validation.validateEmail });
@@ -22,12 +24,17 @@ export const AdminAuthForm: React.FC = () => {
 
   const [isRememberMe, setIsRememberMe] = useState(false);
 
+  const [isLoading, setIsLoading] = useState(false);
+
   const navigate = useNavigate();
 
-  const isButtonDisabled = !emailInput.value || !passwordInput.value;
+  const { setIsAuthenticated } = useContext(AuthContext);
+
+  const isButtonDisabled = !emailInput.value || !passwordInput.value || isLoading;
 
   const handleSubmit = async (event: React.SubmitEvent) => {
     event.preventDefault();
+    setServerError('');
 
     const errors = {
       email: validation.validateEmail(email),
@@ -44,32 +51,37 @@ export const AdminAuthForm: React.FC = () => {
       return;
     }
 
+    setIsLoading(true);
+
     try {
       const response = await login({
         email,
         password,
       });
 
-      tokenService.save(response.data);
+      tokenService.setToken(response.token);
 
+      setIsAuthenticated(true);
+      
       navigate("/admin");
     } catch (error) {
       if (axios.isAxiosError(error)) {
-        if (error.response?.status === 403) {
+        const responseStatus = error.response?.status;
+
+        if (responseStatus === 401 || responseStatus === 401) {
           setServerError("Incorrect email or password");
           return;
         }
 
-        if (error.response?.status === 400) {
-          setServerError("Validation error");
+        if (responseStatus === 500) {
+          setServerError("Server error");
           return;
         }
-
-        setServerError("Something went wrong");
-        return;
       }
 
       setServerError("Unknown error");
+    } finally {
+      setIsLoading(false);
     }
   };
 

@@ -2,17 +2,16 @@
 
 .language-switcher {
   // Swapped from 'fixed' to 'absolute' to lock it permanently to the page layout
-  position: absolute;
-  top: 24px;
-  right: 40px;
-  z-index: 1000;
-  font-family: $font-primary;
+  // position: absolute;
+  // top: 24px;
+  // right: 40px;
+  // z-index: 1000;
 
   // Responsive padding for mobile screens (remains securely on the right side)
-  @media (max-width: $breakpoint-tablet) {
-    top: 16px;
-    right: 16px;
-  }
+  // @media (max-width: $breakpoint-tablet) {
+  //   top: 16px;
+  //   right: 16px;
+  // }
 
   &__current {
     display: flex;
@@ -32,10 +31,10 @@
       background-color: rgba(255, 255, 255, 0.08);
     }
 
-    @media (max-width: $breakpoint-tablet) {
-      padding: 6px 12px;
-      font-size: 13px;
-    }
+    // @media (max-width: $breakpoint-tablet) {
+    //   padding: 6px 12px;
+    //   font-size: 13px;
+    // }
   }
 
   &__dropdown {
@@ -45,10 +44,10 @@
     margin-top: 6px;
     padding: 6px 0;
     list-style: none;
-    background-color: $color-text-dark;
+    // background-color: $color-text-dark;
     border: 1px solid rgba(255, 255, 255, 0.08);
     border-radius: 12px;
-    box-shadow: $shadow-hover;
+    // box-shadow: $shadow-hover;
     
     opacity: 0;
     visibility: hidden;

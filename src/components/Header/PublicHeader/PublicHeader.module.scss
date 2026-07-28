@@ -1,4 +1,4 @@
-@use '../../styles/variables' as v;
+@use '../../../styles/variables' as v;
 
 .header {
   display: flex;
@@ -35,18 +35,7 @@
   align-items: center;
   gap: 4px;
   padding: 8px 12px;
-}
-
-.navLink {
-  background: none;
-  border: none;
-  padding: 0;
-  color: v.$color-gray80;
-  font-size: 16px;
-  font-weight: 400;
-  line-height: 150%;
   cursor: pointer;
-  text-decoration: none;
 
   &Active {
     color: v.$color-secondary-shadow;
@@ -57,8 +46,23 @@
   }
 }
 
-.navLinkActive {
-    color: v.$color-secondary-shadow;
+.navLinkWrapperActive .navLink {
+  color: v.$color-secondary-shadow;
+}
+
+.navLinkWrapper:hover .navLink {
+  color: v.$color-secondary-shadow;
+}
+
+.navLink {
+  background: none;
+  border: none;
+  padding: 0;
+  color: v.$color-gray80;
+  font-size: 16px;
+  font-weight: 400;
+  line-height: 150%;
+  text-decoration: none;
 }
 
 .navLinkIcon {
@@ -79,4 +83,42 @@
   &:hover {
     background: v.$color-accent-light;
   }
+}
+
+.rightContainer {
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+}
+
+.avatar {
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  justify-content: center;
+
+  width: 44px;
+  height: 44px;
+
+  font-weight: 500;
+  font-size: 18px;
+  line-height: 135%;
+  color: v.$color-gray80;
+
+  background: v.$color-gray20;
+  border-radius: 50%;
+  cursor: default;
+}
+
+.info {
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  padding: 12px;
+  height: 44px;
+  cursor: pointer;
+}
+
+.dropdownIcon {
+  padding: 6px;
 }

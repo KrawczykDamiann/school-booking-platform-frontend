@@ -13,11 +13,11 @@ export async function login(data: LoginPostBody) {
     return response.data;
   } catch (error) {
     if (axios.isAxiosError(error)) {
-      throw new Error(error.response?.data.message, {
-        cause: error,
-      });
+      throw error;
     }
 
-    throw error;
+    throw new Error("Unexpected error", {
+      cause: error,
+    });
   }
 }

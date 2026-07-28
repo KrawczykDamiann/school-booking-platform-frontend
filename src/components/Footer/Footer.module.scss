@@ -2,13 +2,36 @@
 
 .footer {
     box-sizing: border-box;
-    height: 92px;
-    background: v.$color-gray80;
-    color: v.$color-white;
+    height: 72px;
+    background: v.$color-black;
+    color: v.$color-gray10;
     padding: 24px 80px;
 
     display: flex;
     flex-direction: row;
     justify-content: space-between;
     align-items: center;
+}
+
+.linksList {
+    display: flex;
+    flex-direction: row;
+    gap: 20px;
+}
+
+.linkItem {
+    color: v.$color-gray10;
+    border-bottom: 1px solid v.$color-gray20;
+
+    &:hover {
+        color: v.$color-gray60;
+        border-bottom: 1px solid v.$color-gray60;
+    }
+
+}
+
+.link {
+    text-decoration: none;
+    padding-block: 8px;
+    color: inherit;
 }
