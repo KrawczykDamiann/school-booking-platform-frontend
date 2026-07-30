@@ -2,7 +2,7 @@ import React from "react";
 
 interface RightIconProps {
   className?: string;
-  size: string;
+  size?: number;
 }
 
 export const RightIcon: React.FC<RightIconProps> = ({ className, size }) => {

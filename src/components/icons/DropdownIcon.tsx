@@ -2,7 +2,7 @@ import React from "react";
 
 interface DropdownIconProps {
   className?: string;
-  size: string;
+  size?: number;
 }
 
 export const DropdownIcon: React.FC<DropdownIconProps> = ({

@@ -78,7 +78,7 @@
 }
 
 .errorMessage {
-  color: v.$color-system-error; // Standard fallback error red, change to v.$color-error if available
+  color: v.$color-system-error;
   font-size: 14px;
   margin: -8px 0 0 0; // Tightly fits inside the form gap
   text-align: left;
@@ -115,30 +115,33 @@
   gap: 8px;
 }
 
+.submitModalContent {
+  height: 100%;
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+}
+
 /* Success View Classes */
 .successContent {
-  text-align: center;
-  padding: 30px 20px;
-}
-
-.successIcon {
-  font-size: 40px;
-  display: block;
-  margin-bottom: 16px;
-}
-
-.successTitle {
-  font-size: 24px;
-  color: v.$color-text-main;
-  margin-bottom: 8px;
+  display: flex;
+  flex-direction: column;
+  height: calc(100% - 56px);
 }
 
 .successText {
-  font-size: 14px;
-  color: v.$color-text-muted;
-  line-height: 1.5;
+  font-weight: 400;
+  font-size: 28px;
+  line-height: 150%;
+  color: v.$color-gray30;
+  text-align: left;
 
   strong {
-    color: v.$color-text-main;
+    font-weight: 500;
+    color: v.$color-gray80;
   }
+}
+
+.buttonWrapper {
+  margin-top: auto;
 }

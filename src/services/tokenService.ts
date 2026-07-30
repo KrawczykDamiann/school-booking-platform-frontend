@@ -1,4 +1,12 @@
-const TOKEN_KEY = "lessio_accessToken";
+import type { UserType } from "../types/UserType";
+
+const TOKEN_KEY = "lessio_token";
+const USERTYPE_KEY = "userType";
+
+type AuthType = {
+  token: string;
+  userType: UserType;
+};
 
 export const tokenService = {
   /**
@@ -27,5 +35,35 @@ export const tokenService = {
    */
   hasToken: (): boolean => {
     return !!localStorage.getItem(TOKEN_KEY);
+  },
+
+  getUserType: (): UserType | null => {
+    const userType = localStorage.getItem(USERTYPE_KEY);
+
+    if (userType === "admin" || userType === "student") {
+      return userType;
+    }
+
+    return null;
+  },
+
+  saveAuth: ({ token, userType }: AuthType) => {
+    localStorage.setItem(TOKEN_KEY, token);
+    localStorage.setItem(USERTYPE_KEY, userType);
+  },
+
+  getAuth: () => {
+    const token = localStorage.getItem(TOKEN_KEY);
+    const userType = localStorage.getItem(USERTYPE_KEY);
+
+    return {
+      token,
+      userType,
+    };
+  },
+
+  clearAuth: (): void => {
+    localStorage.removeItem(TOKEN_KEY);
+    localStorage.removeItem(USERTYPE_KEY);
   },
 };

@@ -2,7 +2,7 @@ import React from "react";
 
 interface DashboardIconProps {
   className?: string;
-  size: string;
+  size?: number;
 }
 
 export const DashboardIcon: React.FC<DashboardIconProps> = ({

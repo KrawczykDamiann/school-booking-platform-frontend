@@ -1,8 +1,6 @@
 import { Link, useNavigate } from "react-router-dom";
 import styles from "./AdminAuthForm.module.scss";
 import { useContext, useState } from "react";
-import { login } from "../../api/auth";
-
 import axios from "axios";
 import { validation } from "../../utils/validators";
 import emailIcon from "../../assets/email.svg";
@@ -10,8 +8,9 @@ import passwordIcon from "../../assets/pass.svg";
 import { Input } from "../../components/ui/Input/Input";
 import { Checkbox } from "../../components/ui/Checkbox/Checkbox";
 import { useInput } from "../../hooks/useInput";
-import { tokenService } from "../../services/tokenService";
 import { AuthContext } from "../../context/AuthContext";
+import { loginAdmin } from "../../api/auth";
+import { Button } from "../../components/ui/Button/Button";
 
 export const AdminAuthForm: React.FC = () => {
   const emailInput = useInput({ validator: validation.validateEmail });
@@ -28,13 +27,14 @@ export const AdminAuthForm: React.FC = () => {
 
   const navigate = useNavigate();
 
-  const { setIsAuthenticated } = useContext(AuthContext);
+  const { login } = useContext(AuthContext);
 
-  const isButtonDisabled = !emailInput.value || !passwordInput.value || isLoading;
+  const isButtonDisabled =
+    !emailInput.value || !passwordInput.value || isLoading;
 
   const handleSubmit = async (event: React.SubmitEvent) => {
     event.preventDefault();
-    setServerError('');
+    setServerError("");
 
     const errors = {
       email: validation.validateEmail(email),
@@ -54,21 +54,20 @@ export const AdminAuthForm: React.FC = () => {
     setIsLoading(true);
 
     try {
-      const response = await login({
+      const response = await loginAdmin({
         email,
         password,
       });
 
-      tokenService.setToken(response.token);
+      const token: string = response.token;
 
-      setIsAuthenticated(true);
-      
+      login({ token, userType: "admin" });
       navigate("/admin");
     } catch (error) {
       if (axios.isAxiosError(error)) {
         const responseStatus = error.response?.status;
 
-        if (responseStatus === 401 || responseStatus === 401) {
+        if (responseStatus === 401 || responseStatus === 403) {
           setServerError("Incorrect email or password");
           return;
         }
@@ -133,14 +132,16 @@ export const AdminAuthForm: React.FC = () => {
           />
         </div>
       </form>
-      <button
-        type="submit"
-        className={styles.button}
-        form="login-form"
-        disabled={isButtonDisabled}
-      >
-        Login
-      </button>
+      <div className={styles.buttonWrapper}>
+        <Button
+          variant="primary"
+          type="submit"
+          form="login-form"
+          disabled={isButtonDisabled}
+        >
+          Login
+        </Button>
+      </div>
     </div>
   );
 };

@@ -1,12 +1,13 @@
 import { useLocation, useNavigate } from "react-router-dom";
 import styles from "./PasswordRecoveryPage.module.scss";
 import { useState } from "react";
-import returnIcon from "../../assets/return.svg";
 import emailIcon from "../../assets/email.svg";
 import warningIcon from "../../assets/warning.svg";
 import { validation } from "../../utils/validators";
 import { Input } from "../../components/ui/Input/Input";
 import { useInput } from "../../hooks/useInput";
+import { Button } from "../../components/ui/Button/Button";
+import { ReturnIcon } from "../../components/icons/ReturnIcon";
 
 export const PasswordRecoveryPage: React.FC = () => {
   const location = useLocation();
@@ -47,7 +48,9 @@ export const PasswordRecoveryPage: React.FC = () => {
             <h3 className={styles.title}>
               If account exists, it will receive a recovery link
             </h3>
-            <a href="/login/admin" className={styles.emailSentLink}>Back to login</a>
+            <a href="/login/admin" className={styles.emailSentLink}>
+              Back to login
+            </a>
           </div>
         ) : (
           <>
@@ -57,11 +60,7 @@ export const PasswordRecoveryPage: React.FC = () => {
                   onClick={() => navigate("/login/admin")}
                   className={styles.buttonBack}
                 >
-                  <img
-                    src={returnIcon}
-                    alt="Return icon"
-                    className={styles.buttonIcon}
-                  />
+                  <ReturnIcon />
                 </button>
                 <h3 className={styles.title}>Forgot your password?</h3>
               </div>
@@ -98,14 +97,16 @@ export const PasswordRecoveryPage: React.FC = () => {
                 </p>
               </div>
             </form>
-            <button
-              type="submit"
-              className={styles.button}
-              form="recovery-password"
-              disabled={!emailInput.isValid}
-            >
-              Request recovery
-            </button>
+            <div className={styles.buttonWrapper}>
+              <Button
+                variant="primary"
+                type="submit"
+                form="recovery-password"
+                disabled={!emailInput.isValid}
+              >
+                Request recovery
+              </Button>
+            </div>
           </>
         )}
       </div>

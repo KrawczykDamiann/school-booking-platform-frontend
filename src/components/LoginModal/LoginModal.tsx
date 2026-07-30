@@ -7,6 +7,8 @@ import emailIcon from "../../assets/email.svg";
 import warningIcon from "../../assets/warning.svg";
 import { validation } from "../../utils/validators";
 import { useInput } from "../../hooks/useInput";
+import { requestStudentOtt } from "../../api/auth";
+import { Button } from "../ui/Button/Button";
 
 interface LoginModalProps {
   onClose: () => void;
@@ -47,16 +49,24 @@ export default function LoginModal({ onClose }: LoginModalProps) {
     }
 
     try {
-      // Sending the POST request to Kamil's backend magic-link endpoint
-      await axios.post(`${import.meta.env.VITE_API_URL}/api/auth/magic-link`, {
+      const zoneId = Intl.DateTimeFormat().resolvedOptions().timeZone;
+
+      await requestStudentOtt({
         email,
+        zoneId,
       });
 
       // If successful, switch to the success confirmation view
       setIsSubmitted(true);
-    } catch (err) {
-      console.error("API Error:", err);
-      setError("Something went wrong. Please try again.");
+    } catch (error) {
+      if (axios.isAxiosError(error)) {
+        if (error.response?.status === 500) {
+          setError("Server error");
+          return;
+        }
+      }
+
+      setError("Unknown error");
     } finally {
       setIsLoading(false);
     }
@@ -67,15 +77,24 @@ export default function LoginModal({ onClose }: LoginModalProps) {
     return (
       <div className={styles.overlay} onClick={onClose}>
         <div className={styles.modal} onClick={(e) => e.stopPropagation()}>
-          <button className={styles.closeBtn} onClick={onClose}>
-            ✕
-          </button>
-          <div className={styles.successContent}>
-            <span className={styles.successIcon}>✉️</span>
-            <h2 className={styles.successTitle}>Check your email!</h2>
-            <p className={styles.successText}>
-              We have sent a magic link to <strong>{email}</strong>.
-            </p>
+          <div className={styles.submitModalContent}>
+            <div className={styles.modalHeader}>
+              <h2 className={styles.title}>Check your email!</h2>
+              <button className={styles.closeBtn} onClick={onClose}>
+                ✕
+              </button>
+            </div>
+            <div className={styles.successContent}>
+              <p className={styles.successText}>
+                We have sent a magic link to:
+                <strong>{email}</strong>.
+              </p>
+              <div className={styles.buttonWrapper}>
+                <Button type="button" variant="primary" onClick={onClose}>
+                  Understood
+                </Button>
+              </div>
+            </div>
           </div>
         </div>
       </div>
@@ -118,7 +137,6 @@ export default function LoginModal({ onClose }: LoginModalProps) {
             error={error}
           />
 
-          {/* Displaying backend error if something goes wrong */}
           {error && <p className={styles.errorMessage}>{error}</p>}
         </form>
 

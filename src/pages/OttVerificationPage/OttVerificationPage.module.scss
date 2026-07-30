@@ -1,0 +1,65 @@
+@use "../../styles/variables" as v;
+
+.overlay {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100vw;
+  height: 100vh;
+  background: v.$color-bg-overlay;
+  backdrop-filter: blur(8px); // Blur background behind the modal
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  z-index: 1000;
+}
+
+.modal {
+  background: v.$color-bg-card;
+  padding: 40px;
+  border-radius: v.$radius-lg;
+  width: 100%;
+  max-width: 480px;
+  height: 420px;
+  box-shadow: v.$shadow-main;
+  position: relative;
+  box-sizing: border-box;
+}
+
+.verificationContainer {
+  height: 100%;
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+  box-sizing: border-box;
+  text-align: left;
+}
+
+.loadingTitle {
+  color: #ffffff;
+  font-size: 1.5rem;
+  font-weight: 600;
+  letter-spacing: -0.025em;
+}
+
+.errorTitle {
+  color: v.$color-system-error;
+  font-weight: 700; 
+  font-size: 28px;
+  line-height: 115%;
+  margin-bottom: 12px;
+}
+
+.errorText {
+  color: v.$color-gray30;
+  font-weight: 400;
+  font-size: 20px;
+  line-height: 145%;
+  margin-bottom: 24px;
+  max-width: 420px;
+}
+
+.buttonWrapper {
+  width: 100%;
+  margin-top: auto;
+}

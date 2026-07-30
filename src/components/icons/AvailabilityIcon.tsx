@@ -2,7 +2,7 @@ import React from "react";
 
 interface AvailabilityIconProps {
   className?: string;
-  size: string;
+  size?: number;
 }
 
 export const AvailabilityIcon: React.FC<AvailabilityIconProps> = ({

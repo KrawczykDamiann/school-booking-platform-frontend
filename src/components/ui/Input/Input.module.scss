@@ -4,7 +4,7 @@
 input:-webkit-autofill,
 input:-webkit-autofill:hover,
 input:-webkit-autofill:focus {
-  -webkit-text-fill-color: v.$color-gray80;
+  -webkit-text-fill-color: v.$color-black;
   -webkit-box-shadow: 0 0 0 1000px v.$color-white inset;
 }
 
@@ -25,7 +25,7 @@ input:-webkit-autofill:focus {
     width: 100%;
     outline: none;
 
-    color: v.$color-gray80;
+    color: v.$color-black;
     font-size: 16px;
     line-height: 24px;
     font-weight: 400;

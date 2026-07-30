@@ -31,7 +31,7 @@ export const CalendarGrid: React.FC<CalendarGridProps> = ({
         onClick={handlePrevDate}
         disabled={isPrevDisabled}
       >
-        <LeftIcon size="16" className={styles.leftIcon}/>
+        <LeftIcon size={16} className={styles.leftIcon}/>
       </button>
       <ul className={styles.daysList}>
         {currentWeek.map((day) => (
@@ -51,7 +51,7 @@ export const CalendarGrid: React.FC<CalendarGridProps> = ({
         ))}
       </ul>
       <button className={styles.calendarNextButton} onClick={handleNextDate}>
-        <RightIcon size="16" />
+        <RightIcon size={16} />
       </button>
     </div>
   );

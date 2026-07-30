@@ -2,7 +2,7 @@ import React from "react";
 
 interface StudentsIconProps {
   className?: string;
-  size: string;
+  size?: number;
 }
 
 export const StudentsIcon: React.FC<StudentsIconProps> = ({
