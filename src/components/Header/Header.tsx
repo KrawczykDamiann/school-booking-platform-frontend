@@ -65,6 +65,44 @@ export const Header: React.FC<HeaderProps> = ({ onLoginClick }) => {
     { code: "ua", label: "UA" },
   ];
 
+  const navigate = useNavigate();
+
+  const { isAuthenticated, userType, logout } = useContext(AuthContext);
+
+  const navigation = userType === "admin" ? adminNavigation : studentNavigation;
+
+  const homePath = userType === "admin" ? "/admin" : "/";
+
+  const [isDropdownOpen, setIsDropdownOpen] = useState(false);
+
+  const dropdownRef = useRef<HTMLDivElement>(null);
+
+  const handleLogout = () => {
+    logout();
+
+    if (userType === "admin") {
+      navigate("/login/admin");
+    } else {
+        navigate("/login");
+    }
+  };
+
+  useEffect(() => {
+    const handleClickOutside = (event: MouseEvent) => {
+      if (
+        dropdownRef.current &&
+        !dropdownRef.current.contains(event.target as Node)
+      ) {
+        setIsDropdownOpen(false);
+      }
+    };
+
+    document.addEventListener("mousedown", handleClickOutside);
+
+    return () => {
+      document.removeEventListener("mousedown", handleClickOutside);
+    };
+  }, []);
   return (
     <header className={`${styles.header} ${isAdmin ? styles.headerAdmin : ""}`}>
       <Link to="/" className={styles.logo}>

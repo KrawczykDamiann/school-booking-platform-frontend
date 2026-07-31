@@ -8,6 +8,8 @@ import emailIcon from "../../assets/email.svg";
 import warningIcon from "../../assets/warning.svg";
 import { validation } from "../../utils/validators";
 import { useInput } from "../../hooks/useInput";
+import { requestStudentOtt } from "../../api/auth";
+import { Button } from "../ui/Button/Button";
 
 interface LoginModalProps {
   onClose: () => void;
@@ -51,9 +53,11 @@ export default function LoginModal({ onClose }: LoginModalProps) {
     }
 
     try {
-      // Sending the POST request to Kamil's backend magic-link endpoint
-      await axios.post(`${import.meta.env.VITE_API_URL}/api/auth/magic-link`, {
+      const zoneId = Intl.DateTimeFormat().resolvedOptions().timeZone;
+
+      await requestStudentOtt({
         email,
+        zoneId,
       });
 
       // If successful, switch to the success confirmation view
@@ -126,7 +130,6 @@ export default function LoginModal({ onClose }: LoginModalProps) {
             error={error}
           />
 
-          {/* Displaying backend error if something goes wrong */}
           {error && <p className={styles.errorMessage}>{error}</p>}
         </form>
 

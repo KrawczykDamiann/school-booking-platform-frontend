@@ -1,0 +1,39 @@
+@use '../../../styles/variables' as v;
+
+.button {
+  width: 100%;
+  height: 40px;
+  border: none;
+  border-radius: 100px;
+  padding: 8px 20px;
+  cursor: pointer;
+
+  color: v.$color-white;
+  font-weight: 400;
+  font-size: 18px;
+  line-height: 135%;
+}
+
+.primaryButton {
+  background: v.$color-primary;
+
+  &:disabled {
+    background: v.$color-gray30;
+    cursor: default;
+  }
+
+  &:not(:disabled):hover {
+    background: v.$color-primary-hover;
+  }
+}
+
+.secondaryButton {
+    text-wrap: nowrap;
+    background: v.$color-white;
+    border: 1px solid v.$color-secondary-shadow;
+    color: v.$color-gray80;
+
+    &:hover {
+      background: v.$color-secondary;
+  }
+}

@@ -1,9 +1,7 @@
 import { Link, useNavigate } from "react-router-dom";
 import { useTranslation } from "react-i18next";
 import styles from "./AdminAuthForm.module.scss";
-import { useState } from "react";
-import { login } from "../../api/auth";
-import { tokenService } from "../../utils/tokenService";
+import { useContext, useState } from "react";
 import axios from "axios";
 import { validation } from "../../utils/validators";
 import emailIcon from "../../assets/email.svg";
@@ -11,6 +9,9 @@ import passwordIcon from "../../assets/pass.svg";
 import { Input } from "../../components/ui/Input/Input";
 import { Checkbox } from "../../components/ui/Checkbox/Checkbox";
 import { useInput } from "../../hooks/useInput";
+import { AuthContext } from "../../context/AuthContext";
+import { loginAdmin } from "../../api/auth";
+import { Button } from "../../components/ui/Button/Button";
 
 export const AdminAuthForm: React.FC = () => {
   const { t } = useTranslation();
@@ -24,12 +25,18 @@ export const AdminAuthForm: React.FC = () => {
 
   const [isRememberMe, setIsRememberMe] = useState(false);
 
+  const [isLoading, setIsLoading] = useState(false);
+
   const navigate = useNavigate();
 
-  const isButtonDisabled = !emailInput.value || !passwordInput.value;
+  const { login } = useContext(AuthContext);
+
+  const isButtonDisabled =
+    !emailInput.value || !passwordInput.value || isLoading;
 
   const handleSubmit = async (event: React.SubmitEvent) => {
     event.preventDefault();
+    setServerError("");
 
     const errors = {
       email: validation.validateEmail(email),
@@ -46,14 +53,17 @@ export const AdminAuthForm: React.FC = () => {
       return;
     }
 
+    setIsLoading(true);
+
     try {
-      const response = await login({
+      const response = await loginAdmin({
         email,
         password,
       });
 
-      tokenService.save(response.data);
+      const token: string = response.token;
 
+      login({ token, userType: "admin" });
       navigate("/admin");
     } catch (error) {
       if (axios.isAxiosError(error)) {

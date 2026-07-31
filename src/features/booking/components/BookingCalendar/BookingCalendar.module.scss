@@ -1,0 +1,32 @@
+@use '../../../../styles/variables' as v;
+
+.bookingCalendar {
+    width: 840px;
+    background: v.$color-white;
+    border-radius: 32px;
+    padding: 40px;
+
+    display: flex;
+    flex-direction: column;
+    gap: 16px;
+}
+
+.warningMessage {
+    height: 40px;
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+    gap: 8px;
+}
+
+.warningIcon {
+    width: 16px;
+    height: 16px;
+}
+
+.warningText {
+    font-weight: 400;
+    font-size: 14px;
+    line-height: 145%;
+    color: v.$color-gray30;
+}

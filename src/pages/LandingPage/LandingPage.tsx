@@ -1,5 +1,6 @@
 import { useTranslation } from "react-i18next";
 import styles from "./LandingPage.module.scss";
+import { Button } from "../../components/ui/Button/Button";
 
 export default function LandingPage() {
   const { t } = useTranslation();

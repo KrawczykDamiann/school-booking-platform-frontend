@@ -7,21 +7,6 @@
   justify-content: center;
 }
 
-.loginBtn {
-  background: transparent;
-  border: 1px solid v.$color-accent;
-  color: v.$color-text-main;
-  padding: 10px 24px;
-  border-radius: v.$radius-lg;
-  font-weight: 500;
-  cursor: pointer;
-  transition: all 0.2s;
-
-  &:hover {
-    background: v.$color-accent-light;
-  }
-}
-
 .heroContent {
   max-width: 600px;
   display: flex;
@@ -51,32 +36,6 @@
   gap: 20px;
 }
 
-.primaryBtn {
-  height: 44px;
-  background: v.$color-primary;
-  color: v.$color-white;
-  border: none;
-  padding: 8px 32px;
-  border-radius: v.$radius-lg;
-  font-size: 16px;
-  cursor: pointer;
-
-  &:hover {
-    background: v.$color-primary-hover;
-  }
-}
-
-.secondaryBtn {
-  height: 44px;
-  background: transparent;
-  color: v.$color-text-main;
-  border: 1px solid v.$color-secondary-shadow;
-  padding: 8px 20px;
-  border-radius: v.$radius-lg;
-  font-size: 16px;
-  cursor: pointer;
-
-  &:hover {
-    background: v.$color-accent-light;
-  }
+.linkWrapper {
+  width: 100%;
 }

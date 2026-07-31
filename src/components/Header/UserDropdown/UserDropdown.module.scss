@@ -1,0 +1,110 @@
+@use '../../../styles/variables' as v;
+
+.dropdownContainer {
+  position: relative;
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  border-radius: 28px;
+
+  &Open {
+    background: v.$color-gray10;
+  }
+}
+
+.dropdownTrigger {
+  background: none;
+  border: none;
+  cursor: pointer;
+
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  padding: 10px 10px;
+  border-radius: 28px;
+
+  &:hover {
+    background: v.$color-gray10;
+  }
+}
+
+.dropdownText {
+  font-weight: 400;
+  font-size: 14px;
+  line-height: 145%;
+  color: v.$color-gray80;
+}
+
+.dropdownIcon {
+  padding: 6px;
+  color: v.$color-gray80;
+
+  &Active {
+    transform: rotate(180deg);
+  }
+}
+
+.dropdownMenu {
+  position: absolute;
+  width: 110px;
+  height: 132px;
+  top: calc(100% + 8px);
+  right: -10px;
+
+  padding: 12px;
+
+  background: v.$color-white;
+  border-radius: 16px;
+  box-shadow: v.$shadow-main;
+
+  font-weight: 400;
+  font-size: 14px;
+  line-height: 145%;
+  color: v.$color-gray80;
+
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+}
+
+.dropdownArrow {
+  position: absolute;
+  bottom: 100%;
+  left: 66%;
+
+  width: 0;
+  height: 0;
+  border-radius: 1px;
+  border-left: 15px solid transparent;
+  border-right: 15px solid transparent;
+  border-bottom: 15px solid v.$color-white;
+}
+
+.dropdownMenuList {
+  display: flex;
+  flex-direction: column;
+}
+
+.dropdownMenuItem {
+  padding: 8px 15px;
+  cursor: pointer;
+
+  &:hover {
+    background: v.$color-gray10;
+  }
+}
+
+.dropdownMenuItem:last-child {
+  border-top: 1px solid v.$color-gray10;
+}
+
+.dropdownMenuButton {
+  background: none;
+  border: none;
+  cursor: pointer;
+
+  font-weight: 400;
+  font-size: 14px;
+  line-height: 145%;
+  color: v.$color-gray80;
+}

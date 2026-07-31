@@ -8,7 +8,7 @@
     background: v.$color-white;
     padding: 40px;
     border-radius: 32px;
-    box-shadow: 0px 8px 20px 0px #0000001F;
+    box-shadow: v.$shadow-main;
     z-index: 1;
     box-sizing: border-box;
 }
@@ -101,25 +101,6 @@
     }
 }
 
-.button {
-    height: 44px;
-    background: v.$color-primary;
-    border: none;
-    border-radius: 100px;
-    cursor: pointer;
-
-    color: v.$color-white;
-    font-size: 18px;
-    line-height: 135%;
-
+.buttonWrapper {
     margin-top: auto;
-
-    &:hover {
-        background: v.$color-primary-hover;
-    }
-
-    &:disabled {
-        background: v.$color-gray30;
-        cursor: default;
-    }
 }
