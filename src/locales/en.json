@@ -22,6 +22,10 @@
     "button_continue": "Continue",
     "button_sending": "Sending...",
     "error_generic": "Something went wrong. Please check your email and try again.",
+    "ageConfirmation": "Please confirm that you are at least 16 years old.",
+    "ageConfirmationCheckbox": "I confirm that I’m over 16 years old.",
+    "footerNote": "We will send you a magic link to confirm your email",
+    "warningIconAlt": "Warning icon",
     "success_title": "Check your inbox!",
     "success_text_start": "We have sent a secure magic login link to ",
     "success_text_end": ". Click the link in the email to log in."
@@ -36,19 +40,9 @@
   },
   "calendar": {
     "chooseTime": "Choose a lesson time:",
-    "addToCart": "Add to cart",
-    "addToCartCount": "Add to cart ({{count}})",
-    "addedToStudentCart": "Added to your schedule (lessons with {{name}}):\n\n{{summary}}",
-    "days": {
-      "monday": "Monday",
-      "wednesday": "Wednesday"
-    }
-  },
-  "calendar": {
-  "chooseTime": "Choose a lesson time:",
-  "saveToSchedule": "Confirm Schedule",
-  "saveToScheduleCount": "Confirm Schedule ({{count}})",
-  "addedToStudentSchedule": "Added directly to your personal calendar (lessons with {{name}}):\n\n{{summary}}",
+    "saveToSchedule": "Confirm Schedule",
+    "saveToScheduleCount": "Confirm Schedule ({{count}})",
+    "addedToStudentSchedule": "Added directly to your personal calendar (lessons with {{name}}):\n\n{{summary}}",
     "days": {
       "monday": "Monday",
       "wednesday": "Wednesday"
@@ -60,7 +54,9 @@
     "informatics": "Informatics",
     "economics": "Economics",
     "biology": "Biology",
-    "chemistry": "Chemistry"
+    "chemistry": "Chemistry",
+    "history": "History",
+    "english": "English"
   },
   "filters": {
     "title": "Filter by Subject",
@@ -73,10 +69,131 @@
     "welcome": "Welcome",
     "tokens": "Tokens",
     "nextLesson": "Next lesson:",
-    "with": "with"
+    "with": "with",
+    "dashboard": "Dashboard",
+    "teachers": "Teachers",
+    "students": "Students",
+    "moreOptions": "More options",
+    "bookLesson": "Book a lesson",
+    "manageBooking": "Manage Booking",
+    "aboutUs": "About us",
+    "studentLogin": "Student login"
+  },
+  "dashboard": {
+    "schedule": "Schedule",
+    "allTeachers": "All teachers",
+    "lunchBreak": "Lunch break",
+    "pendingRequests": "Pending requests",
+    "pendingSub": "Accept or decline booking requests that require admin attention.",
+    "statusActive": "Active",
+    "statusNew": "New",
+    "btnDetails": "Details",
+    "btnAccept": "Accept",
+    "moreAttention": "2 more active requests requiring your attention",
+    "viewAll": "View all"
+  },
+  "landingPage": {
+    "title": "Scheduling with ease",
+    "subtitle": "Book, reschedule or cancel lessons in just a few steps.",
+    "bookLesson": "Book a lesson",
+    "manageBooking": "Manage booking"
+  },
+  "passwordRecovery": {
+    "title": "Forgot your password?",
+    "description": "Enter your email to request recovery",
+    "emailLabel": "Email",
+    "emailPlaceholder": "admin@email.com",
+    "info": "We will send a recovery link to your email",
+    "submit": "Request recovery",
+    "success": "If account exists, it will receive a recovery link",
+    "backToLogin": "Back to login"
+  },
+  "adminAuthForm": {
+    "title": "Login",
+    "emailLabel": "Email",
+    "emailPlaceholder": "admin@email.com",
+    "passwordLabel": "Password",
+    "passwordPlaceholder": "pass1234",
+    "forgotPassword": "Forgot your password?",
+    "rememberMe": "Remember me",
+    "submit": "Login",
+    "errors": {
+      "invalidCredentials": "Incorrect email or password",
+      "validation": "Validation error",
+      "generic": "Something went wrong",
+      "unknown": "Unknown error"
+    }
+  },
+  "instructorListPage": {
+    "title": "Teachers",
+    "table": {
+      "teacherName": "Teacher's name",
+      "subject": "Subject",
+      "workTerms": "Work terms & Due date"
+    },
+    "details": {
+      "nextLessons": "Next lessons:",
+      "noLessons": "No lessons scheduled",
+      "teacherPage": "Teacher's page →"
+    }
+  },
+  "teacherListPage": {
+    "title": "Teachers",
+    "addTeacher": "Add a teacher",
+    "teachers": {
+      "katarynaNovak": "Kataryna Novak",
+      "andriiShevchenko": "Andrii Shevchenko",
+      "sofiaKoval": "Sofia Koval",
+      "nataliiaIvanenko": "Nataliia Ivanenko",
+      "olenaMelnyk": "Olena Melnyk",
+      "dmytroKozak": "Dmytro Kozak",
+      "maksymBondarenko": "Maksym Bondarenko",
+      "annaKowalska": "Anna Kowalska"
+    },
+    "table": {
+      "teacherName": "Teacher's name",
+      "subject": "Subject",
+      "workTerms": "Work terms & Due date"
+    },
+    "details": {
+      "nextLessons": "Next lessons:",
+      "noLessons": "No lessons scheduled.",
+      "teacherPage": "Teacher's page →"
+    },
+    "modal": {
+      "title": "Add a teacher",
+      "step1": "Step 1 of 2",
+      "step2": "Step 2 of 2",
+      "subtitle": "Fill-in basic information",
+      "nameLabel": "Name*",
+      "subjectLabel": "Subject (required)",
+      "subjectPlaceholder": "Select a subject",
+      "subjectHint": "Select a subject and a colour to mark in your schedule",
+      "emailLabel": "Email*",
+      "emailExists": "This email already exists in your list",
+      "withoutTerm": "Without term",
+      "subjectOptions": {
+        "chemistry": "Chemistry",
+        "mathematics": "Maths",
+        "physics": "Physics"
+      },
+      "continue": "Continue to availability",
+      "saveLater": "Save and set later",
+      "availabilitySubtitle": "Set teacher's availability",
+      "workTerms": "Work terms",
+      "collaborationType": "Collaboration type*",
+      "contract": "Contract",
+      "freelance": "Freelance",
+      "dueDate": "Due Date*",
+      "regularAvailability": "Regular availability",
+      "workdays": "💼 Workdays",
+      "lunchBreak": "🍽️ Lunch break",
+      "info": "You can set individual per day later or",
+      "infoLink": "add now",
+      "saveTeacher": "Save teacher"
+    }
   },
   "dates": {
     "tomorrow": "Tomorrow"
   }
 }
-

@@ -1,5 +1,5 @@
 import { useState } from "react";
-import axios from "axios";
+import { useTranslation } from "react-i18next";
 import styles from "./LoginModal.module.scss";
 import { Input } from "../ui/Input/Input";
 import { Checkbox } from "../ui/Checkbox/Checkbox";
@@ -8,13 +8,14 @@ import warningIcon from "../../assets/warning.svg";
 import { validation } from "../../utils/validators";
 import { useInput } from "../../hooks/useInput";
 import { requestStudentOtt } from "../../api/auth";
-import { Button } from "../ui/Button/Button";
 
 interface LoginModalProps {
   onClose: () => void;
 }
 
 export default function LoginModal({ onClose }: LoginModalProps) {
+  const { t } = useTranslation();
+
   // State to store the email input value
   const emailInput = useInput({ validator: validation.validateEmail });
   const email = emailInput.value;
@@ -35,6 +36,7 @@ export default function LoginModal({ onClose }: LoginModalProps) {
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
     setError(null);
+    setIsLoading(true);
 
     const error = validation.validateEmail(email);
 
@@ -44,7 +46,7 @@ export default function LoginModal({ onClose }: LoginModalProps) {
     }
 
     if (!hasConfirmedAge) {
-      setError("Please confirm that you are at least 16 years old.");
+      setError(t("login_magic_link.ageConfirmation"));
       return;
     }
 
@@ -58,15 +60,9 @@ export default function LoginModal({ onClose }: LoginModalProps) {
 
       // If successful, switch to the success confirmation view
       setIsSubmitted(true);
-    } catch (error) {
-      if (axios.isAxiosError(error)) {
-        if (error.response?.status === 500) {
-          setError("Server error");
-          return;
-        }
-      }
-
-      setError("Unknown error");
+    } catch (err) {
+      console.error("API Error:", err);
+      setError(t("login_magic_link.error_generic"));
     } finally {
       setIsLoading(false);
     }
@@ -77,24 +73,19 @@ export default function LoginModal({ onClose }: LoginModalProps) {
     return (
       <div className={styles.overlay} onClick={onClose}>
         <div className={styles.modal} onClick={(e) => e.stopPropagation()}>
-          <div className={styles.submitModalContent}>
-            <div className={styles.modalHeader}>
-              <h2 className={styles.title}>Check your email!</h2>
-              <button className={styles.closeBtn} onClick={onClose}>
-                ✕
-              </button>
-            </div>
-            <div className={styles.successContent}>
-              <p className={styles.successText}>
-                We have sent a magic link to:
-                <strong>{email}</strong>.
-              </p>
-              <div className={styles.buttonWrapper}>
-                <Button type="button" variant="primary" onClick={onClose}>
-                  Understood
-                </Button>
-              </div>
-            </div>
+          <button className={styles.closeBtn} onClick={onClose}>
+            ✕
+          </button>
+          <div className={styles.successContent}>
+            <span className={styles.successIcon}>✉️</span>
+            <h2 className={styles.successTitle}>
+              {t("login_magic_link.success_title")}
+            </h2>
+            <p className={styles.successText}>
+              {t("login_magic_link.success_text_start")}
+              <strong>{email}</strong>
+              {t("login_magic_link.success_text_end")}
+            </p>
           </div>
         </div>
       </div>
@@ -105,12 +96,12 @@ export default function LoginModal({ onClose }: LoginModalProps) {
     <div className={styles.overlay} onClick={onClose}>
       <div className={styles.modal} onClick={(e) => e.stopPropagation()}>
         <div className={styles.modalHeader}>
-          <h2 className={styles.title}>Student login</h2>
+          <h2 className={styles.title}>{t("header.studentLogin")}</h2>
           <button className={styles.closeBtn} onClick={onClose}>
             ✕
           </button>
         </div>
-        <p className={styles.subtitle}>Please provide information about you</p>
+        <p className={styles.subtitle}>{t("login_magic_link.subtitle")}</p>
 
         <form
           className={styles.form}
@@ -118,9 +109,9 @@ export default function LoginModal({ onClose }: LoginModalProps) {
           id="student-login-form"
         >
           <Input
-            label="Contact"
+            label={t("login_magic_link.label_email")}
             type="email"
-            placeholder="studentemail@gmail.com"
+            placeholder={t("login_magic_link.placeholder_email")}
             value={email}
             onChange={emailInput.onChange}
             onBlur={emailInput.onBlur}
@@ -131,7 +122,7 @@ export default function LoginModal({ onClose }: LoginModalProps) {
           />
 
           <Checkbox
-            label="I confirm that I’m over 16 years old."
+            label={t("login_magic_link.ageConfirmationCheckbox")}
             checked={hasConfirmedAge}
             onChange={(e) => setHasConfirmedAge(e.target.checked)}
             error={error}
@@ -146,16 +137,18 @@ export default function LoginModal({ onClose }: LoginModalProps) {
           className={styles.submitBtn}
           disabled={isLoading}
         >
-          {isLoading ? "Sending..." : "Confirm"}
+          {isLoading
+            ? t("login_magic_link.button_sending")
+            : t("login_magic_link.button_continue")}
         </button>
 
         <div className={styles.footerNote}>
           <img
             src={warningIcon}
-            alt="Warning icon"
+            alt={t("login_magic_link.warningIconAlt")}
             className={styles.infoIcon}
           />
-          We will send you a magic link to confirm your email
+          {t("login_magic_link.footerNote")}
         </div>
       </div>
     </div>
