@@ -7,9 +7,6 @@ import { AdminDashboard } from "./pages/AdminDashboard/AdminDashboard";
 import { TeacherListPage } from "./pages/TeacherListPage/TeacherListPage";
 import PublicLayout from "./layouts/PublicLayout/PublicLayout";
 import AdminLayout from "./layouts/AdminLayout/AdminLayout";
-import { BookingPage } from "./pages/BookingPage/BookingPage";
-import { ProtectedRoute } from "./features/ProtectedRoute/ProtectedRoute";
-import { OttVerificationPage } from "./pages/OttVerificationPage/OttVerificationPage";
 
 export function AppRouter() {
   return (

@@ -7,7 +7,6 @@ import warningIcon from "../../assets/warning.svg";
 import { validation } from "../../utils/validators";
 import { Input } from "../../components/ui/Input/Input";
 import { useInput } from "../../hooks/useInput";
-import { Button } from "../../components/ui/Button/Button";
 import { ReturnIcon } from "../../components/icons/ReturnIcon";
 
 export const PasswordRecoveryPage: React.FC = () => {

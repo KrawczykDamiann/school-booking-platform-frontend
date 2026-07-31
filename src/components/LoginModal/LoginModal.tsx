@@ -1,6 +1,5 @@
 import { useState } from "react";
 import { useTranslation } from "react-i18next";
-import axios from "axios";
 import styles from "./LoginModal.module.scss";
 import { Input } from "../ui/Input/Input";
 import { Checkbox } from "../ui/Checkbox/Checkbox";
@@ -9,7 +8,6 @@ import warningIcon from "../../assets/warning.svg";
 import { validation } from "../../utils/validators";
 import { useInput } from "../../hooks/useInput";
 import { requestStudentOtt } from "../../api/auth";
-import { Button } from "../ui/Button/Button";
 
 interface LoginModalProps {
   onClose: () => void;

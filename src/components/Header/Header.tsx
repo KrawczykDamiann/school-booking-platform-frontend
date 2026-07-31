@@ -1,10 +1,11 @@
-import React, { useState, useEffect, useRef } from "react";
+import React, { useState, useEffect, useRef, useContext } from "react";
 import styles from "./Header.module.scss";
-import { Link, useLocation } from "react-router-dom";
+import { Link, useLocation, useNavigate } from "react-router-dom";
 import { useTranslation } from "react-i18next";
 import studentIcon from "../../assets/student.svg";
 import dashboardIcon from "../../assets/dashboard.svg";
 import moreIcon from "../../assets/more.svg";
+import { AuthContext } from "../../context/AuthContext";
 
 type HeaderProps = {
   onLoginClick?: () => void;
@@ -14,6 +15,8 @@ export const Header: React.FC<HeaderProps> = ({ onLoginClick }) => {
   const { pathname } = useLocation();
   const isAdmin = pathname.startsWith("/admin");
   const { t, i18n } = useTranslation();
+  const navigate = useNavigate();
+  const { userType, logout } = useContext(AuthContext);
 
   const [isDropdownOpen, setIsDropdownOpen] = useState(false);
   const dropdownRef = useRef<HTMLDivElement>(null);
@@ -64,45 +67,6 @@ export const Header: React.FC<HeaderProps> = ({ onLoginClick }) => {
     { code: "pl", label: "PL" },
     { code: "ua", label: "UA" },
   ];
-
-  const navigate = useNavigate();
-
-  const { isAuthenticated, userType, logout } = useContext(AuthContext);
-
-  const navigation = userType === "admin" ? adminNavigation : studentNavigation;
-
-  const homePath = userType === "admin" ? "/admin" : "/";
-
-  const [isDropdownOpen, setIsDropdownOpen] = useState(false);
-
-  const dropdownRef = useRef<HTMLDivElement>(null);
-
-  const handleLogout = () => {
-    logout();
-
-    if (userType === "admin") {
-      navigate("/login/admin");
-    } else {
-        navigate("/login");
-    }
-  };
-
-  useEffect(() => {
-    const handleClickOutside = (event: MouseEvent) => {
-      if (
-        dropdownRef.current &&
-        !dropdownRef.current.contains(event.target as Node)
-      ) {
-        setIsDropdownOpen(false);
-      }
-    };
-
-    document.addEventListener("mousedown", handleClickOutside);
-
-    return () => {
-      document.removeEventListener("mousedown", handleClickOutside);
-    };
-  }, []);
   return (
     <header className={`${styles.header} ${isAdmin ? styles.headerAdmin : ""}`}>
       <Link to="/" className={styles.logo}>
@@ -231,7 +195,13 @@ export const Header: React.FC<HeaderProps> = ({ onLoginClick }) => {
         </div>
 
         {isAdmin ? (
-          <div className={styles.adminProfileWrapper}>
+          <div
+            className={styles.adminProfileWrapper}
+            onClick={() => {
+              logout();
+              navigate(userType === "admin" ? "/login/admin" : "/login");
+            }}
+          >
             <div className={styles.avatar}>VU</div>
             <span className={styles.profileName}>VesUp</span>
             <span className={styles.dropdownArrow}>▼</span>

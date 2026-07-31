@@ -11,7 +11,6 @@ import { Checkbox } from "../../components/ui/Checkbox/Checkbox";
 import { useInput } from "../../hooks/useInput";
 import { AuthContext } from "../../context/AuthContext";
 import { loginAdmin } from "../../api/auth";
-import { Button } from "../../components/ui/Button/Button";
 
 export const AdminAuthForm: React.FC = () => {
   const { t } = useTranslation();
