@@ -69,10 +69,10 @@
   font-weight: 400;
   line-height: 150%;
   text-decoration: none;
-}
 
-.navLinkActive {
-  color: v.$color-secondary-shadow;
+  &Active {
+    color: v.$color-secondary-shadow;
+  }
 }
 
 .avatar {
@@ -89,9 +89,9 @@
   line-height: 135%;
   color: v.$color-gray80;
 
-  &:hover {
-    background: v.$color-accent-light;
-  }
+  background: v.$color-gray20;
+  border-radius: 50%;
+  cursor: default;
 }
 
 // Floating admin header
@@ -121,25 +121,6 @@
   gap: 12px;
 }
 
-.avatar {
-  width: 36px;
-  height: 36px;
-  background: #e5e7eb;
-  color: #4b5563;
-  border-radius: 50%;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  font-weight: 700;
-  font-size: 13px;
-}
-
-.profileName {
-  font-size: 14px;
-  font-weight: 600;
-  color: v.$color-text-main;
-}
-
 .dropdownArrow {
   font-size: 10px;
   color: #9ca3af;
@@ -149,7 +130,7 @@
 .rightSection {
   display: flex;
   align-items: center;
-  gap: 24px;
+  max-height: 44px;
 }
 
 // Language switcher

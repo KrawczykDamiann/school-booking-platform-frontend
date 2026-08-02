@@ -2,10 +2,12 @@ import React, { useState, useEffect, useRef, useContext } from "react";
 import styles from "./Header.module.scss";
 import { Link, useLocation, useNavigate } from "react-router-dom";
 import { useTranslation } from "react-i18next";
-import studentIcon from "../../assets/student.svg";
-import dashboardIcon from "../../assets/dashboard.svg";
-import moreIcon from "../../assets/more.svg";
 import { AuthContext } from "../../context/AuthContext";
+import { Button } from "../ui/Button/Button";
+import { AvailabilityIcon } from "../icons/AvailabilityIcon";
+import { StudentsIcon } from "../icons/StudentsIcon";
+import { DashboardIcon } from "../icons/DashboardIcon";
+import { UserDropdown } from "./UserDropdown/UserDropdown";
 
 type HeaderProps = {
   onLoginClick?: () => void;
@@ -16,9 +18,11 @@ export const Header: React.FC<HeaderProps> = ({ onLoginClick }) => {
   const isAdmin = pathname.startsWith("/admin");
   const { t, i18n } = useTranslation();
   const navigate = useNavigate();
-  const { userType, logout } = useContext(AuthContext);
+  const { userType, logout, isAuthenticated } = useContext(AuthContext);
 
+  const [isLanguageDropdownOpen, setIsLanguageDropdownOpen] = useState(false);
   const [isDropdownOpen, setIsDropdownOpen] = useState(false);
+
   const dropdownRef = useRef<HTMLDivElement>(null);
 
   // Read language state from Google cookie, fallback to i18next or 'pl'
@@ -30,6 +34,16 @@ export const Header: React.FC<HeaderProps> = ({ onLoginClick }) => {
     }
     return i18n.resolvedLanguage || i18n.language || "pl";
   });
+
+  const handleLogout = () => {
+    logout();
+
+    if (userType === "admin") {
+      navigate("/login/admin");
+    } else {
+      navigate("/login");
+    }
+  };
 
   // Close dropdown when user clicks outside of the element
   useEffect(() => {
@@ -76,89 +90,47 @@ export const Header: React.FC<HeaderProps> = ({ onLoginClick }) => {
       <nav className={styles.nav}>
         {isAdmin ? (
           <React.Fragment>
-            <div className={styles.navLinkWrapper}>
-              <img
-                src={dashboardIcon}
-                alt="Dashboard icon"
-                className={styles.navLinkIcon}
-              />
-              <Link
-                to="/admin/dashboard"
-                className={`${styles.navLink} ${pathname === "/admin/dashboard" ? styles.navLinkActive : ""}`}
-              >
+            <div
+              className={`${styles.navItem} ${pathname === "/admin/dashboard" ? styles.navItemActive : ""}`}
+            >
+              <DashboardIcon size={16} />
+              <Link to="/admin/dashboard" className={styles.navLink}>
                 {t("header.dashboard")}
               </Link>
             </div>
-            <div className={styles.navLinkWrapper}>
-              <img
-                src={studentIcon}
-                alt="Teachers icon"
-                className={styles.navLinkIcon}
-              />
-              <Link
-                to="/admin/teachers"
-                className={`${styles.navLink} ${pathname === "/admin/teachers" ? styles.navLinkActive : ""}`}
-              >
+            <div
+              className={`${styles.navItem} ${pathname === "/admin/teachers" ? styles.navItemActive : ""}`}
+            >
+              <AvailabilityIcon size={16} />
+              <Link to="/admin/teachers" className={styles.navLink}>
                 {t("header.teachers")}
               </Link>
             </div>
-            <div className={styles.navLinkWrapper}>
-              <img
-                src={studentIcon}
-                alt="Students icon"
-                className={styles.navLinkIcon}
-              />
-              <Link
-                to="/admin/students"
-                className={`${styles.navLink} ${pathname === "/admin/students" ? styles.navLinkActive : ""}`}
-              >
+            <div
+              className={`${styles.navItem} ${pathname === "/admin/students" ? styles.navItemActive : ""}`}
+            >
+              <StudentsIcon size={16} />
+              <Link to="/admin/students" className={styles.navLink}>
                 {t("header.students")}
-              </Link>
-            </div>
-            <div className={styles.navLinkWrapper}>
-              <img
-                src={moreIcon}
-                alt="More icon"
-                className={styles.navLinkIcon}
-              />
-              <Link to="#" className={styles.navLink}>
-                {t("header.moreOptions")}
               </Link>
             </div>
           </React.Fragment>
         ) : (
           <React.Fragment>
-            <div className={styles.navLinkWrapper}>
-              <img
-                src={studentIcon}
-                alt="Student icon"
-                className={styles.navLinkIcon}
-              />
-              <Link
-                to="/booking-calendar"
-                className={`${styles.navLink} ${pathname === "/booking-calendar" ? styles.navLinkActive : ""}`}
-              >
+            <div
+              className={`${styles.navItem} ${pathname === "/booking-calendar" ? styles.navItemActive : ""}`}
+            >
+              <StudentsIcon size={16} />
+              <Link to="/booking-calendar" className={styles.navLink}>
                 {t("header.bookLesson")}
               </Link>
             </div>
-            <div className={styles.navLinkWrapper}>
-              <img
-                src={dashboardIcon}
-                alt="Dashboard icon"
-                className={styles.navLinkIcon}
-              />
-              <Link to="#" className={styles.navLink}>
+            <div
+              className={`${styles.navItem} ${pathname === "/manage-booking" ? styles.navItemActive : ""}`}
+            >
+              <DashboardIcon size={16} />
+              <Link to="/" className={styles.navLink}>
                 {t("header.manageBooking")}
-              </Link>
-            </div>
-            <div className={styles.navLinkWrapper}>
-              <img
-                src={moreIcon}
-                alt="More icon"
-                className={styles.navLinkIcon}
-              />
-              <Link to="#" className={styles.navLink}>
-                {t("header.aboutUs")}
               </Link>
             </div>
           </React.Fragment>
@@ -170,13 +142,13 @@ export const Header: React.FC<HeaderProps> = ({ onLoginClick }) => {
         <div className={styles.translatorContainer} ref={dropdownRef}>
           <button
             className={styles.activeLangBtn}
-            onClick={() => setIsDropdownOpen(!isDropdownOpen)}
+            onClick={() => setIsLanguageDropdownOpen(!isLanguageDropdownOpen)}
           >
-            {activeLang.toUpperCase()}{" "}
+            {activeLang.toUpperCase()}
             <span className={styles.dropdownArrow}>▼</span>
           </button>
 
-          {isDropdownOpen && (
+          {isLanguageDropdownOpen && (
             <ul className={styles.langDropdown}>
               {languages
                 .filter((lang) => lang.code !== activeLang)
@@ -194,22 +166,23 @@ export const Header: React.FC<HeaderProps> = ({ onLoginClick }) => {
           )}
         </div>
 
-        {isAdmin ? (
-          <div
-            className={styles.adminProfileWrapper}
-            onClick={() => {
-              logout();
-              navigate(userType === "admin" ? "/login/admin" : "/login");
-            }}
-          >
-            <div className={styles.avatar}>VU</div>
-            <span className={styles.profileName}>VesUp</span>
-            <span className={styles.dropdownArrow}>▼</span>
+        {isAuthenticated ? (
+          <div className={styles.rightSection}>
+            {userType === "admin" && <div className={styles.avatar}>VU</div>}
+            <UserDropdown
+              name={userType === "admin" ? "VesUp" : "student@example.com"}
+              dropdownRef={dropdownRef}
+              isDropdownOpen={isDropdownOpen}
+              setIsDropdownOpen={setIsDropdownOpen}
+              handleLogout={handleLogout}
+            />
           </div>
         ) : (
-          <button className={styles.loginBtn} onClick={() => onLoginClick?.()}>
-            {t("header.studentLogin")}
-          </button>
+          <div>
+            <Button variant="secondary" onClick={() => onLoginClick?.()}>
+              Student login
+            </Button>
+          </div>
         )}
       </div>
     </header>
