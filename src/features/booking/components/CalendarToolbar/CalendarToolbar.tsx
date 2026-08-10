@@ -5,7 +5,7 @@ import { TIME_PERIODS, type TimePeriod } from "../../constants/timePeriods";
 type CalendarToolbarProps = {
   periodOfDays: string;
   selectedTimePeriod: TimePeriod | null;
-  onSelectTimePeriod: (period: TimePeriod) => void;
+  onSelectTimePeriod: (period: TimePeriod | null) => void;
 };
 
 export const CalendarToolbar: React.FC<CalendarToolbarProps> = ({
@@ -22,6 +22,8 @@ export const CalendarToolbar: React.FC<CalendarToolbarProps> = ({
               <button className={styles.timeFilterButton} onClick={() => onSelectTimePeriod(period.value)}>{period.label}</button>
             </li>
           ))}
+          <li className={styles.clearFilterItem}>
+            <button className={styles.clearFilterButton} onClick={() => onSelectTimePeriod(null)}>Clear filter</button></li>
         </ul>
         <div className={styles.timePeriod}>
           <img

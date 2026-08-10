@@ -2,21 +2,31 @@
 
 .bookingPage {
     background: v.$color-gray10;
-    height: 100dvh;
+    min-height: 100vh;
     margin-top: 20px;
 }
 
-.returnLink {
-    text-decoration: none;
-    color: v.$color-black;
-    font-weight: 500;
-    font-size: 32px;
-    line-height: 100%;
-
+.bookingPageHeader {
     display: flex;
     flex-direction: row;
     align-items: center;
     gap: 6px;
+}
+
+.title {
+    color: v.$color-black;
+    font-weight: 500;
+    font-size: 32px;
+    line-height: 100%;
+    margin: 0;
+}
+
+.returnLink {
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+    gap: 6px;
+    color: v.$color-black;
 }
 
 .returnIcon {

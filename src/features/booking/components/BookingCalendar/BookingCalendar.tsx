@@ -4,6 +4,7 @@ import { CalendarToolbar } from "../CalendarToolbar/CalendarToolbar";
 import styles from "./BookingCalendar.module.scss";
 import warningIcon from "../../../../assets/warning.svg";
 import type { TimePeriod } from "../../constants/timePeriods";
+import type { SubjectFilterType } from "../../../../types/SubjectFilterType";
 
 type BookingCalendarProps = {
   periodOfDays: string;
@@ -14,8 +15,9 @@ type BookingCalendarProps = {
   handlePrevDate: () => void;
   isPrevDisabled: boolean;
   selectedTimePeriod: TimePeriod | null;
-  onSelectTimePeriod: (period: TimePeriod) => void;
+  onSelectTimePeriod: (period: TimePeriod | null) => void;
   hasLessonsOnDay: (day: Date) => boolean;
+  selectedSubject: SubjectFilterType | null;
 };
 
 export const BookingCalendar: React.FC<BookingCalendarProps> = ({
@@ -29,9 +31,17 @@ export const BookingCalendar: React.FC<BookingCalendarProps> = ({
   onSelectTimePeriod,
   selectedTimePeriod,
   hasLessonsOnDay,
+  selectedSubject,
 }) => {
   return (
-    <div className={styles.bookingCalendar}>
+    <div
+      className={`${styles.bookingCalendar} ${!selectedSubject ? styles.bookingCalendarCollapsed : ""}`}
+    >
+      {!selectedSubject && (
+        <div className={styles.bookingCalendarOverlay}>
+          Select a subject to view slots
+        </div>
+      )}
       <CalendarToolbar
         periodOfDays={periodOfDays}
         onSelectTimePeriod={onSelectTimePeriod}
