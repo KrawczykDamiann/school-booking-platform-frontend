@@ -138,62 +138,37 @@
     }
   },
   "teacherListPage": {
-    "title": "Nauczyciele",
-    "addTeacher": "Dodaj nauczyciela",
-    "teachers": {
-      "katarynaNovak": "Kataryna Novak",
-      "andriiShevchenko": "Andrii Szewczenko",
-      "sofiaKoval": "Sofia Koval",
-      "nataliiaIvanenko": "Nataliia Iwanenko",
-      "olenaMelnyk": "Olena Melnyk",
-      "dmytroKozak": "Dmytro Kozak",
-      "maksymBondarenko": "Maksym Bondarenko",
-      "annaKowalska": "Anna Kowalska"
-    },
     "table": {
       "teacherName": "Imię nauczyciela",
       "subject": "Przedmiot",
-      "workTerms": "Warunki pracy i data końca"
-    },
-    "details": {
-      "nextLessons": "Następne lekcje:",
-      "noLessons": "Brak zaplanowanych lekcji.",
-      "teacherPage": "Strona nauczyciela →"
+      "workTerms": "Warunki pracy i data zakończenia",
+      "edit": "Edytuj",
+      "more": "Więcej"
     },
     "modal": {
       "title": "Dodaj nauczyciela",
+      "subtitle": "Wypełnij podstawowe informacje",
+      "withoutTerm": "Bez terminu",
+      "emailExists": "Ten email już istnieje",
       "step1": "Krok 1 z 2",
       "step2": "Krok 2 z 2",
-      "subtitle": "Uzupełnij podstawowe informacje",
-      "nameLabel": "Imię*",
-      "subjectLabel": "Przedmiot (wymagane)",
-      "subjectPlaceholder": "Wybierz przedmiot",
-      "subjectHint": "Wybierz przedmiot i kolor, żeby oznaczyć go w harmonogramie",
-      "emailLabel": "E-mail*",
-      "emailExists": "Ten adres e-mail już istnieje na Twojej liście",
-      "withoutTerm": "Bez terminu",
-      "subjectOptions": {
-        "chemistry": "Chemia",
-        "mathematics": "Matematyka",
-        "physics": "Fizyka"
-      },
-      "continue": "Przejdź do dostępności",
-      "saveLater": "Zapisz i uzupełnij później",
-      "availabilitySubtitle": "Ustaw dostępność nauczyciela",
-      "workTerms": "Warunki pracy",
-      "collaborationType": "Typ współpracy*",
-      "contract": "Umowa",
-      "freelance": "Wolny strzelec",
-      "dueDate": "Data końca*",
+      "nameLabel": "Imię i nazwisko*",
+      "subjectLabel": "Przedmiot (wymagane)*",
+      "selectSubject": "Wybierz przedmiot...",
+      "hint": "Wybierz przedmiot i kolor, aby oznaczyć w harmonogramie",
+      "emailLabel": "Email*",
+      "continueBtn": "Przejdź do dostępności",
+      "saveLaterBtn": "Zapisz i ustaw później",
+      "setAvailability": "Ustaw dostępność nauczyciela",
+      "workTermsLabel": "Warunki współpracy",
+      "collabTypeLabel": "Typ współpracy *",
+      "dueDateLabel": "Data zakończenia *",
       "regularAvailability": "Regularna dostępność",
-      "workdays": "💼 Dni robocze",
-      "lunchBreak": "🍽️ Przerwa obiadowa",
-      "info": "Możesz ustawić indywidualne godziny później lub",
-      "infoLink": "dodaj teraz",
-      "saveTeacher": "Zapisz nauczyciela"
+      "workdays": "Dni robocze",
+      "lunchBreak": "Przerwa na lunch",
+      "infoLink": "Możesz ustawić dni indywidualnie później lub ",
+      "addNow": "dodać teraz",
+      "saveBtn": "Zapisz nauczyciela"
     }
-  },
-  "dates": {
-    "tomorrow": "Jutro"
   }
 }
