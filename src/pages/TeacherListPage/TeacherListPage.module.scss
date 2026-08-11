@@ -8,6 +8,7 @@
   overflow-x: hidden;
 }
 
+/* ... (TopNav stays the same) ... */
 .topNav {
   background-color: $color-white;
   display: flex;
@@ -113,8 +114,8 @@
 }
 
 .addTeacherBtn {
-  background-color: $color-primary;
-  color: $color-text-light;
+  background-color: #1e7154; // Dopasowane do Figmy
+  color: #ffffff;
   border: none;
   padding: 0.6rem 1.2rem;
   border-radius: 20px;
@@ -124,8 +125,14 @@
   align-items: center;
   gap: 0.5rem;
   white-space: nowrap;
+  transition: background-color 0.2s;
 
-  &:hover { background-color: $color-primary-hover; }
+  svg {
+    width: 18px;
+    height: 18px;
+  }
+
+  &:hover { background-color: #155c43; }
 }
 
 .tableWrapper {
@@ -152,7 +159,7 @@
     padding: 1rem;
     border-bottom: 1px solid $color-gray10;
     font-size: 0.95rem;
-    color: $color-gray80;
+    color: $color-text-main;
     vertical-align: middle;
   }
 
@@ -175,16 +182,23 @@
 }
 
 .avatarMock {
-  width: 32px;
-  height: 32px;
+  width: 36px;
+  height: 36px;
   border-radius: 50%;
-  background-color: $color-secondary;
-  color: $color-secondary-shadow;
+  background-color: #f1f3f5;
+  color: #adb5bd;
   display: flex;
   align-items: center;
   justify-content: center;
-  font-size: 0.8rem;
+  font-size: 0.85rem;
   font-weight: 700;
+}
+
+.avatarImg {
+  width: 36px;
+  height: 36px;
+  border-radius: 50%;
+  object-fit: cover;
 }
 
 .subjectWrapper {
@@ -202,7 +216,22 @@
 .termsCell {
   display: flex;
   flex-direction: column;
-  .collabType { font-weight: 500; color: $color-text-main; }
+  gap: 0.25rem;
+  
+  .collabTypeWrapper {
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+    font-weight: 500; 
+    color: $color-text-main;
+    
+    svg {
+      width: 14px;
+      height: 14px;
+      color: $color-gray60;
+    }
+  }
+  
   .dueDate { font-size: 0.8rem; color: $color-gray60; }
 }
 
@@ -218,11 +247,18 @@
     margin-left: 0.5rem;
     opacity: 0.6;
     &:hover { opacity: 1; }
+    
+    svg {
+      width: 16px;
+      height: 16px;
+      color: $color-gray60;
+    }
   }
 }
 
+/* Sidebar Details - zaktualizowany pod Figmę */
 .detailsCard {
-  width: 300px;
+  width: 600px; /* Szerszy panel pod kalendarz z Figmy */
   background: $color-white;
   border-radius: $radius-md;
   padding: 1.5rem;
@@ -231,6 +267,9 @@
   align-self: flex-start;
   box-sizing: border-box;
 
+  @media (max-width: 1200px) {
+    width: 400px;
+  }
   @media (max-width: 1024px) {
     width: 100%;
   }
@@ -241,54 +280,90 @@
     right: 1rem;
     background: none;
     border: none;
-    font-size: 1.2rem;
+    font-size: 1.5rem;
+    color: $color-gray60;
     cursor: pointer;
   }
-
-  h3 {
-    margin: 0 0 0.5rem 0;
+  
+  .detailsHeader {
     display: flex;
     align-items: center;
-    gap: 0.5rem;
-    color: $color-text-main;
+    gap: 1rem;
+    margin-bottom: 2rem;
+    
+    .headerAvatar {
+      width: 60px;
+      height: 60px;
+      border-radius: 50%;
+      object-fit: cover;
+    }
+    
+    .headerInfo {
+      display: flex;
+      flex-direction: column;
+      
+      h3 {
+        margin: 0;
+        display: flex;
+        align-items: center;
+        gap: 0.5rem;
+        color: $color-text-main;
+        font-size: 1.2rem;
+      }
+      
+      .miniDot {
+        width: 8px;
+        height: 8px;
+        border-radius: 50%;
+      }
+      
+      .detailsEmail {
+        font-size: 0.85rem;
+        color: $color-text-muted;
+        margin-top: 0.25rem;
+        display: flex;
+        align-items: center;
+        gap: 0.25rem;
+      }
+    }
   }
-
-  .miniDot {
-    width: 8px;
-    height: 8px;
-    border-radius: 50%;
-  }
-
-  .detailsEmail {
-    font-size: 0.85rem;
-    color: $color-text-muted;
-    margin-bottom: 1.5rem;
+  
+  .detailsGrid {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 2rem;
+    
+    @media (max-width: 1200px) {
+      grid-template-columns: 1fr;
+    }
   }
 }
 
 .nextLessonsSection {
-  background-color: $color-gray10;
+  background-color: #f8f9fa;
   border-radius: $radius-sm;
-  padding: 1rem;
-  margin-bottom: 1.5rem;
+  padding: 1.5rem;
 
-  h4 { margin: 0 0 0.5rem 0; font-size: 0.9rem; color: $color-text-main; }
-  ul { padding-left: 1.2rem; margin: 0; font-size: 0.85rem; color: $color-gray80; }
+  h4 { margin: 0 0 1rem 0; font-size: 1rem; color: $color-text-main; }
+  ul { padding-left: 1.2rem; margin: 0; font-size: 0.85rem; color: $color-text-main; line-height: 1.8; }
 }
 
 .teacherPageLink {
-  color: $color-accent;
+  display: inline-block;
+  color: #ff7675; // Kolor z przycisku z Figmy
   text-decoration: none;
-  font-weight: 600;
+  font-weight: 500;
   font-size: 0.9rem;
+  margin-top: 1rem;
   &:hover { text-decoration: underline; }
 }
 
+/* Modale */
 .modalOverlay {
   position: fixed;
   top: 0; left: 0; right: 0; bottom: 0;
-  background-color: $color-gray30-transparent;
-  backdrop-filter: blur(4px);
+  background-color: rgba(0, 0, 0, 0.4);
+  backdrop-filter: blur(2px);
   display: flex;
   align-items: center;
   justify-content: center;
@@ -299,11 +374,11 @@
 .modalCard {
   background: $color-white;
   width: 100%;
-  max-width: 460px;
-  border-radius: $radius-lg;
+  max-width: 400px; // Węższy wg Figmy
+  border-radius: 20px; // Większe zaokrąglenie wg Figmy
   padding: 2rem;
   position: relative;
-  box-shadow: $shadow-md;
+  box-shadow: 0 10px 30px rgba(0,0,0,0.1);
   box-sizing: border-box;
   max-height: 90vh;
   overflow-y: auto;
@@ -320,26 +395,29 @@
     border: none;
     font-size: 1.5rem;
     cursor: pointer;
+    color: $color-gray60;
   }
 
   h3 {
     margin: 0;
-    font-size: 1.4rem;
+    font-size: 1.2rem;
     display: flex;
-    justify-content: space-between;
+    justify-content: flex-start;
     align-items: center;
+    gap: 0.5rem;
     color: $color-text-main;
+    
+    .stepIndicator {
+      margin-left: auto;
+      font-size: 0.8rem;
+      color: $color-text-muted;
+      font-weight: 400;
+    }
   }
 }
 
-.stepIndicator {
-  font-size: 0.8rem;
-  color: $color-text-muted;
-  font-weight: 400;
-}
-
 .subtitle {
-  font-size: 0.9rem;
+  font-size: 0.85rem;
   color: $color-text-muted;
   margin: 0.25rem 0 1.5rem 0;
 }
@@ -351,15 +429,15 @@
   margin-bottom: 1.2rem;
 
   label {
-    font-size: 0.85rem;
+    font-size: 0.8rem;
     font-weight: 600;
     color: $color-text-main;
   }
 
   input, select {
-    padding: 0.75rem;
+    padding: 0.75rem 1rem;
     border: 1px solid $color-border;
-    border-radius: 10px;
+    border-radius: 12px;
     font-size: 0.95rem;
     outline: none;
     background-color: $color-white;
@@ -400,8 +478,8 @@
 }
 
 .paletteDot {
-  width: 24px;
-  height: 24px;
+  width: 20px;
+  height: 20px;
   border-radius: 50%;
   border: 2px solid transparent;
   cursor: pointer;
@@ -410,12 +488,12 @@
 }
 
 .activePaletteDot {
-  border-color: $color-black;
+  border-color: $color-text-main;
   transform: scale(1.1);
 }
 
 .errorState {
-  input { border-color: $color-system-error; background-color: $color-accent-light; }
+  input { border-color: $color-system-error; background-color: #fff0f0; }
 }
 
 .errorText {
@@ -476,33 +554,33 @@
 }
 
 .accentText {
-  color: $color-primary;
+  color: #ff7675;
   font-weight: 600;
   cursor: pointer;
 }
 
 .primaryModalBtn {
-  background-color: $color-primary;
-  color: $color-text-light;
+  background-color: #1e7154; // Ciemna zieleń z Figmy
+  color: $color-white;
   border: none;
   width: 100%;
   padding: 0.85rem;
-  border-radius: 12px;
+  border-radius: 20px;
   font-weight: 600;
   font-size: 1rem;
   cursor: pointer;
   margin-top: 1rem;
 
-  &:hover { background-color: $color-primary-hover; }
+  &:hover { background-color: #155c43; }
 }
 
 .secondaryModalBtn {
   background: none;
-  border: 1px solid $color-border;
+  border: none;
   color: $color-gray60;
   width: 100%;
   padding: 0.85rem;
-  border-radius: 12px;
+  border-radius: 20px;
   font-weight: 600;
   font-size: 1rem;
   cursor: pointer;
