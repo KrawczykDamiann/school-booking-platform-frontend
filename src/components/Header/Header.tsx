@@ -1,4 +1,10 @@
-import React, { useState, useEffect, useRef, useContext } from "react";
+import React, {
+  useState,
+  useEffect,
+  useRef,
+  useContext,
+  type ComponentType,
+} from "react";
 import styles from "./Header.module.scss";
 import { Link, useLocation, useNavigate } from "react-router-dom";
 import { useTranslation } from "react-i18next";
@@ -9,16 +15,40 @@ import { StudentsIcon } from "../icons/StudentsIcon";
 import { DashboardIcon } from "../icons/DashboardIcon";
 import { UserDropdown } from "./UserDropdown/UserDropdown";
 
+type NavigationItem = {
+  id: number;
+  translationKey: string;
+  to: string;
+  icon: ComponentType<{
+    size?: number;
+    className?: string;
+  }>;
+};
+
+const adminNavigation: NavigationItem[] = [
+  { id: 1, translationKey: "header.dashboard", to: "/admin/dashboard", icon: DashboardIcon },
+  { id: 2, translationKey: "header.teachers", to: "/admin/teachers", icon: AvailabilityIcon },
+  { id: 3, translationKey: "header.students", to: "/admin/students", icon: StudentsIcon },
+];
+
+const studentNavigation: NavigationItem[] = [
+  { id: 1, translationKey: "header.bookLesson", to: "/booking-calendar", icon: StudentsIcon },
+  { id: 2, translationKey: "header.manageBooking", to: "/", icon: DashboardIcon },
+];
+
 type HeaderProps = {
   onLoginClick?: () => void;
 };
 
 export const Header: React.FC<HeaderProps> = ({ onLoginClick }) => {
   const { pathname } = useLocation();
-  const isAdmin = pathname.startsWith("/admin");
-  const { t, i18n } = useTranslation();
   const navigate = useNavigate();
   const { userType, logout, isAuthenticated } = useContext(AuthContext);
+
+  const navigation = userType === "admin" ? adminNavigation : studentNavigation;
+  const homePath = userType === "admin" ? "/admin" : "/";
+
+  const { t, i18n } = useTranslation();
 
   const [isLanguageDropdownOpen, setIsLanguageDropdownOpen] = useState(false);
   const [isDropdownOpen, setIsDropdownOpen] = useState(false);
@@ -81,60 +111,31 @@ export const Header: React.FC<HeaderProps> = ({ onLoginClick }) => {
     { code: "pl", label: "PL" },
     { code: "ua", label: "UA" },
   ];
+
   return (
-    <header className={`${styles.header} ${isAdmin ? styles.headerAdmin : ""}`}>
-      <Link to="/" className={styles.logo}>
+    <header className={styles.header}>
+      <Link to={homePath} className={styles.logo}>
         Less<span className={styles.accent}>io</span>
       </Link>
 
       <nav className={styles.nav}>
-        {isAdmin ? (
-          <React.Fragment>
-            <div
-              className={`${styles.navItem} ${pathname === "/admin/dashboard" ? styles.navItemActive : ""}`}
-            >
-              <DashboardIcon size={16} />
-              <Link to="/admin/dashboard" className={styles.navLink}>
-                {t("header.dashboard")}
-              </Link>
-            </div>
-            <div
-              className={`${styles.navItem} ${pathname === "/admin/teachers" ? styles.navItemActive : ""}`}
-            >
-              <AvailabilityIcon size={16} />
-              <Link to="/admin/teachers" className={styles.navLink}>
-                {t("header.teachers")}
-              </Link>
-            </div>
-            <div
-              className={`${styles.navItem} ${pathname === "/admin/students" ? styles.navItemActive : ""}`}
-            >
-              <StudentsIcon size={16} />
-              <Link to="/admin/students" className={styles.navLink}>
-                {t("header.students")}
-              </Link>
-            </div>
-          </React.Fragment>
-        ) : (
-          <React.Fragment>
-            <div
-              className={`${styles.navItem} ${pathname === "/booking-calendar" ? styles.navItemActive : ""}`}
-            >
-              <StudentsIcon size={16} />
-              <Link to="/booking-calendar" className={styles.navLink}>
-                {t("header.bookLesson")}
-              </Link>
-            </div>
-            <div
-              className={`${styles.navItem} ${pathname === "/manage-booking" ? styles.navItemActive : ""}`}
-            >
-              <DashboardIcon size={16} />
-              <Link to="/" className={styles.navLink}>
-                {t("header.manageBooking")}
-              </Link>
-            </div>
-          </React.Fragment>
-        )}
+        <ul className={styles.navList}>
+          {navigation.map((item) => {
+            const Icon = item.icon;
+
+            return (
+              <li
+                key={item.id}
+                className={`${styles.navItem} ${pathname === item.to ? styles.navItemActive : ""}`}
+              >
+                <Icon size={16} />
+                <Link to={item.to} className={styles.navLink}>
+                  {t(item.translationKey)}
+                </Link>
+              </li>
+            );
+          })}
+        </ul>
       </nav>
 
       <div className={styles.rightSection}>

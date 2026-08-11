@@ -94,26 +94,6 @@
   cursor: default;
 }
 
-// Floating admin header
-.headerAdmin {
-  max-width: 1280px;
-  width: calc(100% - 80px);
-  height: 76px;
-  background: v.$color-white;
-  border-radius: 1000px;
-  margin: 12px auto 0 auto;
-  padding: 16px 32px;
-  box-shadow: 0px 8px 20px rgba(0, 0, 0, 0.05);
-  border-bottom: none !important;
-  box-sizing: border-box;
-
-  @media (max-width: 1280px) {
-    width: calc(100% - 32px);
-    border-radius: 16px;
-    margin: 12px auto;
-  }
-}
-
 // Admin profile
 .adminProfileWrapper {
   display: flex;
