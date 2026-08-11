@@ -1,6 +1,5 @@
 @import "../../styles/variables";
 
-/* Main Layout */
 .dashboardContainer {
   font-family: 'Inter', sans-serif;
   background-color: $color-bg-main;
@@ -23,7 +22,6 @@
   }
 }
 
-/* Header */
 .topHeader {
   display: flex;
   justify-content: space-between;
@@ -80,7 +78,6 @@
   }
 }
 
-/* Table View */
 .listSection {
   background: $color-white;
   border-radius: $radius-md;
@@ -129,7 +126,6 @@
 
   tr {
     cursor: pointer;
-    position: relative;
     transition: background-color 0.15s ease;
 
     &:hover {
@@ -221,6 +217,7 @@
 
 .actionCell {
   text-align: center;
+  position: relative;
 
   .actionIconButton {
     background: none;
@@ -241,7 +238,6 @@
   }
 }
 
-/* Floating Popover */
 .popoverCard {
   width: max-content;
   min-width: 300px;
@@ -249,7 +245,7 @@
   border-radius: 12px;
   padding: 1.25rem 1.5rem;
   position: absolute;
-  left: calc(100% + 2.5rem); 
+  left: calc(100% + 1rem);
   top: 50%;
   transform: translateY(-50%);
   z-index: 100;
@@ -365,7 +361,6 @@
   }
 }
 
-/* Detail View */
 .detailGrid {
   display: grid;
   grid-template-columns: 220px 1fr 340px;
@@ -727,7 +722,6 @@
   }
 }
 
-/* Modal */
 .modalOverlay {
   position: fixed;
   top: 0;
