@@ -6,10 +6,12 @@ import { ReturnIcon } from "../../components/icons/ReturnIcon";
 export const BookingPage: React.FC = () => {
   return (
     <section className={styles.bookingPage}>
-      <Link to="/" className={styles.returnLink}>
-        <ReturnIcon size={24} />
-        Select a lesson to book
-      </Link>
+      <div className={styles.bookingPageHeader}>
+        <Link to="/" className={styles.returnLink}>
+          <ReturnIcon size={24} />
+        </Link>
+        <h2 className={styles.title}>Select a lesson to book</h2>
+      </div>
       <BookingFeature />
     </section>
   );

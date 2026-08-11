@@ -10,19 +10,12 @@
     display: flex;
     flex-direction: column;
     gap: 28px;
+}
 
-    &Header {
-        display: flex;
-        flex-direction: column;
-        gap: 8px;
-
-        &Top {
-            display: flex;
-            flex-direction: row;
-            justify-content: space-between;
-            align-items: center;
-        }
-    }
+.lessonPreviewHeader {
+    display: flex;
+    flex-direction: column;
+    gap: 8px;
 }
 
 .title {
@@ -33,6 +26,10 @@
     text-align: left;
     text-wrap: none;
     margin: 0;
+
+    &Disabled {
+        color: v.$color-gray80;
+    }
 }
 
 .description {
@@ -113,4 +110,8 @@
 
 .buttonWrapper {
     margin-top: 30px;
+}
+
+.buttonWrapperDisabled {
+    margin-top: 0;
 }

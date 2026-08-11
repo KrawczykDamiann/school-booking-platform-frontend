@@ -32,17 +32,19 @@ export const BookingFeature: React.FC = () => {
   const handleSelectSubject = (subject: SubjectFilterType) => {
     if (selectedSubject === subject) {
       setSelectedSubject(null);
+      setSelectedLesson(undefined);
       return;
     }
 
     setSelectedSubject(subject);
+    setSelectedLesson(undefined);
   };
 
   // Tracks active time period filter, allowing users to select or toggle off a period
   const [selectedTimePeriod, setSelectedTimePeriod] =
     useState<TimePeriod | null>(null);
 
-  const handleSelectTimePeriod = (period: TimePeriod) => {
+  const handleSelectTimePeriod = (period: TimePeriod | null) => {
     if (selectedTimePeriod === period) {
       setSelectedTimePeriod(null);
       return;
@@ -62,9 +64,9 @@ export const BookingFeature: React.FC = () => {
   // Navigates the calendar to the next day.
   const handleNextDate = () => {
     setStartDate((prev) => {
-      const nextDate = addDays(prev, 1);
+      const nextDate = addDays(prev, 7);
 
-      return isSunday(nextDate) ? addDays(nextDate, 1) : nextDate;
+      return isSunday(nextDate) ? addDays(nextDate, 7) : nextDate;
     });
   };
 
@@ -77,10 +79,10 @@ export const BookingFeature: React.FC = () => {
   const handlePrevDate = () => {
     const today = getValidStartDate(startOfDay(new Date()));
 
-    let previousDate = subDays(startDate, 1);
+    let previousDate = subDays(startDate, 7);
 
     if (isSunday(previousDate)) {
-      previousDate = subDays(previousDate, 1);
+      previousDate = subDays(previousDate, 7);
     }
 
     setStartDate(
@@ -144,8 +146,6 @@ export const BookingFeature: React.FC = () => {
 
     init();
   }, []);
-
-  
 
   // Filters the lessons array to include only those that match the currently selected subject.
   const filteredBySubject = mockLessons.filter(
@@ -216,26 +216,6 @@ export const BookingFeature: React.FC = () => {
   // Opens the lesson status modal when the user confirms their selection.
   const handleConfirm = async () => {
     setIsLessonBookingModalOpen(true);
-
-     // Сurrently commented, needs to be tested
-
-    // const data = {
-    //   availabilitySlotUuid: "0086ba20-0dea-4306-b2ae-14997c5237bb",
-    //   teacherUuid: "63ba6e46-ca7c-4622-983b-95c9eaab0312",
-    //   maxEnrolled: 1,
-    // }
-
-    // const lessonUuid = "20e5adf3-fed8-4eff-87ab-fbddc488fa03";
-
-    // try {
-    //   // const response = await createLesson(data);
-
-    //   const response = await bookLesson(lessonUuid);
-
-    //   console.log(response.data);
-    // } catch (error) {
-    //   console.log(error);
-    // }
   };
 
   // Clears active selection, resets subject filters, and closes the booking modal.
@@ -263,13 +243,9 @@ export const BookingFeature: React.FC = () => {
           onSelectTimePeriod={handleSelectTimePeriod}
           selectedTimePeriod={selectedTimePeriod}
           hasLessonsOnDay={hasLessonsOnDay}
+          selectedSubject={selectedSubject}
         />
-        {selectedLesson && (
-          <LessonPreview
-            lesson={selectedLesson}
-            handleConfirm={handleConfirm}
-          />
-        )}
+        <LessonPreview lesson={selectedLesson} handleConfirm={handleConfirm} />
       </div>
       {isLessonBookingModalOpen && (
         <LessonBookingModal

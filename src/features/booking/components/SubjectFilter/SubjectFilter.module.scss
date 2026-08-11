@@ -18,6 +18,7 @@
     padding: 8px 16px;
     border: 1px solid v.$color-gray20;
     border-radius: 100px;
+    background: v.$color-white;
 
     color: v.$color-gray80;
     font-weight: 400;
@@ -26,10 +27,11 @@
     cursor: pointer;
 
     &:hover {
-        background: v.$color-secondary;
+        background: v.$color-secondary-shadow;
     }
 
     &[data-selected="true"] {
-        background: v.$color-secondary;
+        background: v.$color-secondary-shadow;
+        color: v.$color-black;
     }
 }

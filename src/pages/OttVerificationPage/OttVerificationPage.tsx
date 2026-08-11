@@ -31,7 +31,7 @@ export const OttVerificationPage: React.FC = () => {
 
         if (token) {
           login({ token, userType: "student" });
-          navigate("/booking");
+          navigate("/booking-calendar");
         } else {
           throw new Error("Missing token");
         }

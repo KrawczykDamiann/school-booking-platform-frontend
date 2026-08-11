@@ -8,6 +8,7 @@ import { validation } from "../../utils/validators";
 import { Input } from "../../components/ui/Input/Input";
 import { useInput } from "../../hooks/useInput";
 import { ReturnIcon } from "../../components/icons/ReturnIcon";
+import { Button } from "../../components/ui/Button/Button";
 
 export const PasswordRecoveryPage: React.FC = () => {
   const location = useLocation();
@@ -92,18 +93,19 @@ export const PasswordRecoveryPage: React.FC = () => {
                 <p className={styles.text}>{t("passwordRecovery.info")}</p>
               </div>
             </form>
-            <button
-              type="submit"
-              className={styles.button}
-              form="recovery-password"
-              disabled={!emailInput.isValid}
-            >
-              {t("passwordRecovery.submit")}
-            </button>
+            <div className={styles.buttonWrapper}>
+              <Button
+                variant="primary"
+                type="submit"
+                form="recovery-password"
+                disabled={!emailInput.isValid}
+              >
+                {t("passwordRecovery.submit")}
+              </Button>
+            </div>
           </>
         )}
       </div>
-      <div>Language Switcher (coming soon)</div>
     </div>
   );
 };

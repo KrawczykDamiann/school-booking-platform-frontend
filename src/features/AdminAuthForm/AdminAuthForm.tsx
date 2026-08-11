@@ -11,6 +11,7 @@ import { Checkbox } from "../../components/ui/Checkbox/Checkbox";
 import { useInput } from "../../hooks/useInput";
 import { AuthContext } from "../../context/AuthContext";
 import { loginAdmin } from "../../api/auth";
+import { Button } from "../../components/ui/Button/Button";
 
 export const AdminAuthForm: React.FC = () => {
   const { t } = useTranslation();
@@ -132,14 +133,16 @@ export const AdminAuthForm: React.FC = () => {
           />
         </div>
       </form>
-      <button
-        type="submit"
-        className={styles.button}
-        form="login-form"
-        disabled={isButtonDisabled}
-      >
-        {t("adminAuthForm.submit")}
-      </button>
+      <div className={styles.buttonWrapper}>
+        <Button
+          variant="primary"
+          form="login-form"
+          disabled={isButtonDisabled}
+          type="submit"
+        >
+          {t("adminAuthForm.submit")}
+        </Button>
+      </div>
     </div>
   );
 };
