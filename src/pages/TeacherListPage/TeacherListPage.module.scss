@@ -1,5 +1,6 @@
 @import "../../styles/variables";
 
+/* Layout */
 .dashboardContainer {
   font-family: 'Inter', sans-serif;
   background-color: $color-bg-main;
@@ -16,12 +17,9 @@
   box-sizing: border-box;
   display: flex;
   align-items: flex-start;
-
-  @media (max-width: 1024px) {
-    padding: 1rem;
-  }
 }
 
+/* Header */
 .topHeader {
   display: flex;
   justify-content: space-between;
@@ -48,16 +46,9 @@
   display: flex;
   align-items: center;
   gap: 0.5rem;
-  transition: background-color 0.2s;
 
-  svg {
-    width: 16px;
-    height: 16px;
-  }
-
-  &:hover {
-    background-color: #155c43;
-  }
+  svg { width: 16px; height: 16px; }
+  &:hover { background-color: #155c43; }
 }
 
 .backBtn {
@@ -72,26 +63,16 @@
   align-items: center;
   gap: 0.4rem;
   margin-bottom: 1rem;
-
-  &:hover {
-    background-color: $color-gray10;
-  }
 }
 
+/* List View */
 .listSection {
   background: $color-white;
   border-radius: $radius-md;
   padding: 1.5rem 2rem;
   box-shadow: $shadow-sm;
   flex: 0 1 950px;
-  box-sizing: border-box;
   position: relative;
-  overflow: visible;
-}
-
-.tableWrapper {
-  width: 100%;
-  overflow: visible;
 }
 
 .teachersTable {
@@ -117,20 +98,11 @@
     border-bottom: 1px solid $color-gray10;
     font-size: 0.9rem;
     color: $color-text-main;
-    vertical-align: middle;
-  }
-
-  .activeRow {
-    background-color: #f8f9fa;
   }
 
   tr {
     cursor: pointer;
-    transition: background-color 0.15s ease;
-
-    &:hover {
-      background-color: #f8f9fa;
-    }
+    &:hover { background-color: #f8f9fa; }
   }
 }
 
@@ -186,11 +158,7 @@
     gap: 0.4rem;
     color: #a0aec0;
     font-size: 0.85rem;
-
-    svg {
-      width: 14px;
-      height: 14px;
-    }
+    svg { width: 14px; height: 14px; }
   }
 
   .dueDate {
@@ -225,19 +193,12 @@
     cursor: pointer;
     padding: 0.25rem;
     opacity: 0.6;
-
-    &:hover {
-      opacity: 1;
-    }
-
-    svg {
-      width: 15px;
-      height: 15px;
-      color: #a0aec0;
-    }
+    &:hover { opacity: 1; }
+    svg { width: 15px; height: 15px; color: #a0aec0; }
   }
 }
 
+/* Popover */
 .popoverCard {
   width: max-content;
   min-width: 300px;
@@ -251,8 +212,6 @@
   z-index: 100;
   box-shadow: 0 10px 30px rgba(0, 0, 0, 0.12);
   border: 1px solid #edf2f7;
-  box-sizing: border-box;
-  text-align: left;
 
   &::before {
     content: "";
@@ -260,8 +219,6 @@
     left: -8px;
     top: 50%;
     transform: translateY(-50%);
-    width: 0;
-    height: 0;
     border-top: 7px solid transparent;
     border-bottom: 7px solid transparent;
     border-right: 8px solid #ffffff;
@@ -276,17 +233,10 @@
     font-size: 1rem;
     color: #a0aec0;
     cursor: pointer;
-    line-height: 1;
-
-    &:hover {
-      color: $color-text-main;
-    }
   }
 
   .popoverHeader {
     margin-bottom: 1rem;
-    padding-right: 1.5rem;
-
     h3 {
       margin: 0 0 0.25rem 0;
       font-size: 0.95rem;
@@ -296,55 +246,39 @@
       align-items: center;
       gap: 0.4rem;
     }
-
     .statusDot {
       width: 6px;
       height: 6px;
       border-radius: 50%;
       background-color: #38ef7d;
-      display: inline-block;
     }
-
     .popoverEmail {
       font-size: 0.78rem;
       color: #718096;
       display: flex;
       align-items: center;
       gap: 0.35rem;
-      margin-top: 0.2rem;
-      white-space: nowrap;
-
-      svg {
-        width: 13px;
-        height: 13px;
-        color: #a0aec0;
-        flex-shrink: 0;
-      }
+      svg { width: 13px; height: 13px; }
     }
   }
 
   .nextLessonsBox {
     margin-bottom: 1.2rem;
-
     .label {
       font-size: 0.78rem;
       color: #a0aec0;
       margin: 0 0 0.3rem 0;
-      font-weight: 500;
     }
-
     .lessons {
       font-size: 0.82rem;
       color: #2d3748;
       margin: 0;
-      line-height: 1.4;
       font-weight: 500;
     }
   }
 
   .popoverFooter {
     text-align: right;
-
     .teacherPageBtn {
       background: none;
       border: none;
@@ -352,376 +286,11 @@
       font-weight: 600;
       font-size: 0.8rem;
       cursor: pointer;
-      padding: 0;
-
-      &:hover {
-        text-decoration: underline;
-      }
     }
   }
 }
 
-.detailGrid {
-  display: grid;
-  grid-template-columns: 220px 1fr 340px;
-  gap: 1.5rem;
-  align-items: start;
-
-  @media (max-width: 1200px) {
-    grid-template-columns: 200px 1fr;
-  }
-  @media (max-width: 900px) {
-    grid-template-columns: 1fr;
-  }
-}
-
-.avatarsSidebar {
-  background: $color-white;
-  border-radius: $radius-md;
-  padding: 1.25rem 1rem;
-  box-shadow: $shadow-sm;
-
-  h3 {
-    font-size: 0.9rem;
-    color: #a0aec0;
-    margin: 0 0 1rem 0.5rem;
-    font-weight: 600;
-  }
-
-  .teacherNavItem {
-    display: flex;
-    align-items: center;
-    gap: 0.75rem;
-    padding: 0.6rem 0.75rem;
-    border-radius: 20px;
-    cursor: pointer;
-    transition: all 0.2s;
-    margin-bottom: 0.25rem;
-
-    &:hover {
-      background-color: #f8f9fa;
-    }
-
-    &.activeNavItem {
-      background-color: #f1f3f5;
-
-      .navName {
-        font-weight: 700;
-      }
-    }
-
-    .navAvatar {
-      width: 32px;
-      height: 32px;
-      border-radius: 50%;
-      object-fit: cover;
-    }
-
-    .navInfo {
-      display: flex;
-      flex-direction: column;
-
-      .navName {
-        font-size: 0.82rem;
-        color: $color-text-main;
-        white-space: nowrap;
-        overflow: hidden;
-        text-overflow: ellipsis;
-        max-width: 120px;
-      }
-
-      .navSubject {
-        font-size: 0.72rem;
-        color: #a0aec0;
-      }
-    }
-  }
-}
-
-.scheduleColumn {
-  display: flex;
-  flex-direction: column;
-  gap: 1.25rem;
-}
-
-.teacherHeaderCard {
-  background: $color-white;
-  border-radius: $radius-md;
-  padding: 1.25rem 1.5rem;
-  box-shadow: $shadow-sm;
-  display: flex;
-  align-items: center;
-  justify-content: space-between;
-
-  .headerLeft {
-    display: flex;
-    align-items: center;
-    gap: 1rem;
-
-    .headerAvatar {
-      width: 56px;
-      height: 56px;
-      border-radius: 50%;
-      object-fit: cover;
-    }
-
-    .headerDetails {
-      h3 {
-        margin: 0 0 0.25rem 0;
-        font-size: 1.1rem;
-        color: $color-text-main;
-      }
-
-      p {
-        margin: 0;
-        font-size: 0.82rem;
-        color: #a0aec0;
-        word-break: break-all;
-      }
-    }
-  }
-
-  .headerRight {
-    display: flex;
-    align-items: center;
-    gap: 0.5rem;
-    font-size: 0.85rem;
-    color: #a0aec0;
-  }
-}
-
-.scheduleGridCard {
-  background: $color-white;
-  border-radius: $radius-md;
-  padding: 1.5rem;
-  box-shadow: $shadow-sm;
-
-  .scheduleHeader {
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
-    margin-bottom: 1rem;
-
-    h3 {
-      margin: 0;
-      font-size: 1.2rem;
-      color: $color-text-main;
-    }
-
-    span {
-      font-size: 0.85rem;
-      color: #a0aec0;
-      font-weight: 500;
-    }
-  }
-
-  .calendarMatrix {
-    display: grid;
-    grid-template-columns: repeat(5, 1fr);
-    gap: 0.5rem;
-    text-align: center;
-    margin-bottom: 1.5rem;
-
-    .dayColumn {
-      display: flex;
-      flex-direction: column;
-      gap: 0.4rem;
-
-      .dayHeader {
-        font-size: 0.75rem;
-        color: #a0aec0;
-        margin-bottom: 0.5rem;
-
-        .dayNum {
-          display: block;
-          font-size: 0.9rem;
-          font-weight: 700;
-          color: $color-text-main;
-          text-transform: capitalize;
-        }
-
-        &.activeDay .dayNum {
-          color: #ff7675;
-        }
-      }
-
-      .timeSlot {
-        padding: 0.4rem;
-        font-size: 0.75rem;
-        border-radius: 6px;
-        background-color: #f8f9fa;
-        color: #a0aec0;
-
-        &.bookedSlot {
-          background-color: #e6fcf5;
-          color: #0ca678;
-          font-weight: 600;
-        }
-
-        &.selectedSlot {
-          background-color: #1e7154;
-          color: #ffffff;
-          font-weight: 600;
-        }
-      }
-    }
-  }
-
-  .scheduleFooter {
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
-    border-top: 1px solid $color-gray10;
-    padding-top: 1rem;
-
-    .nextLessonsLabel {
-      font-size: 0.8rem;
-      color: #a0aec0;
-
-      span {
-        color: $color-text-main;
-        font-weight: 600;
-        margin-left: 0.5rem;
-      }
-    }
-
-    .sendScheduleBtn {
-      background-color: #f1f3f5;
-      color: #adb5bd;
-      border: none;
-      padding: 0.5rem 1rem;
-      border-radius: 12px;
-      font-size: 0.82rem;
-      font-weight: 600;
-      cursor: not-allowed;
-    }
-  }
-}
-
-.availabilityColumn {
-  display: flex;
-  flex-direction: column;
-  gap: 1.25rem;
-}
-
-.availabilityCard {
-  background: $color-white;
-  border-radius: $radius-md;
-  padding: 1.5rem;
-  box-shadow: $shadow-sm;
-
-  .cardHeader {
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
-    margin-bottom: 0.25rem;
-
-    h3 {
-      margin: 0;
-      font-size: 1.1rem;
-      color: $color-text-main;
-    }
-
-    .addDayBtn {
-      color: #ff7675;
-      font-size: 0.8rem;
-      font-weight: 600;
-      background: none;
-      border: none;
-      cursor: pointer;
-    }
-  }
-
-  .subtext {
-    font-size: 0.78rem;
-    color: #a0aec0;
-    margin: 0 0 1.25rem 0;
-  }
-
-  .availRow {
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
-    margin-bottom: 0.75rem;
-
-    .dayName {
-      font-size: 0.82rem;
-      color: $color-text-main;
-      font-weight: 500;
-      text-transform: capitalize;
-    }
-
-    .timeInputs {
-      display: flex;
-      align-items: center;
-      gap: 0.4rem;
-
-      input {
-        width: 55px;
-        padding: 0.3rem;
-        border: 1px solid $color-border;
-        border-radius: 8px;
-        text-align: center;
-        font-size: 0.8rem;
-      }
-
-      span {
-        font-size: 0.75rem;
-        color: #a0aec0;
-      }
-
-      .deleteIcon {
-        color: #ff7675;
-        cursor: pointer;
-        font-size: 0.8rem;
-        margin-left: 0.2rem;
-      }
-    }
-  }
-
-  .hintFooter {
-    font-size: 0.75rem;
-    color: #a0aec0;
-    margin-top: 1rem;
-    line-height: 1.4;
-  }
-}
-
-.vacationsCard {
-  background: $color-white;
-  border-radius: $radius-md;
-  padding: 1.25rem 1.5rem;
-  box-shadow: $shadow-sm;
-
-  .vacationHeader {
-    display: flex;
-    align-items: center;
-    gap: 0.5rem;
-    margin-bottom: 0.5rem;
-
-    h3 {
-      margin: 0;
-      font-size: 0.95rem;
-      color: $color-text-main;
-    }
-
-    .badge {
-      background: #fff4e6;
-      color: #fd7e14;
-      font-size: 0.7rem;
-      padding: 0.2rem 0.5rem;
-      border-radius: 10px;
-      font-weight: 600;
-    }
-  }
-
-  p {
-    margin: 0;
-    font-size: 0.78rem;
-    color: #a0aec0;
-  }
-}
-
+/* Modal Overlay & Card */
 .modalOverlay {
   position: fixed;
   top: 0;
@@ -741,116 +310,274 @@
 .modalCard {
   background: $color-white;
   width: 100%;
-  max-width: 400px;
-  border-radius: 20px;
-  padding: 2rem;
-  position: relative;
+  max-width: 420px;
+  border-radius: 16px;
+  padding: 1.75rem 2rem;
   box-shadow: 0 10px 30px rgba(0, 0, 0, 0.1);
   box-sizing: border-box;
-  max-height: 90vh;
-  overflow-y: auto;
+}
 
-  .closeModal {
-    position: absolute;
-    top: 1.5rem;
-    right: 1.5rem;
-    background: none;
-    border: none;
-    font-size: 1.5rem;
-    cursor: pointer;
-    color: #a0aec0;
-  }
+/* Modal Header Layout */
+.modalHeader {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  margin-bottom: 0.25rem;
 
-  h3 {
-    margin: 0;
-    font-size: 1.2rem;
+  .titleGroup {
     display: flex;
     align-items: center;
     gap: 0.5rem;
-    color: $color-text-main;
+
+    svg {
+      color: $color-text-main;
+      opacity: 0.8;
+    }
+
+    h3 {
+      margin: 0;
+      font-size: 1.15rem;
+      font-weight: 600;
+      color: $color-text-main;
+    }
+  }
+
+  .headerRight {
+    display: flex;
+    align-items: center;
+    gap: 0.75rem;
 
     .stepIndicator {
-      margin-left: auto;
       font-size: 0.8rem;
-      color: $color-text-muted;
-      font-weight: 400;
+      color: #a0aec0;
+    }
+
+    .closeModal {
+      background: none;
+      border: none;
+      font-size: 1.4rem;
+      color: #a0aec0;
+      cursor: pointer;
+      line-height: 1;
+      padding: 0;
+      
+      &:hover {
+        color: $color-text-main;
+      }
     }
   }
 }
 
 .subtitle {
-  font-size: 0.85rem;
-  color: $color-text-muted;
-  margin: 0.25rem 0 1.5rem 0;
+  font-size: 0.82rem;
+  color: #a0aec0;
+  margin: 0 0 1.5rem 0;
 }
 
-.inputGroup {
-  display: flex;
-  flex-direction: column;
-  gap: 0.4rem;
+.backStepBtn {
+  background: none;
+  border: none;
+  font-size: 1.2rem;
+  cursor: pointer;
+  color: $color-text-main;
+  padding: 0;
+}
+
+/* Float Label Inputs (Inset Label) */
+.inputWrapper {
+  position: relative;
   margin-bottom: 1.2rem;
+  width: 100%;
 
   label {
-    font-size: 0.8rem;
-    font-weight: 600;
-    color: $color-text-main;
+    position: absolute;
+    top: -8px;
+    left: 12px;
+    background-color: $color-white;
+    padding: 0 4px;
+    font-size: 0.75rem;
+    font-weight: 400;
+    color: #718096;
+    z-index: 1;
   }
 
   input,
   select {
-    padding: 0.75rem 1rem;
-    border: 1px solid $color-border;
-    border-radius: 12px;
+    width: 100%;
+    padding: 0.9rem 1rem;
+    border: 1px solid #cbd5e0;
+    border-radius: 8px;
     font-size: 0.95rem;
-    outline: none;
-    background-color: $color-white;
-    color: $color-text-main;
+    color: #000000;
+    font-weight: 500;
+    background: #ffffff;
+    box-sizing: border-box;
+    appearance: none; 
+
+    &::placeholder {
+      color: #a0aec0;
+      font-weight: 400;
+    }
 
     &:focus {
-      border-color: $color-border-focus;
+      outline: none;
+      border-color: #1e7154;
+    }
+  }
+
+  select {
+    background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none' stroke='%23a0aec0' stroke-width='2' stroke-linecap='round' stroke-linejoin='round'%3E%3Cpolyline points='6 9 12 15 18 9'%3E%3C/polyline%3E%3C/svg%3E");
+    background-repeat: no-repeat;
+    background-position: right 1rem center;
+    background-size: 1em;
+  }
+}
+
+.inputWithLeftIcon {
+  position: relative;
+  
+  svg {
+    position: absolute;
+    left: 1rem;
+    top: 50%;
+    transform: translateY(-50%);
+    color: #a0aec0;
+    pointer-events: none;
+    z-index: 2;
+  }
+
+  input, select {
+    padding-left: 2.6rem;
+  }
+}
+
+.inputWithRightIcon {
+  position: relative;
+  
+  svg {
+    position: absolute;
+    right: 1rem;
+    top: 50%;
+    transform: translateY(-50%);
+    color: #a0aec0;
+    pointer-events: none;
+    z-index: 2;
+  }
+
+  input {
+    padding-right: 2.6rem;
+    /* Force light mode background/color on native date picker */
+    color-scheme: light;
+    
+    /* Make native calendar icon invisible, but keep it clickable */
+    &::-webkit-calendar-picker-indicator {
+      position: absolute;
+      right: 0;
+      top: 0;
+      width: 100%;
+      height: 100%;
+      opacity: 0;
+      cursor: pointer;
     }
   }
 }
 
-.selectWithColor {
-  position: relative;
-  display: flex;
-  align-items: center;
-  width: 100%;
-
-  select {
-    width: 100%;
-    padding-right: 2.5rem;
+/* Error states */
+.errorState {
+  label {
+    color: #e53e3e;
+  }
+  input {
+    border-color: #e53e3e;
   }
 }
 
-.selectedColorPreview {
-  position: absolute;
-  right: 1rem;
-  width: 14px;
-  height: 14px;
-  border-radius: 50%;
-}
-
-.hint {
+.errorText {
   font-size: 0.75rem;
-  color: $color-text-muted;
-  margin: 0;
+  color: #e53e3e;
+  margin: -0.8rem 0 1.2rem 1rem;
 }
 
-.colorPalette {
+/* Subject & Color Picker Row */
+.subjectRow {
   display: flex;
-  gap: 0.5rem;
-  margin-bottom: 1.5rem;
-  flex-wrap: wrap;
+  align-items: center; 
+  gap: 0.75rem;
+  margin-bottom: 0.25rem;
+
+  .inputWrapper {
+    margin-bottom: 0; 
+    flex: 1;
+  }
+}
+
+/* Custom Color Wheel Button */
+.colorPickerContainer {
+  position: relative;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.colorWheelBtn {
+  width: 24px;
+  height: 24px;
+  border-radius: 50%;
+  border: 1px solid #cbd5e0;
+  cursor: pointer;
+  background: conic-gradient(
+    #ff4757, 
+    #fbad34, 
+    #fec107, 
+    #38ef7d, 
+    #00f2fe, 
+    #00d2ff, 
+    #b155fc, 
+    #ff9ff3, 
+    #ff4757
+  );
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 0;
+  transition: opacity 0.2s;
+  
+  &:hover {
+    opacity: 0.8;
+  }
+}
+
+.innerColorDot {
+  width: 12px;
+  height: 12px;
+  border-radius: 50%;
+  border: 2px solid #ffffff;
+  box-shadow: 0 1px 3px rgba(0,0,0,0.2);
+}
+
+.floatingPalette {
+  position: absolute;
+  top: 100%;
+  right: 0;
+  margin-top: 10px;
+  background: #ffffff;
+  border-radius: 12px;
+  padding: 0.75rem;
+  box-shadow: 0 4px 15px rgba(0, 0, 0, 0.1);
+  border: 1px solid #edf2f7;
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+  gap: 0.6rem;
+  z-index: 100;
 }
 
 .paletteDot {
-  width: 20px;
-  height: 20px;
+  width: 22px;
+  height: 22px;
   border-radius: 50%;
   border: 2px solid transparent;
   cursor: pointer;
+  transition: transform 0.1s;
 
   &:hover {
     transform: scale(1.1);
@@ -858,30 +585,87 @@
 }
 
 .activePaletteDot {
-  border-color: $color-text-main;
+  border-color: #1a202c;
   transform: scale(1.1);
 }
 
-.errorState {
-  input {
-    border-color: $color-system-error;
-    background-color: #fff0f0;
+.hint {
+  font-size: 0.75rem;
+  color: #a0aec0;
+  margin: 0 0 1.2rem 1rem;
+}
+
+/* Modal Buttons */
+.modalFooterActions {
+  display: flex;
+  flex-direction: column;
+  gap: 0.75rem;
+  margin-top: 1.5rem;
+}
+
+.primaryBtn {
+  width: 100%;
+  padding: 0.9rem;
+  border-radius: 20px;
+  border: none;
+  font-weight: 600;
+  font-size: 0.95rem;
+  text-align: center;
+  transition: all 0.2s;
+
+  &:disabled {
+    background-color: #e2e8f0;
+    color: #a0aec0;
+    cursor: not-allowed;
+  }
+
+  &.activeBtn,
+  &:not(:disabled) {
+    background-color: #1e7154;
+    color: #ffffff;
+    cursor: pointer;
+
+    &:hover {
+      background-color: #155c43;
+    }
   }
 }
 
-.errorText {
-  font-size: 0.8rem;
-  color: $color-system-error;
-  font-weight: 500;
+.secondaryBtn {
+  width: 100%;
+  padding: 0.9rem;
+  border-radius: 20px;
+  border: 1px solid #e2e8f0;
+  background-color: #ffffff;
+  color: #4a5568;
+  font-weight: 600;
+  font-size: 0.95rem;
+  cursor: pointer;
+  transition: background-color 0.2s;
+
+  &:hover {
+    background-color: #f8f9fa;
+  }
 }
 
+.modalFooterHint {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 0.4rem;
+  font-size: 0.72rem;
+  color: #a0aec0;
+  margin-top: 1rem;
+
+  svg {
+    color: #a0aec0;
+  }
+}
+
+/* Step 2 Additions */
 .rowInputs {
   display: flex;
   gap: 1rem;
-
-  div {
-    flex: 1;
-  }
 }
 
 .sectionDivider {
@@ -889,7 +673,7 @@
   border-bottom: 1px solid $color-border;
   padding-bottom: 0.4rem;
   margin: 1.5rem 0 1rem 0;
-  color: $color-text-muted;
+  color: $color-text-main;
 }
 
 .availabilityRow {
@@ -897,69 +681,52 @@
   justify-content: space-between;
   align-items: center;
   margin-bottom: 1rem;
-  font-size: 0.95rem;
-  color: $color-text-main;
-  gap: 1rem;
-}
 
-.timeInputs {
-  display: flex;
-  align-items: center;
-  gap: 0.5rem;
+  .availLabel {
+    font-size: 0.9rem;
+    color: #a0aec0;
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+  }
 
-  input {
-    padding: 0.4rem;
-    border: 1px solid $color-border;
-    border-radius: 6px;
-    text-align: center;
-    background-color: $color-white;
-    color: $color-text-main;
+  .timeInputs {
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+
+    input[type="time"] {
+      width: 70px;
+      padding: 0.5rem;
+      border: 1px solid #cbd5e0;
+      border-radius: 6px;
+      text-align: center;
+      
+      /* Overrides for Dark Mode browsers */
+      color-scheme: light;
+      background-color: #ffffff;
+      color: #000000;
+      font-weight: 500;
+      
+      /* Hide native clock icon to look like Figma text */
+      &::-webkit-calendar-picker-indicator {
+        display: none;
+      }
+    }
   }
 }
 
 .infoLink {
+  display: flex;
+  align-items: center;
+  gap: 0.4rem;
   font-size: 0.8rem;
-  color: $color-text-muted;
-  margin-top: 1.5rem;
-  text-align: center;
-}
-
-.accentText {
-  color: #ff7675;
-  font-weight: 600;
-  cursor: pointer;
-}
-
-.primaryModalBtn {
-  background-color: #1e7154;
-  color: $color-white;
-  border: none;
-  width: 100%;
-  padding: 0.85rem;
-  border-radius: 20px;
-  font-weight: 600;
-  font-size: 1rem;
-  cursor: pointer;
-  margin-top: 1rem;
-
-  &:hover {
-    background-color: #155c43;
-  }
-}
-
-.secondaryModalBtn {
-  background: none;
-  border: none;
   color: #a0aec0;
-  width: 100%;
-  padding: 0.85rem;
-  border-radius: 20px;
-  font-weight: 600;
-  font-size: 1rem;
-  cursor: pointer;
-  margin-top: 0.5rem;
+  margin: 1.5rem 0;
 
-  &:hover {
-    background-color: $color-gray10;
+  .accentText {
+    color: #ff7675;
+    font-weight: 600;
+    cursor: pointer;
   }
 }

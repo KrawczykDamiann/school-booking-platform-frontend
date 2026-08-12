@@ -2,7 +2,7 @@ import React, { useState } from "react";
 import { useTranslatedText } from "../../hooks/useTranslatedText";
 import styles from "./TeacherListPage.module.scss";
 
-/* Helper do tłumaczenia w locie przez Google Translator (bez dotykania JSON-ów) */
+/* Helper for Google Translator */
 const Txt: React.FC<{ children: string }> = ({ children }) => {
   const translated = useTranslatedText(children);
   return <>{translated}</>;
@@ -70,7 +70,7 @@ const INITIAL_TEACHERS: Teacher[] = [
     id: 5,
     name: "Olena Melnyk",
     email: "o.melnyk@onlineschool.com",
-    subject: "English",
+    subject: "Literature",
     subjectColor: "#fbad34",
     collabType: "Contract",
     dueDate: "31/12/27",
@@ -113,19 +113,19 @@ const AVAILABLE_COLORS = ["#ff4757", "#fbad34", "#fec107", "#38ef7d", "#00f2fe",
 
 /* SVG Icons */
 const BriefcaseIcon = () => (
-  <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+  <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" width="14" height="14">
     <rect x="2" y="7" width="20" height="14" rx="2" ry="2"></rect>
     <path d="M16 21V5a2 2 0 0 0-2-2h-4a2 2 0 0 0-2 2v16"></path>
   </svg>
 );
 const SendIcon = () => (
-  <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+  <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" width="14" height="14">
     <line x1="22" y1="2" x2="11" y2="13"></line>
     <polygon points="22 2 15 22 11 13 2 9 22 2"></polygon>
   </svg>
 );
 const UserPlusIcon = () => (
-  <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+  <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" width="20" height="20">
     <path d="M16 21v-2a4 4 0 0 0-4-4H6a4 4 0 0 0-4 4v2"></path>
     <circle cx="9" cy="7" r="4"></circle>
     <line x1="19" y1="8" x2="19" y2="14"></line>
@@ -146,16 +146,45 @@ const MoreIcon = () => (
   </svg>
 );
 const MailIcon = () => (
-  <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+  <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" width="16" height="16">
     <path d="M4 4h16c1.1 0 2 .9 2 2v12c0 1.1-.9 2-2 2H4c-1.1 0-2-.9-2-2V6c0-1.1.9-2 2-2z"></path>
     <polyline points="22,6 12,13 2,6"></polyline>
+  </svg>
+);
+const InfoIcon = () => (
+  <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" width="12" height="12">
+    <circle cx="12" cy="12" r="10"></circle>
+    <line x1="12" y1="16" x2="12" y2="12"></line>
+    <line x1="12" y1="8" x2="12.01" y2="8"></line>
+  </svg>
+);
+const CalendarIcon = () => (
+  <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" width="16" height="16">
+    <rect x="3" y="4" width="18" height="18" rx="2" ry="2"></rect>
+    <line x1="16" y1="2" x2="16" y2="6"></line>
+    <line x1="8" y1="2" x2="8" y2="6"></line>
+    <line x1="3" y1="10" x2="21" y2="10"></line>
+  </svg>
+);
+const ContactIcon = () => (
+  <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" width="16" height="16">
+    <rect x="3" y="5" width="18" height="14" rx="2"></rect>
+    <circle cx="8" cy="12" r="3"></circle>
+    <line x1="14" y1="10" x2="19" y2="10"></line>
+    <line x1="14" y1="14" x2="19" y2="14"></line>
+  </svg>
+);
+const ForkKnifeIcon = () => (
+  <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" width="14" height="14">
+    <path d="M3 2v7c0 1.1.9 2 2 2h4a2 2 0 0 0 2-2V2"></path>
+    <path d="M7 2v20"></path>
+    <path d="M21 15V2v0a5 5 0 0 0-5 5v6c0 1.1.9 2 2 2h3zm0 0v7"></path>
   </svg>
 );
 
 export const TeacherListPage: React.FC = () => {
   const [teachers, setTeachers] = useState<Teacher[]>(INITIAL_TEACHERS);
   
-  /* State Management */
   const [viewMode, setViewMode] = useState<"list" | "detail">("list");
   const [selectedTeacherId, setSelectedTeacherId] = useState<number | null>(null);
 
@@ -164,26 +193,29 @@ export const TeacherListPage: React.FC = () => {
 
   const [newTeacherName, setNewTeacherName] = useState("");
   const [newTeacherSubject, setNewTeacherSubject] = useState("");
-  const [newTeacherColor, setNewTeacherColor] = useState("#00d2ff");
+  const [newTeacherColor, setNewTeacherColor] = useState(""); 
   const [newTeacherEmail, setNewTeacherEmail] = useState("");
   const [emailError, setEmailError] = useState("");
   const [collabType, setCollabType] = useState<"Contract" | "Freelance">("Contract");
   const [dueDate, setDueDate] = useState("2027-06-06");
 
-  /* Handlers */
+  const [isColorPaletteOpen, setIsColorPaletteOpen] = useState(false);
+
   const handleEmailChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     const val = e.target.value;
     setNewTeacherEmail(val);
     if (val === "hello@school.com") {
-      setEmailError("This email already exists");
+      setEmailError("This email already exists in your list");
     } else {
       setEmailError("");
     }
   };
 
+  const isStep1Valid = newTeacherName.trim() !== "" && newTeacherSubject !== "" && newTeacherEmail.trim() !== "" && newTeacherColor !== "" && !emailError;
+
   const handleNextStep = (e: React.FormEvent) => {
     e.preventDefault();
-    if (!emailError && newTeacherName && newTeacherEmail && newTeacherSubject) {
+    if (isStep1Valid) {
       setModalStep(2);
     }
   };
@@ -191,10 +223,10 @@ export const TeacherListPage: React.FC = () => {
   const handleSaveTeacher = () => {
     const created: Teacher = {
       id: teachers.length + 1,
-      name: newTeacherName,
-      email: newTeacherEmail,
-      subject: newTeacherSubject,
-      subjectColor: newTeacherColor,
+      name: newTeacherName || "Draft Teacher",
+      email: newTeacherEmail || "draft@school.com",
+      subject: newTeacherSubject || "Draft",
+      subjectColor: newTeacherColor || "#00d2ff",
       collabType: collabType,
       dueDate: collabType === "Freelance" ? "Without term" : new Date(dueDate).toLocaleDateString("en-GB"),
     };
@@ -208,7 +240,9 @@ export const TeacherListPage: React.FC = () => {
     setNewTeacherName("");
     setNewTeacherSubject("");
     setNewTeacherEmail("");
+    setNewTeacherColor("");
     setEmailError("");
+    setIsColorPaletteOpen(false);
   };
 
   const selectedTeacher = teachers.find((t) => t.id === selectedTeacherId) ?? teachers[0];
@@ -216,8 +250,6 @@ export const TeacherListPage: React.FC = () => {
   return (
     <div className={styles.dashboardContainer}>
       <section className={styles.mainContent}>
-        
-        {/* VIEW 1: MAIN LIST VIEW */}
         {viewMode === "list" ? (
           <div className={styles.listSection}>
             <div className={styles.topHeader}>
@@ -280,7 +312,6 @@ export const TeacherListPage: React.FC = () => {
                         <td className={styles.actionCell}>
                           <button className={styles.actionIconButton}><MoreIcon /></button>
                           
-                          {/* Popover */}
                           {isSelected && (
                             <aside className={styles.popoverCard} onClick={(e) => e.stopPropagation()}>
                               <button className={styles.closeDetails} onClick={() => setSelectedTeacherId(null)}>&times;</button>
@@ -315,16 +346,12 @@ export const TeacherListPage: React.FC = () => {
             </div>
           </div>
         ) : (
-          
-          /* VIEW 2: DETAIL VIEW (Schedule & Availability) */
           <div>
             <button className={styles.backBtn} onClick={() => { setViewMode("list"); setSelectedTeacherId(null); }}>
               &larr; <Txt>Back to Teachers List</Txt>
             </button>
 
             <div className={styles.detailGrid}>
-              
-              {/* Left Sidebar */}
               <aside className={styles.avatarsSidebar}>
                 <h3><Txt>Teachers</Txt></h3>
                 {teachers.map((tItem) => {
@@ -352,7 +379,6 @@ export const TeacherListPage: React.FC = () => {
                 })}
               </aside>
 
-              {/* Center Schedule */}
               <main className={styles.scheduleColumn}>
                 <div className={styles.teacherHeaderCard}>
                   <div className={styles.headerLeft}>
@@ -373,187 +399,39 @@ export const TeacherListPage: React.FC = () => {
                     <button className={styles.actionIconButton}><EditIcon /></button>
                   </div>
                 </div>
-
-                <div className={styles.scheduleGridCard}>
-                  <div className={styles.scheduleHeader}>
-                    <h3><Txt>Schedule</Txt></h3>
-                    <span>📅 <Txt>June 29 - July 5</Txt></span>
-                  </div>
-
-                  <div className={styles.calendarMatrix}>
-                    <div className={styles.dayColumn}>
-                      <div className={`${styles.dayHeader} ${styles.activeDay}`}>
-                        29 <span className={styles.dayNum}><Txt>Monday</Txt></span>
-                      </div>
-                      <div className={styles.timeSlot}>12:00</div>
-                      <div className={styles.timeSlot}>13:00</div>
-                      <div className={`${styles.timeSlot} ${styles.selectedSlot}`}>14:00</div>
-                      <div className={`${styles.timeSlot} ${styles.selectedSlot}`}>15:00</div>
-                      <div className={styles.timeSlot}>16:00</div>
-                      <div className={styles.timeSlot}>17:00</div>
-                    </div>
-
-                    <div className={styles.dayColumn}>
-                      <div className={styles.dayHeader}>
-                        30 <span className={styles.dayNum}><Txt>Tuesday</Txt></span>
-                      </div>
-                      <div className={styles.timeSlot}>12:00</div>
-                      <div className={styles.timeSlot}>13:00</div>
-                      <div className={styles.timeSlot}>14:00</div>
-                      <div className={styles.timeSlot}>15:00</div>
-                      <div className={styles.timeSlot}>16:00</div>
-                      <div className={styles.timeSlot}>17:00</div>
-                    </div>
-
-                    <div className={styles.dayColumn}>
-                      <div className={styles.dayHeader}>
-                        1 <span className={styles.dayNum}><Txt>Wednesday</Txt></span>
-                      </div>
-                      <div className={styles.timeSlot}>12:00</div>
-                      <div className={styles.timeSlot}>13:00</div>
-                      <div className={styles.timeSlot}>14:00</div>
-                      <div className={styles.timeSlot}>15:00</div>
-                      <div className={`${styles.timeSlot} ${styles.bookedSlot}`}>17:00</div>
-                      <div className={styles.timeSlot}>18:00</div>
-                    </div>
-
-                    <div className={styles.dayColumn}>
-                      <div className={styles.dayHeader}>
-                        2 <span className={styles.dayNum}><Txt>Thursday</Txt></span>
-                      </div>
-                      <div className={styles.timeSlot}>12:00</div>
-                      <div className={styles.timeSlot}>13:00</div>
-                      <div className={styles.timeSlot}>14:00</div>
-                      <div className={styles.timeSlot}>15:00</div>
-                      <div className={`${styles.timeSlot} ${styles.bookedSlot}`}>17:00</div>
-                      <div className={styles.timeSlot}>18:00</div>
-                    </div>
-
-                    <div className={styles.dayColumn}>
-                      <div className={styles.dayHeader}>
-                        3 <span className={styles.dayNum}><Txt>Friday</Txt></span>
-                      </div>
-                      <div className={styles.timeSlot}>12:00</div>
-                      <div className={styles.timeSlot}>13:00</div>
-                      <div className={styles.timeSlot}>14:00</div>
-                      <div className={styles.timeSlot}>15:00</div>
-                      <div className={`${styles.timeSlot} ${styles.selectedSlot}`}>16:00</div>
-                      <div className={`${styles.timeSlot} ${styles.selectedSlot}`}>17:00</div>
-                    </div>
-                  </div>
-
-                  <div className={styles.scheduleFooter}>
-                    <div className={styles.nextLessonsLabel}>
-                      <Txt>Next lessons:</Txt> <span>29/06 14:00 15:00 2/07 14:00</span>
-                    </div>
-                    <button className={styles.sendScheduleBtn}><Txt>Send schedule</Txt></button>
-                  </div>
-                </div>
               </main>
 
-              {/* Right Availability Form */}
               <aside className={styles.availabilityColumn}>
-                <div className={styles.availabilityCard}>
-                  <div className={styles.cardHeader}>
-                    <h3><Txt>Availability</Txt></h3>
-                    <button className={styles.addDayBtn}><Txt>+ Add day</Txt></button>
-                  </div>
-                  <p className={styles.subtext}><Txt>Set weekly availability hours for this teacher</Txt></p>
-
-                  <div className={styles.availRow}>
-                    <span className={styles.dayName}><Txt>Monday</Txt></span>
-                    <div className={styles.timeInputs}>
-                      <input type="text" defaultValue="14:00" />
-                      <span>—</span>
-                      <input type="text" defaultValue="17:00" />
-                      <span className={styles.deleteIcon}>🗑️</span>
-                    </div>
-                  </div>
-
-                  <div className={styles.availRow}>
-                    <span className={styles.dayName}><Txt>Tuesday</Txt></span>
-                    <div className={styles.timeInputs}>
-                      <input type="text" defaultValue="15:00" />
-                      <span>—</span>
-                      <input type="text" defaultValue="19:00" />
-                      <span className={styles.deleteIcon}>🗑️</span>
-                    </div>
-                  </div>
-
-                  <div className={styles.availRow}>
-                    <span className={styles.dayName}><Txt>Wednesday</Txt></span>
-                    <div className={styles.timeInputs}>
-                      <input type="text" defaultValue="14:00" />
-                      <span>—</span>
-                      <input type="text" defaultValue="18:00" />
-                      <span className={styles.deleteIcon}>🗑️</span>
-                    </div>
-                  </div>
-
-                  <div className={styles.availRow}>
-                    <span className={styles.dayName}><Txt>Thursday</Txt></span>
-                    <div className={styles.timeInputs}>
-                      <input type="text" defaultValue="14:00" />
-                      <span>—</span>
-                      <input type="text" defaultValue="18:00" />
-                      <span className={styles.deleteIcon}>🗑️</span>
-                    </div>
-                  </div>
-
-                  <div className={styles.availRow}>
-                    <span className={styles.dayName}><Txt>Friday</Txt></span>
-                    <div className={styles.timeInputs}>
-                      <input type="text" defaultValue="10:00" />
-                      <span>—</span>
-                      <input type="text" defaultValue="17:00" />
-                      <span className={styles.deleteIcon}>🗑️</span>
-                    </div>
-                  </div>
-
-                  <p className={styles.hintFooter}>
-                    ℹ️ <Txt>Other days will be marked unavailable by default</Txt>
-                  </p>
-
-                  <div className={styles.availRow} style={{ marginTop: '1.25rem' }}>
-                    <span className={styles.dayName}><Txt>Lunch break</Txt></span>
-                    <div className={styles.timeInputs}>
-                      <input type="text" defaultValue="13:00" />
-                      <span>—</span>
-                      <input type="text" defaultValue="14:00" />
-                      <span className={styles.deleteIcon}>✏️</span>
-                    </div>
-                  </div>
-                </div>
-
-                <div className={styles.vacationsCard}>
-                  <div className={styles.vacationHeader}>
-                    <h3><Txt>Vacations</Txt></h3>
-                    <span className={styles.badge}><Txt>Coming in the next update</Txt></span>
-                  </div>
-                  <p><Txt>Mark dates when the teacher is unavailable</Txt></p>
-                </div>
+                {/* Availability Panel Placeholder */}
               </aside>
             </div>
           </div>
         )}
       </section>
 
-      {/* Modal View */}
+      {/* FIGMA ALIGNED MODAL */}
       {isModalOpen && (
         <div className={styles.modalOverlay}>
           <div className={styles.modalCard}>
-            <button className={styles.closeModal} onClick={resetForm}>&times;</button>
-
+            
             {modalStep === 1 ? (
               <form onSubmit={handleNextStep}>
-                <h3>
-                  <UserPlusIcon /> <Txt>Add a teacher</Txt> 
-                  <span className={styles.stepIndicator}><Txt>Step 1 of 2</Txt></span>
-                </h3>
-                <p className={styles.subtitle}><Txt>Fill in basic info</Txt></p>
+                
+                <div className={styles.modalHeader}>
+                  <div className={styles.titleGroup}>
+                    <UserPlusIcon />
+                    <h3><Txt>Add a teacher</Txt></h3>
+                  </div>
+                  <div className={styles.headerRight}>
+                    <span className={styles.stepIndicator}><Txt>Step 1 of 2</Txt></span>
+                    <button type="button" className={styles.closeModal} onClick={resetForm}>&times;</button>
+                  </div>
+                </div>
+                
+                <p className={styles.subtitle}><Txt>Fill-in basic information</Txt></p>
 
-                <div className={styles.inputGroup}>
-                  <label><Txt>Name*</Txt></label>
+                <div className={styles.inputWrapper}>
+                  <label><Txt>Name *</Txt></label>
                   <input
                     type="text"
                     placeholder="Olga Petrivna"
@@ -563,85 +441,125 @@ export const TeacherListPage: React.FC = () => {
                   />
                 </div>
 
-                <div className={styles.inputGroup}>
-                  <label><Txt>Subject (required)*</Txt></label>
-                  <div className={styles.selectWithColor}>
+                <div className={styles.subjectRow}>
+                  <div className={styles.inputWrapper}>
+                    <label><Txt>Subject (required) *</Txt></label>
                     <select required value={newTeacherSubject} onChange={(e) => setNewTeacherSubject(e.target.value)}>
-                      <option value=""><Txt>Select a subject...</Txt></option>
-                      <option value="chemistry"><Txt>Chemistry</Txt></option>
-                      <option value="mathematics"><Txt>Mathematics</Txt></option>
-                      <option value="physics"><Txt>Physics</Txt></option>
+                      <option value="" disabled hidden></option>
+                      <option value="Chemistry">Chemistry</option>
+                      <option value="Mathematics">Mathematics</option>
+                      <option value="Physics">Physics</option>
+                      <option value="Biology">Biology</option>
+                      <option value="English">English</option>
+                      <option value="History">History</option>
                     </select>
-                    <span className={styles.selectedColorPreview} style={{ backgroundColor: newTeacherColor }}></span>
                   </div>
-                  <p className={styles.hint}><Txt>Select a subject and a color to mark in your schedule</Txt></p>
-                </div>
 
-                <div className={styles.colorPalette}>
-                  {AVAILABLE_COLORS.map((c) => (
-                    <button
-                      type="button"
-                      key={c}
-                      className={`${styles.paletteDot} ${newTeacherColor === c ? styles.activePaletteDot : ""}`}
-                      style={{ backgroundColor: c }}
-                      onClick={() => setNewTeacherColor(c)}
+                  <div className={styles.colorPickerContainer}>
+                    <button 
+                      type="button" 
+                      className={styles.colorWheelBtn}
+                      onClick={() => setIsColorPaletteOpen(!isColorPaletteOpen)}
+                    >
+                      {newTeacherColor && <span className={styles.innerColorDot} style={{ backgroundColor: newTeacherColor }}></span>}
+                    </button>
+
+                    {isColorPaletteOpen && (
+                      <div className={styles.floatingPalette}>
+                        {AVAILABLE_COLORS.map((c) => (
+                          <button
+                            type="button"
+                            key={c}
+                            className={`${styles.paletteDot} ${newTeacherColor === c ? styles.activePaletteDot : ""}`}
+                            style={{ backgroundColor: c }}
+                            onClick={() => {
+                              setNewTeacherColor(c);
+                              setIsColorPaletteOpen(false);
+                            }}
+                          />
+                        ))}
+                      </div>
+                    )}
+                  </div>
+                </div>
+                <p className={styles.hint}><Txt>Select a subject and a colour to mark in your schedule</Txt></p>
+
+                <div className={`${styles.inputWrapper} ${emailError ? styles.errorState : ""}`}>
+                  <label><Txt>Email *</Txt></label>
+                  <div className={styles.inputWithLeftIcon}>
+                    <MailIcon />
+                    <input
+                      type="email"
+                      placeholder="hello@school.com"
+                      required
+                      value={newTeacherEmail}
+                      onChange={handleEmailChange}
                     />
-                  ))}
+                  </div>
+                </div>
+                {emailError && <p className={styles.errorText}>{emailError}</p>}
+
+                <div className={styles.modalFooterActions}>
+                  <button type="submit" disabled={!isStep1Valid} className={styles.primaryBtn}>
+                    <Txt>Continue to availability</Txt>
+                  </button>
+                  <button type="button" className={styles.secondaryBtn} onClick={handleSaveTeacher}>
+                    <Txt>Save and set later</Txt>
+                  </button>
                 </div>
 
-                <div className={`${styles.inputGroup} ${emailError ? styles.errorState : ""}`}>
-                  <label><Txt>Email*</Txt></label>
-                  <input
-                    type="email"
-                    placeholder="hello@school.com"
-                    required
-                    value={newTeacherEmail}
-                    onChange={handleEmailChange}
-                  />
-                  {emailError && <span className={styles.errorText}>⚠️ <Txt>{emailError}</Txt></span>}
-                </div>
-
-                <button type="submit" className={styles.primaryModalBtn}>
-                  <Txt>Continue to availability</Txt>
-                </button>
-                <button type="button" className={styles.secondaryModalBtn} onClick={handleSaveTeacher}>
-                  <Txt>Save and set later</Txt>
-                </button>
+                <p className={styles.modalFooterHint}>
+                  <InfoIcon /> <Txt>A teacher will be unavailable for booking, until you set their availability</Txt>
+                </p>
               </form>
             ) : (
               <div>
-                <h3>
-                   &larr; <Txt>Add a teacher</Txt>
-                  <span className={styles.stepIndicator}><Txt>Step 2 of 2</Txt></span>
-                </h3>
-                <p className={styles.subtitle}><Txt>Set teachers availability</Txt></p>
+                <div className={styles.modalHeader}>
+                  <div className={styles.titleGroup}>
+                    <button type="button" className={styles.backStepBtn} onClick={() => setModalStep(1)}>&larr;</button>
+                    <h3><Txt>Add a teacher</Txt></h3>
+                  </div>
+                  <div className={styles.headerRight}>
+                    <span className={styles.stepIndicator}><Txt>Step 2 of 2</Txt></span>
+                    <button type="button" className={styles.closeModal} onClick={resetForm}>&times;</button>
+                  </div>
+                </div>
+                <p className={styles.subtitle}><Txt>Set teacher's availability</Txt></p>
 
                 <h4 className={styles.sectionDivider}><Txt>Work terms</Txt></h4>
                 <div className={styles.rowInputs}>
-                  <div className={styles.inputGroup}>
+                  <div className={styles.inputWrapper}>
                     <label><Txt>Collaboration type *</Txt></label>
-                    <select
-                      value={collabType}
-                      onChange={(e: React.ChangeEvent<HTMLSelectElement>) => setCollabType(e.target.value as "Contract" | "Freelance")}
-                    >
-                      <option value="Contract"><Txt>Contract</Txt></option>
-                      <option value="Freelance"><Txt>Freelance</Txt></option>
-                    </select>
+                    <div className={styles.inputWithLeftIcon}>
+                      <ContactIcon />
+                      <select
+                        value={collabType}
+                        onChange={(e: React.ChangeEvent<HTMLSelectElement>) => setCollabType(e.target.value as "Contract" | "Freelance")}
+                      >
+                        <option value="Contract">Contract</option>
+                        <option value="Freelance">Freelance</option>
+                      </select>
+                    </div>
                   </div>
-                  <div className={styles.inputGroup}>
-                    <label><Txt>Due Date *</Txt></label>
-                    <input
-                      type="date"
-                      value={dueDate}
-                      onChange={(e) => setDueDate(e.target.value)}
-                      disabled={collabType === "Freelance"}
-                    />
+                  <div className={styles.inputWrapper}>
+                    <label><Txt>Two Dates *</Txt></label>
+                    <div className={styles.inputWithRightIcon}>
+                      <input
+                        type="date"
+                        value={dueDate}
+                        onChange={(e) => setDueDate(e.target.value)}
+                        disabled={collabType === "Freelance"}
+                      />
+                      <CalendarIcon />
+                    </div>
                   </div>
                 </div>
 
                 <h4 className={styles.sectionDivider}><Txt>Regular availability</Txt></h4>
                 <div className={styles.availabilityRow}>
-                  <span><Txt>Workdays</Txt></span>
+                  <span className={styles.availLabel}>
+                    <BriefcaseIcon /> <Txt>Workdays</Txt>
+                  </span>
                   <div className={styles.timeInputs}>
                     <input type="time" defaultValue="09:00" />
                     <span>—</span>
@@ -650,7 +568,9 @@ export const TeacherListPage: React.FC = () => {
                 </div>
 
                 <div className={styles.availabilityRow}>
-                  <span><Txt>Lunch break</Txt></span>
+                  <span className={styles.availLabel}>
+                    <ForkKnifeIcon /> <Txt>Lunch break</Txt>
+                  </span>
                   <div className={styles.timeInputs}>
                     <input type="time" defaultValue="12:00" />
                     <span>—</span>
@@ -659,11 +579,11 @@ export const TeacherListPage: React.FC = () => {
                 </div>
 
                 <p className={styles.infoLink}>
-                  <Txt>You can set individual per-day later or</Txt>{" "}
+                  <InfoIcon /> <Txt>You can set individual per day later or</Txt>{" "}
                   <span className={styles.accentText}><Txt>add now</Txt></span>
                 </p>
 
-                <button type="button" className={styles.primaryModalBtn} onClick={handleSaveTeacher}>
+                <button type="button" className={`${styles.primaryBtn} ${styles.activeBtn}`} onClick={handleSaveTeacher}>
                   <Txt>Save teacher</Txt>
                 </button>
               </div>
