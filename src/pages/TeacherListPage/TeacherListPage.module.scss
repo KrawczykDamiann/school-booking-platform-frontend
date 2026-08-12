@@ -17,6 +17,10 @@
   box-sizing: border-box;
   display: flex;
   align-items: flex-start;
+
+  @media (max-width: 1024px) {
+    padding: 1rem;
+  }
 }
 
 /* Header */
@@ -63,6 +67,8 @@
   align-items: center;
   gap: 0.4rem;
   margin-bottom: 1rem;
+
+  &:hover { background-color: $color-gray10; }
 }
 
 /* List View */
@@ -72,7 +78,14 @@
   padding: 1.5rem 2rem;
   box-shadow: $shadow-sm;
   flex: 0 1 950px;
+  box-sizing: border-box;
   position: relative;
+  overflow: visible;
+}
+
+.tableWrapper {
+  width: 100%;
+  overflow: visible;
 }
 
 .teachersTable {
@@ -98,10 +111,16 @@
     border-bottom: 1px solid $color-gray10;
     font-size: 0.9rem;
     color: $color-text-main;
+    vertical-align: middle;
+  }
+
+  .activeRow {
+    background-color: #f8f9fa;
   }
 
   tr {
     cursor: pointer;
+    transition: background-color 0.15s ease;
     &:hover { background-color: #f8f9fa; }
   }
 }
@@ -185,7 +204,7 @@
 
 .actionCell {
   text-align: center;
-  position: relative;
+  position: relative !important;
 
   .actionIconButton {
     background: none;
@@ -198,7 +217,7 @@
   }
 }
 
-/* Popover */
+/* POPOVER - MOVED FURTHER RIGHT */
 .popoverCard {
   width: max-content;
   min-width: 300px;
@@ -206,12 +225,14 @@
   border-radius: 12px;
   padding: 1.25rem 1.5rem;
   position: absolute;
-  left: calc(100% + 1rem);
+  left: calc(100% + 45px); /* Increased to 45px to clear the table completely */
   top: 50%;
   transform: translateY(-50%);
   z-index: 100;
   box-shadow: 0 10px 30px rgba(0, 0, 0, 0.12);
   border: 1px solid #edf2f7;
+  box-sizing: border-box;
+  text-align: left;
 
   &::before {
     content: "";
@@ -219,6 +240,8 @@
     left: -8px;
     top: 50%;
     transform: translateY(-50%);
+    width: 0;
+    height: 0;
     border-top: 7px solid transparent;
     border-bottom: 7px solid transparent;
     border-right: 8px solid #ffffff;
@@ -233,10 +256,13 @@
     font-size: 1rem;
     color: #a0aec0;
     cursor: pointer;
+    line-height: 1;
+    &:hover { color: $color-text-main; }
   }
 
   .popoverHeader {
     margin-bottom: 1rem;
+    padding-right: 1.5rem;
     h3 {
       margin: 0 0 0.25rem 0;
       font-size: 0.95rem;
@@ -251,6 +277,7 @@
       height: 6px;
       border-radius: 50%;
       background-color: #38ef7d;
+      display: inline-block;
     }
     .popoverEmail {
       font-size: 0.78rem;
@@ -258,7 +285,9 @@
       display: flex;
       align-items: center;
       gap: 0.35rem;
-      svg { width: 13px; height: 13px; }
+      margin-top: 0.2rem;
+      white-space: nowrap;
+      svg { width: 13px; height: 13px; color: #a0aec0; flex-shrink: 0; }
     }
   }
 
@@ -268,11 +297,13 @@
       font-size: 0.78rem;
       color: #a0aec0;
       margin: 0 0 0.3rem 0;
+      font-weight: 500;
     }
     .lessons {
       font-size: 0.82rem;
       color: #2d3748;
       margin: 0;
+      line-height: 1.4;
       font-weight: 500;
     }
   }
@@ -286,7 +317,390 @@
       font-weight: 600;
       font-size: 0.8rem;
       cursor: pointer;
+      padding: 0;
+      &:hover { text-decoration: underline; }
     }
+  }
+}
+
+/* Detail View Layout */
+.detailGrid {
+  display: grid;
+  grid-template-columns: 220px 1fr 400px; 
+  gap: 1.5rem;
+  align-items: start;
+
+  @media (max-width: 1200px) {
+    grid-template-columns: 200px 1fr;
+  }
+  @media (max-width: 900px) {
+    grid-template-columns: 1fr;
+  }
+}
+
+.avatarsSidebar {
+  background: $color-white;
+  border-radius: $radius-md;
+  padding: 1.25rem 1rem;
+  box-shadow: $shadow-sm;
+
+  h3 {
+    font-size: 0.9rem;
+    color: #a0aec0;
+    margin: 0 0 1rem 0.5rem;
+    font-weight: 600;
+  }
+
+  .teacherNavItem {
+    display: flex;
+    align-items: center;
+    gap: 0.75rem;
+    padding: 0.6rem 0.75rem;
+    border-radius: 20px;
+    cursor: pointer;
+    transition: all 0.2s;
+    margin-bottom: 0.25rem;
+
+    &:hover { background-color: #f8f9fa; }
+    &.activeNavItem {
+      background-color: #f1f3f5;
+      .navName { font-weight: 700; }
+    }
+
+    .navAvatar {
+      width: 32px;
+      height: 32px;
+      border-radius: 50%;
+      object-fit: cover;
+    }
+
+    .navInfo {
+      display: flex;
+      flex-direction: column;
+
+      .navName {
+        font-size: 0.82rem;
+        color: $color-text-main;
+        white-space: nowrap;
+        overflow: hidden;
+        text-overflow: ellipsis;
+        max-width: 120px;
+      }
+      .navSubject {
+        font-size: 0.72rem;
+        color: #a0aec0;
+      }
+    }
+  }
+}
+
+/* Schedule Column */
+.scheduleColumn {
+  display: flex;
+  flex-direction: column;
+  gap: 1.25rem;
+}
+
+.teacherHeaderCard {
+  background: $color-white;
+  border-radius: $radius-md;
+  padding: 1.25rem 1.5rem;
+  box-shadow: $shadow-sm;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+
+  .headerLeft {
+    display: flex;
+    align-items: center;
+    gap: 1rem;
+
+    .headerAvatar {
+      width: 56px;
+      height: 56px;
+      border-radius: 50%;
+      object-fit: cover;
+    }
+
+    .headerDetails {
+      h3 {
+        margin: 0 0 0.25rem 0;
+        font-size: 1.1rem;
+        color: $color-text-main;
+      }
+      p {
+        margin: 0;
+        font-size: 0.82rem;
+        color: #a0aec0;
+        word-break: break-all;
+      }
+    }
+  }
+
+  .headerRight {
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+    font-size: 0.85rem;
+    color: #a0aec0;
+  }
+}
+
+.scheduleGridCard {
+  background: $color-white;
+  border-radius: $radius-md;
+  padding: 1.5rem;
+  box-shadow: $shadow-sm;
+
+  .scheduleHeader {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 1rem;
+
+    h3 {
+      margin: 0;
+      font-size: 1.2rem;
+      color: $color-text-main;
+    }
+    span {
+      font-size: 0.85rem;
+      color: #a0aec0;
+      font-weight: 500;
+    }
+  }
+
+  .calendarMatrix {
+    display: grid;
+    grid-template-columns: repeat(5, 1fr);
+    gap: 0.5rem;
+    text-align: center;
+    margin-bottom: 1.5rem;
+
+    .dayColumn {
+      display: flex;
+      flex-direction: column;
+      gap: 0.4rem;
+
+      .dayHeader {
+        font-size: 0.75rem;
+        color: #a0aec0;
+        margin-bottom: 0.5rem;
+
+        .dayNum {
+          display: block;
+          font-size: 0.9rem;
+          font-weight: 700;
+          color: $color-text-main;
+          text-transform: capitalize;
+        }
+
+        &.activeDay .dayNum {
+          color: #ff7675;
+        }
+      }
+
+      .timeSlot {
+        padding: 0.4rem;
+        font-size: 0.75rem;
+        border-radius: 6px;
+        background-color: #f8f9fa;
+        color: #a0aec0;
+        transition: all 0.2s;
+
+        &.bookedSlot {
+          background-color: #e6fcf5;
+          color: #0ca678;
+          font-weight: 600;
+        }
+        &.selectedSlot {
+          background-color: #1e7154;
+          color: #ffffff;
+          font-weight: 600;
+        }
+      }
+    }
+  }
+
+  .scheduleFooter {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    border-top: 1px solid $color-gray10;
+    padding-top: 1rem;
+
+    .nextLessonsLabel {
+      font-size: 0.8rem;
+      color: #a0aec0;
+      span {
+        color: $color-text-main;
+        font-weight: 600;
+        margin-left: 0.5rem;
+      }
+    }
+
+    .sendScheduleBtn {
+      background-color: #f1f3f5;
+      color: #adb5bd;
+      border: none;
+      padding: 0.5rem 1rem;
+      border-radius: 12px;
+      font-size: 0.82rem;
+      font-weight: 600;
+      cursor: not-allowed;
+    }
+  }
+}
+
+/* Availability Column */
+.availabilityColumn {
+  display: flex;
+  flex-direction: column;
+  gap: 1.25rem;
+}
+
+.availabilityCard {
+  background: $color-white;
+  border-radius: $radius-md;
+  padding: 1.5rem;
+  box-shadow: $shadow-sm;
+
+  .cardHeader {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 0.25rem;
+
+    h3 {
+      margin: 0;
+      font-size: 1.1rem;
+      color: $color-text-main;
+    }
+    .addDayBtn {
+      color: #ff7675;
+      font-size: 0.8rem;
+      font-weight: 600;
+      background: none;
+      border: none;
+      cursor: pointer;
+    }
+  }
+
+  .subtext {
+    font-size: 0.78rem;
+    color: #a0aec0;
+    margin: 0 0 1.25rem 0;
+  }
+
+  .availRow {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 0.75rem;
+
+    .dayName {
+      font-size: 0.82rem;
+      color: $color-text-main;
+      font-weight: 500;
+      text-transform: capitalize;
+      width: 95px; /* Ensures all inputs align beautifully vertically */
+      flex-shrink: 0;
+    }
+
+    /* TIME INPUTS WITH ARROWS - WIDTH REDUCED & ALIGNED */
+    .timeInputs {
+      display: flex;
+      align-items: center;
+      gap: 0.3rem;
+
+      input[type="time"] {
+        width: 76px; /* Reduced so the trash icon fits and doesn't wrap */
+        padding: 0.3rem 0.1rem 0.3rem 0.4rem;
+        border: 1px solid $color-border;
+        border-radius: 6px;
+        text-align: center;
+        font-size: 0.85rem;
+        font-weight: 500;
+        
+        background-color: #ffffff;
+        color: #000000;
+        color-scheme: light;
+        
+        &::-webkit-inner-spin-button {
+          display: block !important;
+          opacity: 1 !important;
+          cursor: pointer;
+          height: 24px;
+        }
+        &::-webkit-calendar-picker-indicator {
+          display: none !important;
+          -webkit-appearance: none;
+        }
+      }
+
+      span {
+        font-size: 0.75rem;
+        color: #a0aec0;
+      }
+      .deleteIcon {
+        color: #ff7675;
+        cursor: pointer;
+        font-size: 0.8rem;
+        margin-left: 0.2rem;
+        flex-shrink: 0;
+      }
+    }
+  }
+
+  .hintFooter {
+    font-size: 0.75rem;
+    color: #a0aec0;
+    margin-top: 1rem;
+    line-height: 1.4;
+    display: flex;
+    align-items: center;
+    gap: 0.4rem;
+
+    svg {
+      width: 12px;
+      height: 12px;
+      color: #a0aec0;
+    }
+  }
+}
+
+.vacationsCard {
+  background: $color-white;
+  border-radius: $radius-md;
+  padding: 1.25rem 1.5rem;
+  box-shadow: $shadow-sm;
+
+  .vacationHeader {
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+    margin-bottom: 0.5rem;
+
+    h3 {
+      margin: 0;
+      font-size: 0.95rem;
+      color: $color-text-main;
+    }
+
+    .badge {
+      background: #fff4e6;
+      color: #fd7e14;
+      font-size: 0.7rem;
+      padding: 0.2rem 0.5rem;
+      border-radius: 10px;
+      font-weight: 600;
+    }
+  }
+
+  p {
+    margin: 0;
+    font-size: 0.78rem;
+    color: #a0aec0;
   }
 }
 
@@ -466,10 +880,8 @@
 
   input {
     padding-right: 2.6rem;
-    /* Force light mode background/color on native date picker */
     color-scheme: light;
     
-    /* Make native calendar icon invisible, but keep it clickable */
     &::-webkit-calendar-picker-indicator {
       position: absolute;
       right: 0;
@@ -484,12 +896,8 @@
 
 /* Error states */
 .errorState {
-  label {
-    color: #e53e3e;
-  }
-  input {
-    border-color: #e53e3e;
-  }
+  label { color: #e53e3e; }
+  input { border-color: #e53e3e; }
 }
 
 .errorText {
@@ -542,9 +950,7 @@
   padding: 0;
   transition: opacity 0.2s;
   
-  &:hover {
-    opacity: 0.8;
-  }
+  &:hover { opacity: 0.8; }
 }
 
 .innerColorDot {
@@ -575,13 +981,11 @@
   width: 22px;
   height: 22px;
   border-radius: 50%;
-  border: 2px solid transparent;
+  border: 2px transparent;
   cursor: pointer;
   transition: transform 0.1s;
 
-  &:hover {
-    transform: scale(1.1);
-  }
+  &:hover { transform: scale(1.1); }
 }
 
 .activePaletteDot {
@@ -625,9 +1029,7 @@
     color: #ffffff;
     cursor: pointer;
 
-    &:hover {
-      background-color: #155c43;
-    }
+    &:hover { background-color: #155c43; }
   }
 }
 
@@ -643,9 +1045,7 @@
   cursor: pointer;
   transition: background-color 0.2s;
 
-  &:hover {
-    background-color: #f8f9fa;
-  }
+  &:hover { background-color: #f8f9fa; }
 }
 
 .modalFooterHint {
@@ -657,76 +1057,5 @@
   color: #a0aec0;
   margin-top: 1rem;
 
-  svg {
-    color: #a0aec0;
-  }
-}
-
-/* Step 2 Additions */
-.rowInputs {
-  display: flex;
-  gap: 1rem;
-}
-
-.sectionDivider {
-  font-size: 0.95rem;
-  border-bottom: 1px solid $color-border;
-  padding-bottom: 0.4rem;
-  margin: 1.5rem 0 1rem 0;
-  color: $color-text-main;
-}
-
-.availabilityRow {
-  display: flex;
-  justify-content: space-between;
-  align-items: center;
-  margin-bottom: 1rem;
-
-  .availLabel {
-    font-size: 0.9rem;
-    color: #a0aec0;
-    display: flex;
-    align-items: center;
-    gap: 0.5rem;
-  }
-
-  .timeInputs {
-    display: flex;
-    align-items: center;
-    gap: 0.5rem;
-
-    input[type="time"] {
-      width: 70px;
-      padding: 0.5rem;
-      border: 1px solid #cbd5e0;
-      border-radius: 6px;
-      text-align: center;
-      
-      /* Overrides for Dark Mode browsers */
-      color-scheme: light;
-      background-color: #ffffff;
-      color: #000000;
-      font-weight: 500;
-      
-      /* Hide native clock icon to look like Figma text */
-      &::-webkit-calendar-picker-indicator {
-        display: none;
-      }
-    }
-  }
-}
-
-.infoLink {
-  display: flex;
-  align-items: center;
-  gap: 0.4rem;
-  font-size: 0.8rem;
-  color: #a0aec0;
-  margin: 1.5rem 0;
-
-  .accentText {
-    color: #ff7675;
-    font-weight: 600;
-    cursor: pointer;
-  }
+  svg { color: #a0aec0; }
 }

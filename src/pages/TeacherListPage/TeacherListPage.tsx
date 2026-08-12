@@ -182,6 +182,13 @@ const ForkKnifeIcon = () => (
   </svg>
 );
 
+/* Helper function to robustly compare times */
+const timeToMins = (t: string) => {
+  if (!t) return 0;
+  const [h, m] = t.split(':').map(Number);
+  return h * 60 + m;
+};
+
 export const TeacherListPage: React.FC = () => {
   const [teachers, setTeachers] = useState<Teacher[]>(INITIAL_TEACHERS);
   
@@ -191,6 +198,7 @@ export const TeacherListPage: React.FC = () => {
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [modalStep, setModalStep] = useState<1 | 2>(1);
 
+  /* Teacher Form State */
   const [newTeacherName, setNewTeacherName] = useState("");
   const [newTeacherSubject, setNewTeacherSubject] = useState("");
   const [newTeacherColor, setNewTeacherColor] = useState(""); 
@@ -200,6 +208,38 @@ export const TeacherListPage: React.FC = () => {
   const [dueDate, setDueDate] = useState("2027-06-06");
 
   const [isColorPaletteOpen, setIsColorPaletteOpen] = useState(false);
+
+  /* Interactive Schedule State with active flags */
+  const [scheduleAvail, setScheduleAvail] = useState({
+    monday: { start: "14:00", end: "16:00", active: true },
+    tuesday: { start: "15:00", end: "19:00", active: true },
+    wednesday: { start: "12:00", end: "18:00", active: true },
+    thursday: { start: "14:00", end: "18:00", active: true },
+    friday: { start: "10:00", end: "17:00", active: true },
+    saturday: { start: "10:00", end: "14:00", active: false },
+    sunday: { start: "10:00", end: "14:00", active: false },
+  });
+  const [lunch, setLunch] = useState({ start: "13:00", end: "14:00" });
+
+  /* Remove and Add Day Functions */
+  const handleRemoveDay = (dayId: string) => {
+    setScheduleAvail((prev) => ({
+      ...prev,
+      [dayId]: { ...prev[dayId as keyof typeof prev], active: false },
+    }));
+  };
+
+  const handleAddDay = () => {
+    const allKeys = ['monday', 'tuesday', 'wednesday', 'thursday', 'friday', 'saturday', 'sunday'];
+    const nextInactive = allKeys.find((k) => !scheduleAvail[k as keyof typeof scheduleAvail].active);
+    
+    if (nextInactive) {
+      setScheduleAvail((prev) => ({
+        ...prev,
+        [nextInactive]: { ...prev[nextInactive as keyof typeof prev], active: true },
+      }));
+    }
+  };
 
   const handleEmailChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     const val = e.target.value;
@@ -246,6 +286,27 @@ export const TeacherListPage: React.FC = () => {
   };
 
   const selectedTeacher = teachers.find((t) => t.id === selectedTeacherId) ?? teachers[0];
+
+  /* Constants for rendering */
+  const MATRIX_DAYS = [
+    { id: 'monday', date: '29', name: 'Monday' },
+    { id: 'tuesday', date: '30', name: 'Tuesday' },
+    { id: 'wednesday', date: '1', name: 'Wednesday' },
+    { id: 'thursday', date: '2', name: 'Thursday' },
+    { id: 'friday', date: '3', name: 'Friday' },
+  ];
+
+  const ALL_DAYS_LIST = [
+    { id: 'monday', name: 'Monday' },
+    { id: 'tuesday', name: 'Tuesday' },
+    { id: 'wednesday', name: 'Wednesday' },
+    { id: 'thursday', name: 'Thursday' },
+    { id: 'friday', name: 'Friday' },
+    { id: 'saturday', name: 'Saturday' },
+    { id: 'sunday', name: 'Sunday' },
+  ];
+
+  const TIMES = ["12:00", "13:00", "14:00", "15:00", "16:00", "17:00", "18:00"];
 
   return (
     <div className={styles.dashboardContainer}>
@@ -346,12 +407,16 @@ export const TeacherListPage: React.FC = () => {
             </div>
           </div>
         ) : (
+          
+          /* DETAIL VIEW */
           <div>
             <button className={styles.backBtn} onClick={() => { setViewMode("list"); setSelectedTeacherId(null); }}>
               &larr; <Txt>Back to Teachers List</Txt>
             </button>
 
             <div className={styles.detailGrid}>
+              
+              {/* Left Sidebar */}
               <aside className={styles.avatarsSidebar}>
                 <h3><Txt>Teachers</Txt></h3>
                 {teachers.map((tItem) => {
@@ -379,6 +444,7 @@ export const TeacherListPage: React.FC = () => {
                 })}
               </aside>
 
+              {/* Center Schedule */}
               <main className={styles.scheduleColumn}>
                 <div className={styles.teacherHeaderCard}>
                   <div className={styles.headerLeft}>
@@ -399,10 +465,120 @@ export const TeacherListPage: React.FC = () => {
                     <button className={styles.actionIconButton}><EditIcon /></button>
                   </div>
                 </div>
+
+                <div className={styles.scheduleGridCard}>
+                  <div className={styles.scheduleHeader}>
+                    <h3><Txt>Schedule</Txt></h3>
+                    <span>📅 <Txt>June 29 - July 5</Txt></span>
+                  </div>
+
+                  <div className={styles.calendarMatrix}>
+                    {MATRIX_DAYS.map(day => (
+                      <div key={day.id} className={styles.dayColumn}>
+                        <div className={`${styles.dayHeader} ${day.id === 'monday' ? styles.activeDay : ''}`}>
+                          {day.date} <span className={styles.dayNum}><Txt>{day.name}</Txt></span>
+                        </div>
+                        {TIMES.map(time => {
+                          const tMins = timeToMins(time);
+                          const dayConfig = scheduleAvail[day.id as keyof typeof scheduleAvail];
+                          
+                          const wStart = timeToMins(dayConfig.start);
+                          const wEnd = timeToMins(dayConfig.end);
+                          const lStart = timeToMins(lunch.start);
+                          const lEnd = timeToMins(lunch.end);
+
+                          const isWork = dayConfig.active && (tMins >= wStart && tMins < wEnd);
+                          const isLunch = tMins >= lStart && tMins < lEnd;
+                          
+                          const isSelected = isWork && !isLunch;
+                          
+                          // Mock booked slots logic
+                          const isBooked = (day.id === "wednesday" || day.id === "thursday") && time === "17:00";
+
+                          let classes = styles.timeSlot;
+                          if (isSelected && isBooked) classes += ` ${styles.bookedSlot}`;
+                          else if (isSelected) classes += ` ${styles.selectedSlot}`;
+                          else if (isBooked) classes += ` ${styles.bookedSlot}`;
+
+                          return <div key={time} className={classes}>{time}</div>;
+                        })}
+                      </div>
+                    ))}
+                  </div>
+
+                  <div className={styles.scheduleFooter}>
+                    <div className={styles.nextLessonsLabel}>
+                      <Txt>Next lessons:</Txt> <span>29/06 14:00 15:00 2/07 14:00</span>
+                    </div>
+                    <button className={styles.sendScheduleBtn}><Txt>Send schedule</Txt></button>
+                  </div>
+                </div>
               </main>
 
+              {/* Right Availability Form */}
               <aside className={styles.availabilityColumn}>
-                {/* Availability Panel Placeholder */}
+                <div className={styles.availabilityCard}>
+                  <div className={styles.cardHeader}>
+                    <h3><Txt>Availability</Txt></h3>
+                    <button className={styles.addDayBtn} onClick={handleAddDay}><Txt>+ Add day</Txt></button>
+                  </div>
+                  <p className={styles.subtext}><Txt>Set weekly availability hours for this teacher</Txt></p>
+
+                  {/* Render ONLY active days */}
+                  {ALL_DAYS_LIST.filter(day => scheduleAvail[day.id as keyof typeof scheduleAvail].active).map(day => (
+                    <div key={day.id} className={styles.availRow}>
+                      <span className={styles.dayName}><Txt>{day.name}</Txt></span>
+                      <div className={styles.timeInputs}>
+                        <input 
+                          type="time" 
+                          step="900" 
+                          value={scheduleAvail[day.id as keyof typeof scheduleAvail].start}
+                          onChange={(e) => setScheduleAvail({...scheduleAvail, [day.id]: { ...scheduleAvail[day.id as keyof typeof scheduleAvail], start: e.target.value }})}
+                        />
+                        <span>—</span>
+                        <input 
+                          type="time" 
+                          step="900"
+                          value={scheduleAvail[day.id as keyof typeof scheduleAvail].end}
+                          onChange={(e) => setScheduleAvail({...scheduleAvail, [day.id]: { ...scheduleAvail[day.id as keyof typeof scheduleAvail], end: e.target.value }})}
+                        />
+                        <span className={styles.deleteIcon} onClick={() => handleRemoveDay(day.id)}>🗑️</span>
+                      </div>
+                    </div>
+                  ))}
+
+                  <p className={styles.hintFooter}>
+                    <InfoIcon /> <Txt>Other days will be marked unavailable by default</Txt>
+                  </p>
+
+                  <div className={styles.availRow} style={{ marginTop: '1.25rem' }}>
+                    <span className={styles.dayName}><Txt>Lunch break</Txt></span>
+                    <div className={styles.timeInputs}>
+                      <input 
+                        type="time" 
+                        step="900"
+                        value={lunch.start}
+                        onChange={(e) => setLunch({...lunch, start: e.target.value})}
+                      />
+                      <span>—</span>
+                      <input 
+                        type="time" 
+                        step="900"
+                        value={lunch.end}
+                        onChange={(e) => setLunch({...lunch, end: e.target.value})}
+                      />
+                      <span className={styles.deleteIcon}>✏️</span>
+                    </div>
+                  </div>
+                </div>
+
+                <div className={styles.vacationsCard}>
+                  <div className={styles.vacationHeader}>
+                    <h3><Txt>Vacations</Txt></h3>
+                    <span className={styles.badge}><Txt>Coming in the next update</Txt></span>
+                  </div>
+                  <p><Txt>Mark dates when the teacher is unavailable</Txt></p>
+                </div>
               </aside>
             </div>
           </div>
@@ -542,7 +718,7 @@ export const TeacherListPage: React.FC = () => {
                     </div>
                   </div>
                   <div className={styles.inputWrapper}>
-                    <label><Txt>Two Dates *</Txt></label>
+                    <label><Txt>Due Date *</Txt></label>
                     <div className={styles.inputWithRightIcon}>
                       <input
                         type="date"
@@ -561,9 +737,9 @@ export const TeacherListPage: React.FC = () => {
                     <BriefcaseIcon /> <Txt>Workdays</Txt>
                   </span>
                   <div className={styles.timeInputs}>
-                    <input type="time" defaultValue="09:00" />
+                    <input type="time" step="900" defaultValue="09:00" />
                     <span>—</span>
-                    <input type="time" defaultValue="17:00" />
+                    <input type="time" step="900" defaultValue="17:00" />
                   </div>
                 </div>
 
@@ -572,9 +748,9 @@ export const TeacherListPage: React.FC = () => {
                     <ForkKnifeIcon /> <Txt>Lunch break</Txt>
                   </span>
                   <div className={styles.timeInputs}>
-                    <input type="time" defaultValue="12:00" />
+                    <input type="time" step="900" defaultValue="12:00" />
                     <span>—</span>
-                    <input type="time" defaultValue="13:00" />
+                    <input type="time" step="900" defaultValue="13:00" />
                   </div>
                 </div>
 
