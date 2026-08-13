@@ -4,26 +4,24 @@
   display: flex;
   flex-direction: column;
   min-height: 100vh;
-  background: v.$color-gray10;
-  
-  // Ten fragment kodu tworzy tę ładną siatkę (grid) z Figmy w tle
-  background-image: 
-    linear-gradient(to right, v.$color-border 1px, transparent 1px),
-    linear-gradient(to bottom, v.$color-border 1px, transparent 1px);
-  background-size: 100px 100px;
-  background-position: center center;
-}
-
-.content {
-  flex: 1;
-  padding-inline: 80px;
+  background: v.$color-white;
   padding-top: 12px;
 
-  display: flex;
-  flex-direction: column;
-  min-height: 100%;
+  &GrayBackground {
+    background: v.$color-gray10;
+  }
+}
+
+.layout > header {
+  padding-inline: 80px;
 }
 
 .main {
-  margin-block: auto;
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+}
+
+.main > :first-child {
+  padding-inline: 80px;
 }

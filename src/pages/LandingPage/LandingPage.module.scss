@@ -5,13 +5,19 @@
   flex-direction: column;
   align-items: center;
   justify-content: center;
+
+  flex: 1;
+  background-image: url("/src/assets/background.svg");
+  background-repeat: no-repeat;
+  background-position: 10%;
+  background-size: cover;
 }
 
 .heroContent {
-  max-width: 600px;
   display: flex;
   flex-direction: column;
   align-items: center;
+  margin-top: -136px;
 }
 
 .title {

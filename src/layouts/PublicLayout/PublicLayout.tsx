@@ -7,20 +7,16 @@ import { Header } from "../../components/Header/Header";
 
 export default function PublicLayout() {
   const [isLoginModalOpen, setIsLoginModalOpen] = useState(false);
-
   const { pathname } = useLocation();
 
-  const isHeaderVisible =
-    pathname !== "/login/admin" && pathname !== "/password-recovery";
+  const isLandingPage = pathname !== "/login";
 
   return (
-    <div className={styles.layout}>
-      <div className={styles.content}>
-        {isHeaderVisible && <Header onLoginClick={() => setIsLoginModalOpen(true)} />}
-        <main className={styles.main}>
-          <Outlet />
-        </main>
-      </div>
+    <div className={`${styles.layout} ${isLandingPage ? styles.layoutGrayBackground : ""}`}>
+      <Header onLoginClick={() => setIsLoginModalOpen(true)} />
+      <main className={styles.main}>
+        <Outlet />
+      </main>
 
       <Footer />
 

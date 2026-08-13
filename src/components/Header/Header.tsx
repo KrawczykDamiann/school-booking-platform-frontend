@@ -14,6 +14,7 @@ import { AvailabilityIcon } from "../icons/AvailabilityIcon";
 import { StudentsIcon } from "../icons/StudentsIcon";
 import { DashboardIcon } from "../icons/DashboardIcon";
 import { UserDropdown } from "./UserDropdown/UserDropdown";
+import { PageContainer } from "../PageContainer/PageContainer";
 
 type NavigationItem = {
   id: number;
@@ -113,6 +114,7 @@ export const Header: React.FC<HeaderProps> = ({ onLoginClick }) => {
   ];
 
   return (
+    <PageContainer>
     <header className={styles.header}>
       <Link to={homePath} className={styles.logo}>
         Less<span className={styles.accent}>io</span>
@@ -181,11 +183,13 @@ export const Header: React.FC<HeaderProps> = ({ onLoginClick }) => {
         ) : (
           <div>
             <Button variant="secondary" onClick={() => onLoginClick?.()}>
-              Student login
+              {t("header.studentLogin")}
             </Button>
           </div>
         )}
       </div>
     </header>
+    </PageContainer>
+
   );
 };
