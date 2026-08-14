@@ -12,6 +12,7 @@ import { useInput } from "../../hooks/useInput";
 import { AuthContext } from "../../context/AuthContext";
 import { loginAdmin } from "../../api/auth";
 import { Button } from "../../components/ui/Button/Button";
+import { api } from "../../api/api";
 
 export const AdminAuthForm: React.FC = () => {
   const { t } = useTranslation();
@@ -67,7 +68,7 @@ export const AdminAuthForm: React.FC = () => {
       navigate("/admin");
     } catch (error) {
       if (axios.isAxiosError(error)) {
-        if (error.response?.status === 403) {
+        if (error.response?.status === 401) {
           setServerError(t("adminAuthForm.errors.invalidCredentials"));
           return;
         }
@@ -83,6 +84,19 @@ export const AdminAuthForm: React.FC = () => {
 
       setServerError(t("adminAuthForm.errors.unknown"));
     }
+  };
+
+  const handleSetupAdmin = async () => {
+    const data = {
+      email: "admin@example.com",
+      password: "administrator",
+      zoneId: "Europe/Kyiv",
+    };
+
+    const response = api.post("/api/setup/admin", data);
+
+    console.log(response);
+    // e8494800-fab7-43e7-8fc3-758d6da25255
   };
 
   return (
@@ -132,6 +146,7 @@ export const AdminAuthForm: React.FC = () => {
             onChange={(e) => setIsRememberMe(e.target.checked)}
           />
         </div>
+        <Button variant="primary" onClick={handleSetupAdmin}>Setup Admin</Button>
       </form>
       <div className={styles.buttonWrapper}>
         <Button

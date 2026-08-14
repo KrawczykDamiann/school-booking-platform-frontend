@@ -27,6 +27,10 @@
   }
 }
 
+.primaryModalButton {
+  background: v.$color-system-success;
+}
+
 .secondaryButton {
     text-wrap: nowrap;
     background: v.$color-white;
@@ -35,5 +39,15 @@
 
     &:hover {
       background: v.$color-secondary;
+  }
+}
+
+.secondaryModalButton {
+  background: inherit;
+  color: v.$color-gray80;
+  border: 2px solid v.$color-secondary;
+
+  &:hover {
+    background: v.$color-secondary;
   }
 }

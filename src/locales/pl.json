@@ -1,7 +1,7 @@
 {
   "title": "Katalog Instruktorów",
   "subtitle": "Zarządzaj wszystkimi dostępnymi zasobami dydaktycznymi i przeglądaj je",
-  
+
   "forgot_password": {
     "title": "Zapomniałeś hasła?",
     "description": "Wprowadź swój adres e-mail, a wyślemy Ci bezpieczny link do zresetowania hasła.",
@@ -170,5 +170,31 @@
       "addNow": "dodać teraz",
       "saveBtn": "Zapisz nauczyciela"
     }
+  },
+  "dates": {
+    "tomorrow": "Jutro"
+  },
+  "bookingPage": {
+    "title": "Wybierz lekcję, aby ją zarezerwować",
+    "timePeriods": {
+      "morning": "Rano",
+      "afternoon": "Popołudnie",
+      "evening": "Wieczór",
+      "clearFilter": "Wyczyść filtr"
+    },
+    "preferredPeriod": "Wybierz preferowany okres",
+    "notification": "Nasza szkoła jest zawsze zamknięta w niedzielę",
+    "lessonPreview": {
+      "title": "Podgląd wybranej lekcji",
+      "subtitle": "Sprawdź swój przedział czasowy",
+      "lessonToBook": "Zajęcie do rezerwacji:",
+      "activeBookings": "Masz już aktywne rezerwacje",
+      "button_confirm": "Potwierdź",
+      "button_sending": "Wysyłanie...",
+      "notSelected": {
+        "subtitle": "W tym miejscu wyświetli się wybrany przez Ciebie przedział czasowy"
+      }
+    },
+    "notSelectedSubject": "Wybierz przedmiot, aby wyświetlić dostępne terminy"
   }
 }

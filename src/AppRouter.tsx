@@ -9,6 +9,8 @@ import PublicLayout from "./layouts/PublicLayout/PublicLayout";
 import AdminLayout from "./layouts/AdminLayout/AdminLayout";
 import { BookingPage } from "./pages/BookingPage/BookingPage";
 import { OttVerificationPage } from "./pages/OttVerificationPage/OttVerificationPage";
+import { BookingLesson } from "./features/bookingLesson/BookingLesson";
+import { AdminSetupController } from "./features/AdminSetupController/AdminSetupController";
 
 export function AppRouter() {
   return (
@@ -28,6 +30,8 @@ export function AppRouter() {
         <Route index element={<Navigate to="dashboard" replace />} />
         <Route path="dashboard" element={<AdminDashboard />} />
         <Route path="teachers" element={<TeacherListPage />} />
+        <Route path="create-booking" element={<BookingLesson />} />
+        <Route path="setup-controller" element={<AdminSetupController />} />
       </Route>
 
       <Route path="*" element={<Navigate to="/" replace />} />

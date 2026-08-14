@@ -18,7 +18,7 @@ export default function PublicLayout() {
         <Outlet />
       </main>
 
-      <Footer />
+      {/* <Footer /> */}
 
       {isLoginModalOpen && (
         <LoginModal onClose={() => setIsLoginModalOpen(false)} />

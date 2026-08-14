@@ -5,11 +5,16 @@ type LessonsPostData = {
   availabilitySlotUuid: string;
   teacherUuid: string;
   maxEnrolled: number;
-}
+};
 
 export async function fetchLessons() {
   try {
-    const response = await api.get("/api/lessons");
+    const response = await api.get("/api/lessons", {
+      params: {
+        page: 0,
+        size: 100,
+      },
+    });
 
     return response.data;
   } catch (error) {

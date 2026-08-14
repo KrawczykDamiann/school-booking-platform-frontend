@@ -1,7 +1,7 @@
 {
   "title": "Instructor Catalog",
   "subtitle": "Manage and browse all available teaching resources",
-  
+
   "forgot_password": {
     "title": "Forgot Password?",
     "description": "Enter your email address and we will send you a secure link to reset your password.",
@@ -195,5 +195,28 @@
   },
   "dates": {
     "tomorrow": "Tomorrow"
+  },
+  "bookingPage": {
+    "title": "Select a lesson to book",
+    "timePeriods": {
+      "morning": "Morning",
+      "afternoon": "Afternoon",
+      "evening": "Evening",
+      "clearFilter": "Clear filter"
+    },
+    "preferredPeriod": "Select preferred period of time",
+    "notification": "Our school is always closed on Sunday",
+    "lessonPreview": {
+      "title": "Selected lesson preview",
+      "subtitle": "Review your timeslot",
+      "lessonToBook": "The lesson to book:",
+      "activeBookings": "You already have active bookings",
+      "button_confirm": "Confirm",
+      "button_sending": "Sending...",
+      "notSelected": {
+        "subtitle": "Your selected timeslot will be shown here"
+      }
+    },
+    "notSelectedSubject": "Select a subject to view slots"
   }
 }

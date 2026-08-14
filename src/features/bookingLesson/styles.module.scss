@@ -1,0 +1,45 @@
+.content {
+    display: flex;
+    flex-direction: row;
+    justify-content: center;
+    width: 100%;
+    margin-top: 100px;
+    gap: 200px;
+}
+
+.data {
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+
+    gap: 20px;
+}
+
+.row button {
+    height: 100%;
+    width: 100px;
+    cursor: pointer;
+}
+
+.row input {
+    height: 40px;
+    background: white;
+    border: 1px solid black;
+    color: black;
+    padding: 5px;
+    font-size: 18px;
+}
+
+.row {
+    display: flex;
+    flex-direction: row;
+    gap: 50px;
+    padding: 20px;
+    border: 1px solid black;
+}
+
+.title {
+    color: black;
+    font-size: 36px;
+}

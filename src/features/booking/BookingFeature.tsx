@@ -1,4 +1,4 @@
-import { useCallback, useContext, useEffect, useMemo, useState } from "react";
+import { useContext, useEffect, useMemo, useState } from "react";
 import styles from "./BookingFeature.module.scss";
 import { BookingCalendar } from "./components/BookingCalendar/BookingCalendar";
 import { LessonPreview } from "./components/LessonPreview/LessonPreview";
@@ -14,31 +14,21 @@ import {
 } from "date-fns";
 import { LessonPreviewContext } from "../../context/LessonPreviewContext";
 import { mockLessons } from "./mocks/lessons";
-import type { SubjectFilterType } from "../../types/SubjectFilterType";
 import { LessonBookingModal } from "../../components/LessonBookingModal/LessonBookingModal";
-import { fetchLessons } from "../../api/lessons";
-// import { bookLesson, createLesson } from "../../api/lessons";
+import { bookLesson, fetchLessons } from "../../api/lessons";
 import type { TimePeriod } from "./constants/timePeriods";
 import { fetchSubjects } from "../../api/subjects";
+import type { Lesson } from "../../types/Lesson";
+import type { Subject } from "../../types/Subject";
+import axios from "axios";
 
 export const BookingFeature: React.FC = () => {
+  // #region MAIN_CONTENT
+
   // State to manage the active starting date of the currently viewed calendar period.
   const [startDate, setStartDate] = useState(new Date());
 
-  // Tracks active subject filter, letting users select or toggle off a subject.
-  const [selectedSubject, setSelectedSubject] =
-    useState<SubjectFilterType | null>(null);
-
-  const handleSelectSubject = (subject: SubjectFilterType) => {
-    if (selectedSubject === subject) {
-      setSelectedSubject(null);
-      setSelectedLesson(undefined);
-      return;
-    }
-
-    setSelectedSubject(subject);
-    setSelectedLesson(undefined);
-  };
+  const [isLoading, setIsLoading] = useState(false);
 
   // Tracks active time period filter, allowing users to select or toggle off a period
   const [selectedTimePeriod, setSelectedTimePeriod] =
@@ -58,7 +48,7 @@ export const BookingFeature: React.FC = () => {
     useState(false);
 
   // Context hook to manage the state of the currently selected lesson for preview or scheduling details.
-  const { selectedLesson, setSelectedLesson } =
+  const { selectedLessonUuid, setSelectedLessonUuid } =
     useContext(LessonPreviewContext);
 
   // Navigates the calendar to the next day.
@@ -108,9 +98,6 @@ export const BookingFeature: React.FC = () => {
     return days;
   }, [startDate]);
 
-  // Defines the operational schedule hours (12 PM to 8 PM) for the calendar grid.
-  // const availableHours = Array.from({ length: 13 }, (_, i) => i + 8);
-
   // Captures the start and end dates of the currently rendered 6-day week.
   const start = currentWeek[0];
   const end = currentWeek[5];
@@ -119,12 +106,18 @@ export const BookingFeature: React.FC = () => {
   // e.g July 17 - July 22
   const period = `${format(start, "MMMM d")} - ${format(end, "MMMM d")}`;
 
+  const [lessons, setLessons] = useState<Lesson[] | null>(null);
+
+  const selectedLesson = lessons?.find(
+    (lesson) => lesson.uuid === selectedLessonUuid,
+  );
+
   // Loads initial lessons list once when the component first renders
   useEffect(() => {
     async function init() {
       try {
         const lessonsData = await fetchLessons();
-        console.log(lessonsData);
+        setLessons(lessonsData.content);
       } catch (error) {
         console.log(error);
       }
@@ -132,13 +125,27 @@ export const BookingFeature: React.FC = () => {
 
     init();
   }, []);
+
+  const [subjects, setSubjects] = useState<Subject[] | null>(null);
+  const [selectedSubjectId, setSelectedSubjectId] = useState<number | null>(
+    null,
+  );
+
+  const handleSelectSubject = (subjectId: number) => {
+    if (selectedSubjectId === subjectId) {
+      setSelectedSubjectId(null);
+      return;
+    }
+
+    setSelectedSubjectId(subjectId);
+  };
 
   // Loads initial subjects list once when the component first renders
   useEffect(() => {
     async function init() {
       try {
         const subjectsData = await fetchSubjects();
-        console.log(subjectsData);
+        setSubjects(subjectsData.content);
       } catch (error) {
         console.log(error);
       }
@@ -147,9 +154,11 @@ export const BookingFeature: React.FC = () => {
     init();
   }, []);
 
+  const visibleLessons = lessons !== null ? lessons : mockLessons;
+
   // Filters the lessons array to include only those that match the currently selected subject.
-  const filteredBySubject = mockLessons.filter(
-    (lesson) => lesson.subject === selectedSubject,
+  const filteredBySubject = visibleLessons.filter(
+    (lesson) => lesson.subjectId === selectedSubjectId,
   );
 
   const filteredByTimePeriod = filteredBySubject.filter((lesson) => {
@@ -170,24 +179,21 @@ export const BookingFeature: React.FC = () => {
   });
 
   // Dynamically generates and memoizes hour ranges (8 AM to 9 PM) to filter grid time rows.
-  const getAvailableHours = useCallback(() => {
-    if (selectedTimePeriod) {
-      switch (selectedTimePeriod) {
-        case "morning":
-          return Array.from({ length: 4 }, (_, i) => i + 8);
-        case "afternoon":
-          return Array.from({ length: 5 }, (_, i) => i + 12);
-        case "evening":
-          return Array.from({ length: 4 }, (_, i) => i + 17);
-      }
-    } else {
-      return Array.from({ length: 13 }, (_, i) => i + 8);
+  const availableHours = useMemo(() => {
+    switch (selectedTimePeriod) {
+      case "morning":
+        return Array.from({ length: 4 }, (_, i) => i + 8);
+
+      case "afternoon":
+        return Array.from({ length: 5 }, (_, i) => i + 12);
+
+      case "evening":
+        return Array.from({ length: 4 }, (_, i) => i + 17);
+
+      default:
+        return Array.from({ length: 13 }, (_, i) => i + 8);
     }
   }, [selectedTimePeriod]);
-
-  const availableHours = useMemo(() => {
-    return getAvailableHours();
-  }, [getAvailableHours]);
 
   // Indexes lessons by date and hour to easily map them to their corresponding calendar slots.
   const lessonsMap = new Map();
@@ -215,21 +221,44 @@ export const BookingFeature: React.FC = () => {
 
   // Opens the lesson status modal when the user confirms their selection.
   const handleConfirm = async () => {
-    setIsLessonBookingModalOpen(true);
+    setIsLoading(true);
+    if (!selectedLessonUuid) {
+      return;
+    }
+
+    try {
+      const response = await bookLesson(selectedLessonUuid);
+
+      console.log(response);
+
+      setIsLessonBookingModalOpen(true);
+    } catch (error) {
+      if (axios.isAxiosError(error)) {
+        if (error.response?.status === 403) {
+          console.log("error");
+          return;
+        }
+      }
+    } finally {
+      setIsLoading(false);
+    }
   };
 
   // Clears active selection, resets subject filters, and closes the booking modal.
   const handleResetBooking = () => {
-    setSelectedSubject(null);
+    setSelectedSubjectId(null);
     setIsLessonBookingModalOpen(false);
-    setSelectedLesson(undefined);
+    setSelectedLessonUuid(undefined);
   };
+
+  // #endregion
 
   return (
     <>
       <SubjectFilter
+        subjects={subjects}
         onSelectSubject={handleSelectSubject}
-        selectedSubject={selectedSubject}
+        selectedSubjectId={selectedSubjectId}
       />
       <div className={styles.bookingContent}>
         <BookingCalendar
@@ -243,9 +272,14 @@ export const BookingFeature: React.FC = () => {
           onSelectTimePeriod={handleSelectTimePeriod}
           selectedTimePeriod={selectedTimePeriod}
           hasLessonsOnDay={hasLessonsOnDay}
-          selectedSubject={selectedSubject}
+          selectedSubjectId={selectedSubjectId}
         />
-        <LessonPreview lesson={selectedLesson} handleConfirm={handleConfirm} />
+        <LessonPreview
+          lesson={selectedLesson}
+          handleConfirm={handleConfirm}
+          subjects={subjects}
+          isLoading={isLoading}
+        />
       </div>
       {isLessonBookingModalOpen && (
         <LessonBookingModal

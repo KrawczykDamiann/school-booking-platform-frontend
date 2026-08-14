@@ -9,11 +9,11 @@ type TimeSlotProps = {
 };
 
 export const TimeSlot: React.FC<TimeSlotProps> = ({ lesson, hour }) => {
-  const { selectedLesson, setSelectedLesson } =
+  const { selectedLessonUuid: selectedLessonId, setSelectedLessonUuid: setSelectedLessonId } =
     useContext(LessonPreviewContext);
 
   const isSelected =
-    lesson !== undefined && selectedLesson?.lessonUuid === lesson.lessonUuid;
+    lesson !== undefined && selectedLessonId === lesson.uuid;
 
   return (
     <li className={styles.timeSlot}>
@@ -23,7 +23,7 @@ export const TimeSlot: React.FC<TimeSlotProps> = ({ lesson, hour }) => {
         data-selected={isSelected}
         onClick={() => {
           if (lesson) {
-            setSelectedLesson(lesson);
+            setSelectedLessonId(lesson.uuid);
           }
         }}
       >

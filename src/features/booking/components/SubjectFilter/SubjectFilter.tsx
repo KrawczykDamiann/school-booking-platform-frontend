@@ -1,25 +1,29 @@
-import type { SubjectFilterType } from "../../../../types/SubjectFilterType";
+import type { Subject } from "../../../../types/Subject";
 import { mockSubjects } from "../../mocks/subjects";
 import styles from "./SubjectFilter.module.scss";
 
 type SubjectFilterProps = {
-  onSelectSubject: (subject: SubjectFilterType) => void;
-  selectedSubject: SubjectFilterType | null;
+  subjects: Subject[] | null;
+  onSelectSubject: (subjectId: number) => void;
+  selectedSubjectId: number | null;
 };
 
 export const SubjectFilter: React.FC<SubjectFilterProps> = ({
   onSelectSubject,
-  selectedSubject,
+  selectedSubjectId,
+  subjects,
 }) => {
+
+  const visibleSubjects = subjects !== null ? subjects : mockSubjects;
   return (
     <div className={styles.subjectFilterWrapper}>
       <ul className={styles.subjectFilterList}>
-        {mockSubjects.map((subject) => (
+        {visibleSubjects.map((subject) => (
           <li
             key={subject.id}
             className={styles.subjectFilterItem}
-            onClick={() => onSelectSubject(subject.name)}
-            data-selected={subject.name === selectedSubject}
+            onClick={() => onSelectSubject(subject.id)}
+            data-selected={subject.id === selectedSubjectId}
           >
             {subject.name}
           </li>

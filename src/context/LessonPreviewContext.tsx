@@ -1,15 +1,14 @@
 import { createContext, useMemo, useState } from "react";
-import type { Lesson } from "../types/Lesson";
 
 type LessonPreviewContextType = {
-  selectedLesson: Lesson | undefined;
-  setSelectedLesson: React.Dispatch<React.SetStateAction<Lesson | undefined>>;
+  selectedLessonUuid: string | undefined;
+  setSelectedLessonUuid: React.Dispatch<React.SetStateAction<string | undefined>>;
 };
 
 // eslint-disable-next-line react-refresh/only-export-components
 export const LessonPreviewContext = createContext<LessonPreviewContextType>({
-  selectedLesson: undefined,
-  setSelectedLesson: () => {},
+  selectedLessonUuid: undefined,
+  setSelectedLessonUuid: () => {},
 });
 
 type Props = {
@@ -17,14 +16,14 @@ type Props = {
 };
 
 export const LessonPreviewProvider: React.FC<Props> = ({ children }) => {
-  const [selectedLesson, setSelectedLesson] = useState<Lesson | undefined>();
+  const [selectedLessonUuid, setSelectedLessonUuid] = useState<string | undefined>();
 
   const value = useMemo(
     () => ({
-      selectedLesson,
-      setSelectedLesson,
+      selectedLessonUuid,
+      setSelectedLessonUuid,
     }),
-    [selectedLesson],
+    [selectedLessonUuid],
   );
 
   return (

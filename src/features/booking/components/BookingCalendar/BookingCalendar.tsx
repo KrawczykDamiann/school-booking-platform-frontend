@@ -4,7 +4,7 @@ import { CalendarToolbar } from "../CalendarToolbar/CalendarToolbar";
 import styles from "./BookingCalendar.module.scss";
 import warningIcon from "../../../../assets/warning.svg";
 import type { TimePeriod } from "../../constants/timePeriods";
-import type { SubjectFilterType } from "../../../../types/SubjectFilterType";
+import { useTranslation } from "react-i18next";
 
 type BookingCalendarProps = {
   periodOfDays: string;
@@ -17,7 +17,7 @@ type BookingCalendarProps = {
   selectedTimePeriod: TimePeriod | null;
   onSelectTimePeriod: (period: TimePeriod | null) => void;
   hasLessonsOnDay: (day: Date) => boolean;
-  selectedSubject: SubjectFilterType | null;
+  selectedSubjectId: number | null;
 };
 
 export const BookingCalendar: React.FC<BookingCalendarProps> = ({
@@ -31,13 +31,14 @@ export const BookingCalendar: React.FC<BookingCalendarProps> = ({
   onSelectTimePeriod,
   selectedTimePeriod,
   hasLessonsOnDay,
-  selectedSubject,
+  selectedSubjectId,
 }) => {
+  const { t } = useTranslation();
   return (
     <div
-      className={`${styles.bookingCalendar} ${!selectedSubject ? styles.bookingCalendarCollapsed : ""}`}
+      className={`${styles.bookingCalendar} ${!selectedSubjectId ? styles.bookingCalendarCollapsed : ""}`}
     >
-      {!selectedSubject && (
+      {!selectedSubjectId && (
         <div className={styles.bookingCalendarOverlay}>
           Select a subject to view slots
         </div>
@@ -63,7 +64,7 @@ export const BookingCalendar: React.FC<BookingCalendarProps> = ({
           className={styles.warningIcon}
         />
         <p className={styles.warningText}>
-          Our school is always closed on Sunday
+          {t("bookingPage.notification")}
         </p>
       </div>
     </div>
