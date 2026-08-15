@@ -5,6 +5,7 @@ import { useTranslation } from "react-i18next"; // Tool for handling multi-langu
 import { loginStudentWithOtt } from "../../api/auth";
 import { AuthContext } from "../../context/AuthContext";
 import { Button } from "../../components/ui/Button/Button";
+import { authStorage } from "../../services/authStorage";
 
 export const OttVerificationPage: React.FC = () => {
   const [searchParams] = useSearchParams();
@@ -30,7 +31,14 @@ export const OttVerificationPage: React.FC = () => {
         const token: string = response.token;
 
         if (token) {
-          login({ token, userType: "student" });
+          const email = authStorage.getPendingEmail();
+
+          if (!email) {
+            return;
+          }
+
+          login({ token, userType: "student", email });
+          authStorage.clearPendingEmail();
           navigate("/booking-calendar");
         } else {
           throw new Error("Missing token");
@@ -38,6 +46,7 @@ export const OttVerificationPage: React.FC = () => {
       } catch (error) {
         console.error("Authentication verification failed:", error);
         setIsError(true);
+        authStorage.clearPendingEmail();
       }
     };
 

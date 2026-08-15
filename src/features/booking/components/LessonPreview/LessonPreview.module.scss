@@ -115,3 +115,39 @@
 .buttonWrapperDisabled {
     margin-top: 0;
 }
+
+.activeBookingsList {
+    display: flex;
+    flex-direction: column;
+    gap: 8px;
+    margin-top: 10px;
+}
+
+.activeBookingsItem {
+    display: flex;
+    flex-direction: row;
+    justify-content: space-between;
+    align-items: center;
+    
+    gap: 5px;
+    padding: 10px;
+    border-radius: 16px;
+    border: 1px solid v.$color-gray30;
+}
+
+.activeBookingsText {
+    font-weight: 500;
+    font-size: 15px;
+    line-height: 135%;
+    color: v.$color-gray30;
+
+    display: flex;
+    gap: 5px;
+}
+
+.activeBookingsValue {
+    font-weight: 400;
+    font-size: 15px;
+    line-height: 145%;
+    color: v.$color-gray80;
+}

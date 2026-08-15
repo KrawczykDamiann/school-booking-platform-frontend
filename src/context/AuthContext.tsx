@@ -1,16 +1,19 @@
 import { createContext, useMemo, useState } from "react";
 import { tokenService } from "../services/tokenService";
 import type { UserType } from "../types/UserType";
+import { authStorage } from "../services/authStorage";
 
 type LoginDataType = {
   token: string;
   userType: UserType;
+  email: string
 };
 
 type AuthContextType = {
   isAuthenticated: boolean;
   userType: UserType | null;
-  login: ({ token, userType }: LoginDataType) => void;
+  userEmail: string | null;
+  login: ({ token, userType, email }: LoginDataType) => void;
   logout: () => void;
 };
 
@@ -18,6 +21,7 @@ type AuthContextType = {
 export const AuthContext = createContext<AuthContextType>({
   isAuthenticated: false,
   userType: null,
+  userEmail: null,
   login: () => {},
   logout: () => {},
 });
@@ -35,10 +39,15 @@ export const AuthContextProvider: React.FC<Props> = ({ children }) => {
     return tokenService.getUserType();
   });
 
-  const login = ({ token, userType }: LoginDataType) => {
+  const [userEmail, setUserEmail] = useState(authStorage.getUserEmail());
+
+  const login = ({ token, userType, email }: LoginDataType) => {
     tokenService.saveAuth({ token, userType });
+    authStorage.setUserEmail(email);
+    
     setUserType(userType);
     setIsAuthenticated(true);
+    setUserEmail(email);
   };
 
   const logout = () => {
@@ -53,8 +62,9 @@ export const AuthContextProvider: React.FC<Props> = ({ children }) => {
       login,
       userType,
       logout,
+      userEmail,
     }),
-    [isAuthenticated, userType],
+    [isAuthenticated, userType, userEmail],
   );
   return <AuthContext.Provider value={value}>{children}</AuthContext.Provider>;
 };

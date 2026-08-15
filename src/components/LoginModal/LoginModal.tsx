@@ -8,6 +8,7 @@ import warningIcon from "../../assets/warning.svg";
 import { validation } from "../../utils/validators";
 import { useInput } from "../../hooks/useInput";
 import { requestStudentOtt } from "../../api/auth";
+import { authStorage } from "../../services/authStorage";
 
 interface LoginModalProps {
   onClose: () => void;
@@ -53,10 +54,14 @@ export default function LoginModal({ onClose }: LoginModalProps) {
     try {
       const zoneId = Intl.DateTimeFormat().resolvedOptions().timeZone;
 
-      await requestStudentOtt({
+      const response = await requestStudentOtt({
         email,
         zoneId,
       });
+
+      if (response.status === "SENT") {
+        authStorage.setPendingEmail(response.recipient);
+      }
 
       // If successful, switch to the success confirmation view
       setIsSubmitted(true);

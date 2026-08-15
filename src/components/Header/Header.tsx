@@ -44,7 +44,9 @@ type HeaderProps = {
 export const Header: React.FC<HeaderProps> = ({ onLoginClick }) => {
   const { pathname } = useLocation();
   const navigate = useNavigate();
-  const { userType, logout, isAuthenticated } = useContext(AuthContext);
+  const { userType, logout, isAuthenticated, userEmail } = useContext(AuthContext);
+
+  const studentEmail = userEmail ? userEmail : "student@example.com";
 
   const navigation = userType === "admin" ? adminNavigation : studentNavigation;
   const homePath = userType === "admin" ? "/admin" : "/";
@@ -173,7 +175,7 @@ export const Header: React.FC<HeaderProps> = ({ onLoginClick }) => {
           <div className={styles.rightSection}>
             {userType === "admin" && <div className={styles.avatar}>VU</div>}
             <UserDropdown
-              name={userType === "admin" ? "VesUp" : "student@example.com"}
+              name={userType === "admin" ? "VesUp" : studentEmail}
               dropdownRef={dropdownRef}
               isDropdownOpen={isDropdownOpen}
               setIsDropdownOpen={setIsDropdownOpen}

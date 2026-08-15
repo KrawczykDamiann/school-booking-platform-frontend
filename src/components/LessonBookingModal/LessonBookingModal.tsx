@@ -8,11 +8,13 @@ import confirmationBookedIcon from "../../assets/confirmation-booked.svg";
 interface LessonBookingModalProps {
   onClose: () => void;
   onResetBooking: () => void;
+  bookingUuid: string;
 }
 
 export const LessonBookingModal: React.FC<LessonBookingModalProps> = ({
   onClose,
   onResetBooking,
+  bookingUuid,
 }) => {
   const navigate = useNavigate();
 
@@ -39,7 +41,7 @@ export const LessonBookingModal: React.FC<LessonBookingModalProps> = ({
             <span className={styles.bookingId}>
               Booking id:
               {" "}
-              <span className={styles.bookingIdValue}>U235bdha6 </span>
+              <span className={styles.bookingIdValue}>{bookingUuid}</span>
             </span>
             <div className={styles.warningMessage}>
               <img

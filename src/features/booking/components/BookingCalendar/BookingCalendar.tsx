@@ -40,7 +40,7 @@ export const BookingCalendar: React.FC<BookingCalendarProps> = ({
     >
       {!selectedSubjectId && (
         <div className={styles.bookingCalendarOverlay}>
-          Select a subject to view slots
+          {t("bookingPage.notSelectedSubject")}
         </div>
       )}
       <CalendarToolbar

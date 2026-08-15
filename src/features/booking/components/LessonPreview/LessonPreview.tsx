@@ -1,16 +1,18 @@
 import styles from "./LessonPreview.module.scss";
-// import dropdownIcon from "../../../../assets/dropdown.svg";
+import dropdownIcon from "../../../../assets/dropdown.svg";
 import type { Lesson } from "../../../../types/Lesson";
 import { format } from "date-fns";
 import { Button } from "../../../../components/ui/Button/Button";
 import type { Subject } from "../../../../types/Subject";
 import { useTranslation } from "react-i18next";
+import { useState } from "react";
 
 type LessonPreviewType = {
   lesson: Lesson | undefined;
   handleConfirm: () => void;
   subjects: Subject[] | null;
   isLoading: boolean;
+  studentActiveBookings: Lesson[] | null;
 };
 
 export const LessonPreview: React.FC<LessonPreviewType> = ({
@@ -18,10 +20,16 @@ export const LessonPreview: React.FC<LessonPreviewType> = ({
   handleConfirm,
   subjects,
   isLoading,
+  studentActiveBookings,
 }) => {
   const isLessonEmpty = lesson === undefined;
   const subject = subjects?.find((s) => s.id === lesson?.subjectId);
   const { t } = useTranslation();
+  const [isDropdownOpen, setIsDropdownOpen] = useState(false);
+
+  const getSubjectById = (subjectId: number) => {
+    return subjects?.find((s) => s.id === subjectId)?.name;
+  };
 
   return (
     <div className={styles.lessonPreview}>
@@ -32,7 +40,7 @@ export const LessonPreview: React.FC<LessonPreviewType> = ({
               {t("bookingPage.lessonPreview.title")}
             </h4>
             <span className={styles.description}>
-              You selected timeslot will be shown here
+              {t("bookingPage.lessonPreview.notSelected.subtitle")}
             </span>
           </div>
           <div className={styles.buttonWrapperDisabled}>
@@ -64,17 +72,46 @@ export const LessonPreview: React.FC<LessonPreviewType> = ({
                 {format(new Date(lesson.startTime), "HH:mm")}
               </span>
             </div>
-            {/* <button className={styles.dropdownTrigger}>
-          <span>{t("bookingPage.lessonPreview.activeBookings")}</span>
-          <img
-            src={dropdownIcon}
-            alt="Dropdown icon"
-            className={styles.dropdownIcon}
-          />
-        </button> */}
+
+            <button
+              className={styles.dropdownTrigger}
+              onClick={() => setIsDropdownOpen(!isDropdownOpen)}
+            >
+              <span>{t("bookingPage.lessonPreview.activeBookings")}</span>
+              <img
+                src={dropdownIcon}
+                alt="Dropdown icon"
+                className={styles.dropdownIcon}
+              />
+            </button>
+
+            {studentActiveBookings && isDropdownOpen && (
+              <ul className={styles.activeBookingsList}>
+                {studentActiveBookings.map((l) => (
+                  <li key={l.uuid} className={styles.activeBookingsItem}>
+                    <span className={styles.activeBookingsText}>
+                      Subject:
+                      <span className={styles.activeBookingsValue}>
+                        {getSubjectById(l.subjectId)}
+                      </span>
+                    </span>
+                    <span className={styles.activeBookingsText}>
+                      Date:
+                      <span className={styles.activeBookingsValue}>
+                        {format(new Date(l.startTime), "dd/MM HH:mm", )}
+                      </span>
+                    </span>
+                  </li>
+                ))}
+              </ul>
+            )}
 
             <div className={styles.buttonWrapper}>
-              <Button variant="primary" onClick={handleConfirm}>
+              <Button
+                variant="primary"
+                onClick={handleConfirm}
+                disabled={isLoading}
+              >
                 {isLoading
                   ? t("bookingPage.lessonPreview.button_sending")
                   : t("bookingPage.lessonPreview.button_confirm")}

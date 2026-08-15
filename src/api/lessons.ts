@@ -59,3 +59,19 @@ export async function bookLesson(lessonUuid: string) {
     throw error;
   }
 }
+
+export async function fetchBookedLessons() {
+  try {
+    const response = await api.get("/api/lessons/booked");
+
+    return response.data.content;
+  } catch (error) {
+    if (axios.isAxiosError(error)) {
+      throw new Error(error.response?.data.message, {
+        cause: error,
+      });
+    }
+
+    throw error;
+  }
+}

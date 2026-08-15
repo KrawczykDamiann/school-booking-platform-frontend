@@ -13,9 +13,12 @@ import {
   subDays,
 } from "date-fns";
 import { LessonPreviewContext } from "../../context/LessonPreviewContext";
-import { mockLessons } from "./mocks/lessons";
 import { LessonBookingModal } from "../../components/LessonBookingModal/LessonBookingModal";
-import { bookLesson, fetchLessons } from "../../api/lessons";
+import {
+  bookLesson,
+  fetchBookedLessons,
+  fetchLessons,
+} from "../../api/lessons";
 import type { TimePeriod } from "./constants/timePeriods";
 import { fetchSubjects } from "../../api/subjects";
 import type { Lesson } from "../../types/Lesson";
@@ -112,6 +115,39 @@ export const BookingFeature: React.FC = () => {
     (lesson) => lesson.uuid === selectedLessonUuid,
   );
 
+  const [subjects, setSubjects] = useState<Subject[] | null>(null);
+  const [selectedSubjectId, setSelectedSubjectId] = useState<number | null>(
+    null,
+  );
+
+  const handleSelectSubject = (subjectId: number) => {
+    if (selectedSubjectId === subjectId) {
+      setSelectedSubjectId(null);
+      return;
+    }
+
+    setSelectedSubjectId(subjectId);
+    setSelectedLessonUuid(undefined);
+  };
+
+  const [isSubjectsLoading, setIsSubjectsLoading] = useState(false);
+  // Loads initial subjects list once when the component first renders
+  useEffect(() => {
+    async function init() {
+      setIsSubjectsLoading(true);
+      try {
+        const subjectsData = await fetchSubjects();
+        setSubjects(subjectsData.content);
+      } catch (error) {
+        console.log(error);
+      } finally {
+        setIsSubjectsLoading(false);
+      }
+    }
+
+    init();
+  }, []);
+
   // Loads initial lessons list once when the component first renders
   useEffect(() => {
     async function init() {
@@ -126,38 +162,14 @@ export const BookingFeature: React.FC = () => {
     init();
   }, []);
 
-  const [subjects, setSubjects] = useState<Subject[] | null>(null);
-  const [selectedSubjectId, setSelectedSubjectId] = useState<number | null>(
-    null,
+  const visibleLessons = lessons !== null ? lessons : [];
+
+  const availableLessons = visibleLessons.filter(
+    (lesson) => lesson.enrolled < lesson.maxEnrolled,
   );
 
-  const handleSelectSubject = (subjectId: number) => {
-    if (selectedSubjectId === subjectId) {
-      setSelectedSubjectId(null);
-      return;
-    }
-
-    setSelectedSubjectId(subjectId);
-  };
-
-  // Loads initial subjects list once when the component first renders
-  useEffect(() => {
-    async function init() {
-      try {
-        const subjectsData = await fetchSubjects();
-        setSubjects(subjectsData.content);
-      } catch (error) {
-        console.log(error);
-      }
-    }
-
-    init();
-  }, []);
-
-  const visibleLessons = lessons !== null ? lessons : mockLessons;
-
   // Filters the lessons array to include only those that match the currently selected subject.
-  const filteredBySubject = visibleLessons.filter(
+  const filteredBySubject = availableLessons.filter(
     (lesson) => lesson.subjectId === selectedSubjectId,
   );
 
@@ -219,6 +231,8 @@ export const BookingFeature: React.FC = () => {
     return availableHours.some((hour) => lessonsMap.has(`${key}-${hour}`));
   };
 
+  const [bookingUuid, setBookingUuid] = useState<string | null>(null);
+
   // Opens the lesson status modal when the user confirms their selection.
   const handleConfirm = async () => {
     setIsLoading(true);
@@ -229,9 +243,11 @@ export const BookingFeature: React.FC = () => {
     try {
       const response = await bookLesson(selectedLessonUuid);
 
-      console.log(response);
-
-      setIsLessonBookingModalOpen(true);
+      const bookingUuid = response.uuid;
+      if (bookingUuid) {
+        setBookingUuid(bookingUuid);
+        setIsLessonBookingModalOpen(true);
+      }
     } catch (error) {
       if (axios.isAxiosError(error)) {
         if (error.response?.status === 403) {
@@ -252,6 +268,23 @@ export const BookingFeature: React.FC = () => {
   };
 
   // #endregion
+  const [studentActiveBookings, setStudentActiveBookings] = useState<
+    Lesson[] | null
+  >(null);
+
+  useEffect(() => {
+    async function init() {
+      try {
+        const response = await fetchBookedLessons();
+
+        setStudentActiveBookings(response);
+      } catch (error) {
+        console.log(error);
+      }
+    }
+
+    init();
+  }, []);
 
   return (
     <>
@@ -259,6 +292,7 @@ export const BookingFeature: React.FC = () => {
         subjects={subjects}
         onSelectSubject={handleSelectSubject}
         selectedSubjectId={selectedSubjectId}
+        isSubjectsLoading={isSubjectsLoading}
       />
       <div className={styles.bookingContent}>
         <BookingCalendar
@@ -279,12 +313,14 @@ export const BookingFeature: React.FC = () => {
           handleConfirm={handleConfirm}
           subjects={subjects}
           isLoading={isLoading}
+          studentActiveBookings={studentActiveBookings}
         />
       </div>
-      {isLessonBookingModalOpen && (
+      {isLessonBookingModalOpen && bookingUuid && (
         <LessonBookingModal
           onClose={() => setIsLessonBookingModalOpen(false)}
           onResetBooking={handleResetBooking}
+          bookingUuid={bookingUuid}
         />
       )}
     </>
