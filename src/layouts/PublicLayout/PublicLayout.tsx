@@ -3,6 +3,7 @@ import styles from "./PublicLayout.module.scss";
 import { useState } from "react";
 import LoginModal from "../../components/LoginModal/LoginModal";
 import { Header } from "../../components/Header/Header";
+import { Footer } from "../../components/Footer/Footer";
 
 export default function PublicLayout() {
   const [isLoginModalOpen, setIsLoginModalOpen] = useState(false);
@@ -17,7 +18,7 @@ export default function PublicLayout() {
         <Outlet />
       </main>
 
-      {/* <Footer /> */}
+      <Footer />
 
       {isLoginModalOpen && (
         <LoginModal onClose={() => setIsLoginModalOpen(false)} />

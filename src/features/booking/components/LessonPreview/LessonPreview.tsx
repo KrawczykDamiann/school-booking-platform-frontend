@@ -27,6 +27,8 @@ export const LessonPreview: React.FC<LessonPreviewType> = ({
   const { t } = useTranslation();
   const [isDropdownOpen, setIsDropdownOpen] = useState(false);
 
+  const hasBookingsData = studentActiveBookings !== null;
+
   const getSubjectById = (subjectId: number) => {
     return subjects?.find((s) => s.id === subjectId)?.name;
   };
@@ -73,19 +75,21 @@ export const LessonPreview: React.FC<LessonPreviewType> = ({
               </span>
             </div>
 
-            <button
-              className={styles.dropdownTrigger}
-              onClick={() => setIsDropdownOpen(!isDropdownOpen)}
-            >
-              <span>{t("bookingPage.lessonPreview.activeBookings")}</span>
-              <img
-                src={dropdownIcon}
-                alt="Dropdown icon"
-                className={styles.dropdownIcon}
-              />
-            </button>
+            {hasBookingsData && (
+              <button
+                className={styles.dropdownTrigger}
+                onClick={() => setIsDropdownOpen(!isDropdownOpen)}
+              >
+                <span>{t("bookingPage.lessonPreview.activeBookings")}</span>
+                <img
+                  src={dropdownIcon}
+                  alt="Dropdown icon"
+                  className={styles.dropdownIcon}
+                />
+              </button>
+            )}
 
-            {studentActiveBookings && isDropdownOpen && (
+            {hasBookingsData && isDropdownOpen && (
               <ul className={styles.activeBookingsList}>
                 {studentActiveBookings.map((l) => (
                   <li key={l.uuid} className={styles.activeBookingsItem}>
@@ -98,7 +102,7 @@ export const LessonPreview: React.FC<LessonPreviewType> = ({
                     <span className={styles.activeBookingsText}>
                       Date:
                       <span className={styles.activeBookingsValue}>
-                        {format(new Date(l.startTime), "dd/MM HH:mm", )}
+                        {format(new Date(l.startTime), "dd/MM HH:mm")}
                       </span>
                     </span>
                   </li>

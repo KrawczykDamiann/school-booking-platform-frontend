@@ -279,6 +279,7 @@ export const BookingFeature: React.FC = () => {
 
         setStudentActiveBookings(response);
       } catch (error) {
+        setStudentActiveBookings(null);
         console.log(error);
       }
     }
