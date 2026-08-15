@@ -64,7 +64,7 @@ export const AdminAuthForm: React.FC = () => {
 
       const token: string = response.token;
 
-      login({ token, userType: "admin" });
+      login({ token, userType: "admin", email: "VesUp"});
       navigate("/admin");
     } catch (error) {
       if (axios.isAxiosError(error)) {
