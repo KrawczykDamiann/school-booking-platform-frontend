@@ -99,13 +99,12 @@
 
     display: flex;
     flex-direction: row;
+    align-items: center;
     gap: 8px;
 }
 
-.dropdownIcon {
-    width: 12px;
-    height: 12px;
-    padding: 6px;
+.dropdownIconActive {
+    transform: rotate(180deg);
 }
 
 .buttonWrapper {
@@ -127,12 +126,11 @@
     display: flex;
     flex-direction: row;
     justify-content: space-between;
-    align-items: center;
+    align-items: baseline;
     
     gap: 5px;
     padding: 10px;
-    border-radius: 16px;
-    border: 1px solid v.$color-gray30;
+    border-bottom: 1px solid v.$color-gray20;
 }
 
 .activeBookingsText {

@@ -1,11 +1,11 @@
 import styles from "./LessonPreview.module.scss";
-import dropdownIcon from "../../../../assets/dropdown.svg";
 import type { Lesson } from "../../../../types/Lesson";
 import { format } from "date-fns";
 import { Button } from "../../../../components/ui/Button/Button";
 import type { Subject } from "../../../../types/Subject";
 import { useTranslation } from "react-i18next";
 import { useState } from "react";
+import { DropdownIcon } from "../../../../components/icons/DropdownIcon";
 
 type LessonPreviewType = {
   lesson: Lesson | undefined;
@@ -81,10 +81,9 @@ export const LessonPreview: React.FC<LessonPreviewType> = ({
                 onClick={() => setIsDropdownOpen(!isDropdownOpen)}
               >
                 <span>{t("bookingPage.lessonPreview.activeBookings")}</span>
-                <img
-                  src={dropdownIcon}
-                  alt="Dropdown icon"
-                  className={styles.dropdownIcon}
+                <DropdownIcon
+                  size={16}
+                  className={isDropdownOpen ? styles.dropdownIconActive : ""}
                 />
               </button>
             )}
