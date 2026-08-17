@@ -12,6 +12,7 @@ import { OttVerificationPage } from "./pages/OttVerificationPage/OttVerification
 import { BookingLesson } from "./features/bookingLesson/BookingLesson";
 import { AdminSetupController } from "./features/AdminSetupController/AdminSetupController";
 import { AdminAuthLayout } from "./layouts/AdminAuthLayout/AdminAuthLayout";
+import { LessonPreviewProvider } from "./context/LessonPreviewContext";
 
 export function AppRouter() {
   return (
@@ -20,7 +21,14 @@ export function AppRouter() {
         <Route path="/" element={<Navigate to="/login" replace />} />
         <Route path="/login" element={<LandingPage />} />
         <Route path="/login/link" element={<OttVerificationPage />} />
-        <Route path="/booking-calendar" element={<BookingPage />} />
+        <Route
+          path="/booking-calendar"
+          element={
+            <LessonPreviewProvider>
+              <BookingPage />
+            </LessonPreviewProvider>
+          }
+        />
         <Route path="/instructors" element={<InstructorListPage />} />
       </Route>
 

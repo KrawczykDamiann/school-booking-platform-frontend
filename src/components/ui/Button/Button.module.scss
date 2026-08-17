@@ -27,10 +27,6 @@
   }
 }
 
-.primaryModalButton {
-  background: v.$color-system-success;
-}
-
 .secondaryButton {
     text-wrap: nowrap;
     background: v.$color-white;
@@ -49,5 +45,37 @@
 
   &:hover {
     background: v.$color-secondary;
+  }
+}
+
+.success {
+  background: v.$color-system-success;
+
+  &:hover {
+    background: #8FBF73 !important;
+  }
+}
+
+.error {
+  background: v.$color-system-error;
+
+  &:hover {
+    background: #C66163 !important;
+  }
+}
+
+.warning {
+  background: v.$color-system-warning;
+
+  &:hover {
+    background: #F2DD17 !important;
+  }
+}
+
+.info {
+  background: v.$color-system-info;
+
+  &:hover {
+    background: #516DB2 !important;
   }
 }

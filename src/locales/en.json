@@ -15,20 +15,20 @@
     "error_user_not_found": "No user found with this email address in our system."
   },
   "login_magic_link": {
-    "title": "Welcome!",
-    "subtitle": "Enter your email to continue",
-    "label_email": "Email address",
+    "title": "Student login",
+    "subtitle": "Please provide your contact email",
+    "label_email": "Primary contact",
     "placeholder_email": "student@example.com",
-    "button_continue": "Continue",
+    "button_continue": "Confirm",
     "button_sending": "Sending...",
     "error_generic": "Something went wrong. Please check your email and try again.",
     "ageConfirmation": "Please confirm that you are at least 16 years old.",
     "ageConfirmationCheckbox": "I confirm that I’m over 16 years old.",
     "footerNote": "We will send you a magic link to confirm your email",
     "warningIconAlt": "Warning icon",
-    "success_title": "Check your inbox!",
-    "success_text_start": "We have sent a secure magic login link to ",
-    "success_text_end": ". Click the link in the email to log in."
+    "success_title": "Link sent",
+    "success_text_start": "We have sent a secure link for authorization to ",
+    "success_text_end": "Click the link in your email to log in"
   },
   "auth": {
     "callback": {

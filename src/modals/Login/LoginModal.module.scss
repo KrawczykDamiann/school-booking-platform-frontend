@@ -1,0 +1,134 @@
+@use '../../styles/variables' as v;
+
+.modalHeader {
+  display: flex;
+  flex-direction: row;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 8px
+}
+
+.closeBtn {
+  background: none;
+  border: none;
+  font-size: 16px;
+  color: v.$color-text-muted;
+  cursor: pointer;
+}
+
+.title {
+  font-size: 28px;
+  line-height: 115%;
+  color: v.$color-black;
+  font-weight: 500;
+  text-align: left;
+  margin: 0;
+}
+
+.subtitle {
+  font-size: 14px;
+  line-height: 145%;
+  font-weight: 400;
+  color: v.$color-gray60;
+  margin-bottom: 32px;
+  text-align: left;
+}
+
+.form {
+  display: flex;
+  flex-direction: column;
+  gap: 18px;
+}
+
+.inputGroup {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+
+  label {
+    font-size: 12px;
+    color: v.$color-text-muted;
+  }
+}
+
+.errorMessage {
+  color: v.$color-system-error;
+  font-size: 14px;
+  margin: -8px 0 0 0; // Tightly fits inside the form gap
+  text-align: left;
+}
+
+.buttonWrapper {
+  margin-top: 80px;
+}
+
+.footerNote {
+  margin-top: 16px;
+  font-size: 14px;
+  line-height: 145%;
+  color: v.$color-gray30;
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+
+.infoIcon {
+  height: 16px;
+  width: 16px;
+}
+
+.submitModalContent {
+  height: 100%;
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+}
+
+/* Success View Classes */
+.successContent {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+}
+
+.successFooter {
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  align-self: start;
+  gap: 10px;
+}
+
+.successButtonWrapper {
+  margin-top: 28px;
+  margin-bottom: 16px;
+  width: 100%;
+}
+
+.successIcon {
+  width: 112px;
+  height: 112px;
+  margin-bottom: 16px;
+}
+
+.successTitle {
+  font-weight: 500;
+  font-size: 28px;
+  line-height: 115%;
+  color: v.$color-system-info;
+  margin-bottom: 8px;
+}
+
+.successText {
+  font-weight: 400;
+  font-size: 16px;
+  line-height: 145%;
+  color: v.$color-gray60;
+  text-align: center;
+
+  span {
+    font-weight: 400;
+    color: v.$color-gray80;
+  }
+}

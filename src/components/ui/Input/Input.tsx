@@ -57,7 +57,7 @@ export const Input: React.FC<InputProps> = ({
         htmlFor={label}
         className={`${styles.label} ${error ? styles.labelError : ""}`}
       >
-        {`${label}*`}
+        {`${label}`}
       </label>
       <div className={styles.inputWrapper}>
         <img src={leftIcon} alt={`${label} icon`} className={styles.icon} />

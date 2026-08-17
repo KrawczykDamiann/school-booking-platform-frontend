@@ -15,6 +15,7 @@ import { StudentsIcon } from "../icons/StudentsIcon";
 import { DashboardIcon } from "../icons/DashboardIcon";
 import { UserDropdown } from "./UserDropdown/UserDropdown";
 import { PageContainer } from "../PageContainer/PageContainer";
+import { ModalContext } from "../../context/ModalContext";
 
 type NavigationItem = {
   id: number;
@@ -27,24 +28,48 @@ type NavigationItem = {
 };
 
 const adminNavigation: NavigationItem[] = [
-  { id: 1, translationKey: "header.dashboard", to: "/admin/dashboard", icon: DashboardIcon },
-  { id: 2, translationKey: "header.teachers", to: "/admin/teachers", icon: AvailabilityIcon },
-  { id: 3, translationKey: "header.students", to: "/admin/students", icon: StudentsIcon },
+  {
+    id: 1,
+    translationKey: "header.dashboard",
+    to: "/admin/dashboard",
+    icon: DashboardIcon,
+  },
+  {
+    id: 2,
+    translationKey: "header.teachers",
+    to: "/admin/teachers",
+    icon: AvailabilityIcon,
+  },
+  {
+    id: 3,
+    translationKey: "header.students",
+    to: "/admin/students",
+    icon: StudentsIcon,
+  },
 ];
 
 const studentNavigation: NavigationItem[] = [
-  { id: 1, translationKey: "header.bookLesson", to: "/booking-calendar", icon: StudentsIcon },
-  { id: 2, translationKey: "header.manageBooking", to: "/", icon: DashboardIcon },
+  {
+    id: 1,
+    translationKey: "header.bookLesson",
+    to: "/booking-calendar",
+    icon: StudentsIcon,
+  },
+  {
+    id: 2,
+    translationKey: "header.manageBooking",
+    to: "/",
+    icon: DashboardIcon,
+  },
 ];
 
-type HeaderProps = {
-  onLoginClick?: () => void;
-};
-
-export const Header: React.FC<HeaderProps> = ({ onLoginClick }) => {
+export const Header: React.FC = () => {
   const { pathname } = useLocation();
   const navigate = useNavigate();
-  const { userType, logout, isAuthenticated, userEmail } = useContext(AuthContext);
+  const { userType, logout, isAuthenticated, userEmail } =
+    useContext(AuthContext);
+
+  const { openModal } = useContext(ModalContext);
 
   const studentEmail = userEmail ? userEmail : "student@example.com";
 
@@ -117,81 +142,80 @@ export const Header: React.FC<HeaderProps> = ({ onLoginClick }) => {
 
   return (
     <PageContainer>
-    <header className={styles.header}>
-      <Link to={homePath} className={styles.logo}>
-        Less<span className={styles.accent}>io</span>
-      </Link>
+      <header className={styles.header}>
+        <Link to={homePath} className={styles.logo}>
+          Less<span className={styles.accent}>io</span>
+        </Link>
 
-      <nav className={styles.nav}>
-        <ul className={styles.navList}>
-          {navigation.map((item) => {
-            const Icon = item.icon;
+        <nav className={styles.nav}>
+          <ul className={styles.navList}>
+            {navigation.map((item) => {
+              const Icon = item.icon;
 
-            return (
-              <li
-                key={item.id}
-                className={`${styles.navItem} ${pathname === item.to ? styles.navItemActive : ""}`}
-              >
-                <Icon size={16} />
-                <Link to={item.to} className={styles.navLink}>
-                  {t(item.translationKey)}
-                </Link>
-              </li>
-            );
-          })}
-        </ul>
-      </nav>
+              return (
+                <li
+                  key={item.id}
+                  className={`${styles.navItem} ${pathname === item.to ? styles.navItemActive : ""}`}
+                >
+                  <Icon size={16} />
+                  <Link to={item.to} className={styles.navLink}>
+                    {t(item.translationKey)}
+                  </Link>
+                </li>
+              );
+            })}
+          </ul>
+        </nav>
 
-      <div className={styles.rightSection}>
-        {/* Custom Dropdown Language Switcher */}
-        <div className={styles.translatorContainer} ref={dropdownRef}>
-          <button
-            className={styles.activeLangBtn}
-            onClick={() => setIsLanguageDropdownOpen(!isLanguageDropdownOpen)}
-          >
-            {activeLang.toUpperCase()}
-            <span className={styles.dropdownArrow}>▼</span>
-          </button>
+        <div className={styles.rightSection}>
+          {/* Custom Dropdown Language Switcher */}
+          <div className={styles.translatorContainer} ref={dropdownRef}>
+            <button
+              className={styles.activeLangBtn}
+              onClick={() => setIsLanguageDropdownOpen(!isLanguageDropdownOpen)}
+            >
+              {activeLang.toUpperCase()}
+              <span className={styles.dropdownArrow}>▼</span>
+            </button>
 
-          {isLanguageDropdownOpen && (
-            <ul className={styles.langDropdown}>
-              {languages
-                .filter((lang) => lang.code !== activeLang)
-                .map((lang) => (
-                  <li key={lang.code}>
-                    <button
-                      className={styles.dropdownLangBtn}
-                      onClick={() => changeLanguage(lang.code)}
-                    >
-                      {lang.label}
-                    </button>
-                  </li>
-                ))}
-            </ul>
+            {isLanguageDropdownOpen && (
+              <ul className={styles.langDropdown}>
+                {languages
+                  .filter((lang) => lang.code !== activeLang)
+                  .map((lang) => (
+                    <li key={lang.code}>
+                      <button
+                        className={styles.dropdownLangBtn}
+                        onClick={() => changeLanguage(lang.code)}
+                      >
+                        {lang.label}
+                      </button>
+                    </li>
+                  ))}
+              </ul>
+            )}
+          </div>
+
+          {isAuthenticated ? (
+            <div className={styles.rightSection}>
+              {userType === "admin" && <div className={styles.avatar}>VU</div>}
+              <UserDropdown
+                name={userType === "admin" ? "VesUp" : studentEmail}
+                dropdownRef={dropdownRef}
+                isDropdownOpen={isDropdownOpen}
+                setIsDropdownOpen={setIsDropdownOpen}
+                handleLogout={handleLogout}
+              />
+            </div>
+          ) : (
+            <div>
+              <Button variant="secondary" onClick={() => openModal({ type: "login"})}>
+                {t("header.studentLogin")}
+              </Button>
+            </div>
           )}
         </div>
-
-        {isAuthenticated ? (
-          <div className={styles.rightSection}>
-            {userType === "admin" && <div className={styles.avatar}>VU</div>}
-            <UserDropdown
-              name={userType === "admin" ? "VesUp" : studentEmail}
-              dropdownRef={dropdownRef}
-              isDropdownOpen={isDropdownOpen}
-              setIsDropdownOpen={setIsDropdownOpen}
-              handleLogout={handleLogout}
-            />
-          </div>
-        ) : (
-          <div>
-            <Button variant="secondary" onClick={() => onLoginClick?.()}>
-              {t("header.studentLogin")}
-            </Button>
-          </div>
-        )}
-      </div>
-    </header>
+      </header>
     </PageContainer>
-
   );
 };

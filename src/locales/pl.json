@@ -15,20 +15,20 @@
     "error_user_not_found": "Nie znaleziono użytkownika o tym adresie e-mail w naszym systemie."
   },
   "login_magic_link": {
-    "title": "Witaj!",
-    "subtitle": "Wpisz swój e-mail, aby kontynuować",
-    "label_email": "Adres e-mail",
+    "title": "Logowanie dla studentów",
+    "subtitle": "Proszę podać swój adres e-mail do kontaktu",
+    "label_email": "Główna osoba kontaktowa",
     "placeholder_email": "uczen@example.com",
-    "button_continue": "Kontynuuj",
+    "button_continue": "Potwierdź",
     "button_sending": "Wysyłanie...",
     "error_generic": "Coś poszło nie tak. Sprawdź swój adres e-mail i spróbuj ponownie.",
     "ageConfirmation": "Potwierdź, że masz co najmniej 16 lat.",
     "ageConfirmationCheckbox": "Potwierdzam, że mam ukończone 16 lat.",
     "footerNote": "Wyślemy Ci link magiczny, aby potwierdzić adres e-mail",
     "warningIconAlt": "Ikona ostrzeżenia",
-    "success_title": "Sprawdź skrzynkę odbiorczą!",
+    "success_title": "Wysłano link",
     "success_text_start": "Wysłaliśmy bezpieczny link logowania na adres ",
-    "success_text_end": ". Kliknij w link w wiadomości e-mail, aby się zalogować."
+    "success_text_end": "Kliknij w link w wiadomości e-mail, aby się zalogować"
   },
   "auth": {
     "callback": {

@@ -4,7 +4,7 @@ import { format } from "date-fns";
 import { Button } from "../../../../components/ui/Button/Button";
 import type { Subject } from "../../../../types/Subject";
 import { useTranslation } from "react-i18next";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { DropdownIcon } from "../../../../components/icons/DropdownIcon";
 
 type LessonPreviewType = {
@@ -12,7 +12,7 @@ type LessonPreviewType = {
   handleConfirm: () => void;
   subjects: Subject[] | null;
   isLoading: boolean;
-  studentActiveBookings: Lesson[] | null;
+  studentActiveBookings: Lesson[];
 };
 
 export const LessonPreview: React.FC<LessonPreviewType> = ({
@@ -27,11 +27,17 @@ export const LessonPreview: React.FC<LessonPreviewType> = ({
   const { t } = useTranslation();
   const [isDropdownOpen, setIsDropdownOpen] = useState(false);
 
-  const hasBookingsData = studentActiveBookings !== null;
+  const hasActiveBookings = studentActiveBookings.length !== 0;
 
   const getSubjectById = (subjectId: number) => {
     return subjects?.find((s) => s.id === subjectId)?.name;
   };
+
+  useEffect(() => {
+    return () => {
+      setIsDropdownOpen(false);
+    };
+  }, []);
 
   return (
     <div className={styles.lessonPreview}>
@@ -75,7 +81,7 @@ export const LessonPreview: React.FC<LessonPreviewType> = ({
               </span>
             </div>
 
-            {hasBookingsData && (
+            {hasActiveBookings && (
               <button
                 className={styles.dropdownTrigger}
                 onClick={() => setIsDropdownOpen(!isDropdownOpen)}
@@ -88,7 +94,7 @@ export const LessonPreview: React.FC<LessonPreviewType> = ({
               </button>
             )}
 
-            {hasBookingsData && isDropdownOpen && (
+            {hasActiveBookings && isDropdownOpen && (
               <ul className={styles.activeBookingsList}>
                 {studentActiveBookings.map((l) => (
                   <li key={l.uuid} className={styles.activeBookingsItem}>

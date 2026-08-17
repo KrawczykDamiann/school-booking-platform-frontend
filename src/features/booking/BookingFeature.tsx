@@ -13,7 +13,6 @@ import {
   subDays,
 } from "date-fns";
 import { LessonPreviewContext } from "../../context/LessonPreviewContext";
-import { LessonBookingModal } from "../../components/LessonBookingModal/LessonBookingModal";
 import {
   bookLesson,
   fetchBookedLessons,
@@ -24,6 +23,8 @@ import { fetchSubjects } from "../../api/subjects";
 import type { Lesson } from "../../types/Lesson";
 import type { Subject } from "../../types/Subject";
 import axios from "axios";
+import { AuthContext } from "../../context/AuthContext";
+import { ModalContext } from "../../context/ModalContext";
 
 export const BookingFeature: React.FC = () => {
   // #region MAIN_CONTENT
@@ -45,10 +46,6 @@ export const BookingFeature: React.FC = () => {
 
     setSelectedTimePeriod(period);
   };
-
-  // State to control the visibility of the lesson booking and status modal.
-  const [isLessonBookingModalOpen, setIsLessonBookingModalOpen] =
-    useState(false);
 
   // Context hook to manage the state of the currently selected lesson for preview or scheduling details.
   const { selectedLessonUuid, setSelectedLessonUuid } =
@@ -231,10 +228,16 @@ export const BookingFeature: React.FC = () => {
     return availableHours.some((hour) => lessonsMap.has(`${key}-${hour}`));
   };
 
-  const [bookingUuid, setBookingUuid] = useState<string | null>(null);
+  const { openModal, closeModal } = useContext(ModalContext);
+  const { isAuthenticated } = useContext(AuthContext);
 
   // Opens the lesson status modal when the user confirms their selection.
   const handleConfirm = async () => {
+    if (!isAuthenticated) {
+      openModal({ type: "login" });
+      return;
+    }
+
     setIsLoading(true);
     if (!selectedLessonUuid) {
       return;
@@ -243,10 +246,15 @@ export const BookingFeature: React.FC = () => {
     try {
       const response = await bookLesson(selectedLessonUuid);
 
-      const bookingUuid = response.uuid;
+      const bookingUuid: string = response.uuid;
       if (bookingUuid) {
-        setBookingUuid(bookingUuid);
-        setIsLessonBookingModalOpen(true);
+        openModal({
+          type: "lessonBooked",
+          data: {
+            onResetBooking: handleResetBooking,
+            bookingUuid,
+          },
+        });
       }
     } catch (error) {
       if (axios.isAxiosError(error)) {
@@ -263,14 +271,14 @@ export const BookingFeature: React.FC = () => {
   // Clears active selection, resets subject filters, and closes the booking modal.
   const handleResetBooking = () => {
     setSelectedSubjectId(null);
-    setIsLessonBookingModalOpen(false);
     setSelectedLessonUuid(undefined);
+    closeModal();
   };
 
   // #endregion
-  const [studentActiveBookings, setStudentActiveBookings] = useState<
-    Lesson[] | null
-  >(null);
+  const [studentActiveBookings, setStudentActiveBookings] = useState<Lesson[]>(
+    [],
+  );
 
   useEffect(() => {
     async function init() {
@@ -279,7 +287,7 @@ export const BookingFeature: React.FC = () => {
 
         setStudentActiveBookings(response);
       } catch (error) {
-        setStudentActiveBookings(null);
+        setStudentActiveBookings([]);
         console.log(error);
       }
     }
@@ -317,13 +325,6 @@ export const BookingFeature: React.FC = () => {
           studentActiveBookings={studentActiveBookings}
         />
       </div>
-      {isLessonBookingModalOpen && bookingUuid && (
-        <LessonBookingModal
-          onClose={() => setIsLessonBookingModalOpen(false)}
-          onResetBooking={handleResetBooking}
-          bookingUuid={bookingUuid}
-        />
-      )}
     </>
   );
 };
