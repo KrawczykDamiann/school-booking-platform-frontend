@@ -52,8 +52,10 @@ export const AuthContextProvider: React.FC<Props> = ({ children }) => {
 
   const logout = () => {
     tokenService.clearAuth();
+    authStorage.removeUserEmail();
     setUserType(null);
     setIsAuthenticated(false);
+    setUserEmail(null);
   };
 
   const value = useMemo(
