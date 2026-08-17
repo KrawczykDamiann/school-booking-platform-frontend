@@ -11,6 +11,7 @@ import { BookingPage } from "./pages/BookingPage/BookingPage";
 import { OttVerificationPage } from "./pages/OttVerificationPage/OttVerificationPage";
 import { BookingLesson } from "./features/bookingLesson/BookingLesson";
 import { AdminSetupController } from "./features/AdminSetupController/AdminSetupController";
+import { AdminAuthLayout } from "./layouts/AdminAuthLayout/AdminAuthLayout";
 
 export function AppRouter() {
   return (
@@ -19,11 +20,13 @@ export function AppRouter() {
         <Route path="/" element={<Navigate to="/login" replace />} />
         <Route path="/login" element={<LandingPage />} />
         <Route path="/login/link" element={<OttVerificationPage />} />
+        <Route path="/booking-calendar" element={<BookingPage />} />
+        <Route path="/instructors" element={<InstructorListPage />} />
+      </Route>
+
+      <Route element={<AdminAuthLayout />}>
         <Route path="/login/admin" element={<AdminLoginPage />} />
         <Route path="/password-recovery" element={<PasswordRecoveryPage />} />
-        <Route path="/booking-calendar" element={<BookingPage />} />
-        {/* <Route path="/booking" element={<BookingLandingPage />} /> */}
-        <Route path="/instructors" element={<InstructorListPage />} />
       </Route>
 
       <Route path="/admin" element={<AdminLayout />}>

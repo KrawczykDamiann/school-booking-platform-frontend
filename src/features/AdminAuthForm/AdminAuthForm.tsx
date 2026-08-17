@@ -7,12 +7,13 @@ import { validation } from "../../utils/validators";
 import emailIcon from "../../assets/email.svg";
 import passwordIcon from "../../assets/pass.svg";
 import { Input } from "../../components/ui/Input/Input";
-import { Checkbox } from "../../components/ui/Checkbox/Checkbox";
 import { useInput } from "../../hooks/useInput";
 import { AuthContext } from "../../context/AuthContext";
 import { loginAdmin } from "../../api/auth";
 import { Button } from "../../components/ui/Button/Button";
-import { api } from "../../api/api";
+
+// import { api } from "../../api/api";
+// import { Checkbox } from "../../components/ui/Checkbox/Checkbox";
 
 export const AdminAuthForm: React.FC = () => {
   const { t } = useTranslation();
@@ -24,7 +25,7 @@ export const AdminAuthForm: React.FC = () => {
 
   const [serverError, setServerError] = useState("");
 
-  const [isRememberMe, setIsRememberMe] = useState(false);
+  // const [isRememberMe, setIsRememberMe] = useState(false);
 
   const [isLoading, setIsLoading] = useState(false);
 
@@ -86,18 +87,18 @@ export const AdminAuthForm: React.FC = () => {
     }
   };
 
-  const handleSetupAdmin = async () => {
-    const data = {
-      email: "admin@example.com",
-      password: "administrator",
-      zoneId: "Europe/Kyiv",
-    };
+  // const handleSetupAdmin = async () => {
+  //   const data = {
+  //     email: "admin@example.com",
+  //     password: "administrator",
+  //     zoneId: "Europe/Kyiv",
+  //   };
 
-    const response = api.post("/api/setup/admin", data);
+  //   const response = api.post("/api/setup/admin", data);
 
-    console.log(response);
-    // e8494800-fab7-43e7-8fc3-758d6da25255
-  };
+  //   console.log(response);
+  //   // e8494800-fab7-43e7-8fc3-758d6da25255
+  // };
 
   return (
     <div className={styles.wrapper}>
@@ -140,13 +141,13 @@ export const AdminAuthForm: React.FC = () => {
           >
             {t("adminAuthForm.forgotPassword")}
           </Link>
-          <Checkbox
+          {/* <Checkbox
             label={t("adminAuthForm.rememberMe")}
             checked={isRememberMe}
             onChange={(e) => setIsRememberMe(e.target.checked)}
-          />
+          /> */}
         </div>
-        <Button variant="primary" onClick={handleSetupAdmin}>Setup Admin</Button>
+        {/* <Button variant="primary" onClick={handleSetupAdmin}>Setup Admin</Button> */}
       </form>
       <div className={styles.buttonWrapper}>
         <Button
