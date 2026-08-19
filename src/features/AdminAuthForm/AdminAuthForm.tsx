@@ -13,7 +13,7 @@ import { loginAdmin } from "../../api/auth";
 import { Button } from "../../components/ui/Button/Button";
 
 // import { api } from "../../api/api";
-// import { Checkbox } from "../../components/ui/Checkbox/Checkbox";
+// import { useEffect } from "react";
 
 export const AdminAuthForm: React.FC = () => {
   const { t } = useTranslation();
@@ -65,7 +65,7 @@ export const AdminAuthForm: React.FC = () => {
 
       const token: string = response.token;
 
-      login({ token, userType: "admin", email: "VesUp"});
+      login({ token, userType: "admin", email: "VesUp" });
       navigate("/admin");
     } catch (error) {
       if (axios.isAxiosError(error)) {
@@ -87,7 +87,7 @@ export const AdminAuthForm: React.FC = () => {
     }
   };
 
-  // const handleSetupAdmin = async () => {
+  // useEffect(() => {
   //   const data = {
   //     email: "admin@example.com",
   //     password: "administrator",
@@ -97,8 +97,7 @@ export const AdminAuthForm: React.FC = () => {
   //   const response = api.post("/api/setup/admin", data);
 
   //   console.log(response);
-  //   // e8494800-fab7-43e7-8fc3-758d6da25255
-  // };
+  // }, []);
 
   return (
     <div className={styles.wrapper}>
@@ -141,13 +140,7 @@ export const AdminAuthForm: React.FC = () => {
           >
             {t("adminAuthForm.forgotPassword")}
           </Link>
-          {/* <Checkbox
-            label={t("adminAuthForm.rememberMe")}
-            checked={isRememberMe}
-            onChange={(e) => setIsRememberMe(e.target.checked)}
-          /> */}
         </div>
-        {/* <Button variant="primary" onClick={handleSetupAdmin}>Setup Admin</Button> */}
       </form>
       <div className={styles.buttonWrapper}>
         <Button
