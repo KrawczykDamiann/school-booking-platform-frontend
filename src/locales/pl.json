@@ -196,5 +196,11 @@
       }
     },
     "notSelectedSubject": "Wybierz przedmiot, aby wyświetlić dostępne terminy"
+  },
+  "footer": {
+    "legalCenter": "Centrum Prawne",
+    "privacyPolicy": "Polityka Prywatności",
+    "aboutUs": "O nas",
+    "sendFeedback": "Wyślij opinię"
   }
 }

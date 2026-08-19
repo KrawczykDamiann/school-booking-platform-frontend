@@ -218,5 +218,11 @@
       }
     },
     "notSelectedSubject": "Select a subject to view slots"
+  },
+  "footer": {
+    "legalCenter": "Legal Center",
+    "privacyPolicy": "Privacy Policy",
+    "aboutUs": "About us",
+    "sendFeedback": "Send feedback"
   }
 }

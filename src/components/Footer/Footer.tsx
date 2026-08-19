@@ -1,14 +1,24 @@
+import React from "react";
+import { useTranslation } from "react-i18next";
 import { LanguageSwitcher } from "../LanguageSwitcher/LanguageSwitcher";
 import styles from "./Footer.module.scss";
 
-const footerLinks = [
-  { id: 1, label: "Legal Center", to: "/" },
-  { id: 2, label: "Privacy Policy", to: "/" },
-  { id: 3, label: "About us", to: "/" },
-  { id: 4, label: "Send feedback", to: "/" },
+interface FooterLink {
+  id: number;
+  translationKey: string;
+  to: string;
+}
+
+const footerLinks: FooterLink[] = [
+  { id: 1, translationKey: "footer.legalCenter", to: "/" },
+  { id: 2, translationKey: "footer.privacyPolicy", to: "/" },
+  { id: 3, translationKey: "footer.aboutUs", to: "/" },
+  { id: 4, translationKey: "footer.sendFeedback", to: "/" },
 ];
 
 export const Footer: React.FC = () => {
+  const { t } = useTranslation();
+
   return (
     <footer className={styles.footer}>
       <span>© 2026 Lessio</span>
@@ -16,7 +26,7 @@ export const Footer: React.FC = () => {
         {footerLinks.map((link) => (
           <li className={styles.linkItem} key={link.id}>
             <a href={link.to} className={styles.link}>
-              {link.label}
+              {t(link.translationKey)}
             </a>
           </li>
         ))}
