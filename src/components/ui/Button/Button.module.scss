@@ -1,12 +1,18 @@
 @use '../../../styles/variables' as v;
 
 .button {
-  width: 100%;
+  /* Adapt width to content and center text */
+  width: fit-content;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
   height: 44px;
   border: none;
   border-radius: 100px;
-  padding: 8px 20px;
+  padding: 8px 24px;
   cursor: pointer;
+  /* Prevent text wrapping for all variants */
+  white-space: nowrap;
 
   color: v.$color-white;
   font-weight: 400;
@@ -28,13 +34,12 @@
 }
 
 .secondaryButton {
-    text-wrap: nowrap;
-    background: v.$color-white;
-    border: 1px solid v.$color-secondary-shadow;
-    color: v.$color-gray80;
+  background: v.$color-white;
+  border: 1px solid v.$color-secondary-shadow;
+  color: v.$color-gray80;
 
-    &:hover {
-      background: v.$color-secondary;
+  &:hover {
+    background: v.$color-secondary;
   }
 }
 

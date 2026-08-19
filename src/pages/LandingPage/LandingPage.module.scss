@@ -42,8 +42,13 @@
   align-self: center;
   display: flex;
   gap: 20px;
+  /* Allow wrapping on smaller screens to prevent overflow */
+  flex-wrap: wrap; 
+  justify-content: center;
 }
 
 .linkWrapper {
-  width: 188px;
+  /* Removed fixed width to allow dynamic sizing based on translated text */
+  display: inline-flex;
+  text-decoration: none;
 }
