@@ -1,6 +1,6 @@
 import { Outlet, useLocation } from "react-router-dom";
-import styles from "./PublicLayout.module.scss";
 import { useState } from "react";
+import styles from "./PublicLayout.module.scss";
 import LoginModal from "../../components/LoginModal/LoginModal";
 import { Header } from "../../components/Header/Header";
 import { Footer } from "../../components/Footer/Footer";
@@ -13,7 +13,7 @@ export default function PublicLayout() {
 
   return (
     <div className={`${styles.layout} ${isLandingPage ? styles.layoutGrayBackground : ""}`}>
-      <Header onLoginClick={() => setIsLoginModalOpen(true)} />
+      <Header />
       
       <main className={styles.main}>
         <Outlet />
@@ -21,6 +21,7 @@ export default function PublicLayout() {
 
       <Footer />
 
+      {/* Render login modal if state is active */}
       {isLoginModalOpen && (
         <LoginModal onClose={() => setIsLoginModalOpen(false)} />
       )}
