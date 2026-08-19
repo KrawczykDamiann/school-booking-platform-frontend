@@ -3,14 +3,17 @@
 .layout {
   display: flex;
   flex-direction: column;
-  justify-content: space-between;
-  min-height: calc(100vh - 12px);
+  min-height: 100vh;
   background: v.$color-white;
   padding-top: 12px;
 
   &GrayBackground {
     background: v.$color-gray10;
   }
+}
+
+.layout > header {
+  padding-inline: 80px;
 }
 
 .main {
