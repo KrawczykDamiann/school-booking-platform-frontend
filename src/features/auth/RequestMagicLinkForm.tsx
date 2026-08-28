@@ -1,6 +1,6 @@
 import { useState } from "react";
 import { useTranslation } from "react-i18next";
-import axios from "axios";
+import { api } from "../../api/api";
 import styles from "./LoginModal.module.scss";
 
 interface LoginModalProps {
@@ -30,7 +30,7 @@ export default function LoginModal({ onClose }: LoginModalProps) {
 
     try {
       // Sending the POST request to Kamil's backend magic-link endpoint
-      await axios.post(`${import.meta.env.VITE_API_URL}/api/auth/magic-link`, {
+      await api.post("/api/auth/magic-link", {
         email,
       });
 

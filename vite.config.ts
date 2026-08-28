@@ -9,5 +9,14 @@ export default defineConfig({
     watch: {
       usePolling: true,
     },
+    proxy: {
+      "/api": {
+        target: "http://localhost:8082",
+        changeOrigin: true,
+        headers: {
+          Origin: "http://localhost:8082",
+        },
+      },
+    },
   },
 });

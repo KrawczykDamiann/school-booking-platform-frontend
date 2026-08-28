@@ -1,85 +1,101 @@
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { useTranslation } from "react-i18next";
+import { format } from "date-fns";
 import styles from "./InstructorListPage.module.scss";
+import { fetchPublicTeachers } from "../../api/teachers";
+import { fetchLessons } from "../../api/lessons";
+import type { PublicTeacher } from "../../types/Teacher";
+import type { Lesson } from "../../types/Lesson";
 
 interface Teacher {
-  id: number;
-  nameKey: string;
-  subjectKey: string;
-  color: string;
-  termsKey: string;
-  date: string;
-  status: string;
-  email: string;
-  nextLessons: string[];
-  alert?: boolean;
+  uuid: string;
+  name: string;
 }
-
-const MOCK_TEACHERS: Teacher[] = [
-  {
-    id: 1,
-    nameKey: "teacherListPage.teachers.katarynaNovak",
-    subjectKey: "subjects.chemistry",
-    color: "#2f80ed",
-    termsKey: "teacherListPage.modal.contract",
-    date: "teacherListPage.modal.withoutTerm",
-    status: "online",
-    email: "knowakchemistry@onlineschool.com",
-    nextLessons: ["30/06 at 14:00", "15:00", "17:00"],
-  },
-  {
-    id: 2,
-    nameKey: "teacherListPage.teachers.andriiShevchenko",
-    subjectKey: "subjects.mathematics",
-    color: "#00bfa5",
-    termsKey: "teacherListPage.modal.freelance",
-    date: "teacherListPage.modal.withoutTerm",
-    status: "online",
-    email: "ashevchenko@onlineschool.com",
-    nextLessons: [],
-  },
-  {
-    id: 3,
-    nameKey: "teacherListPage.teachers.sofiaKoval",
-    subjectKey: "subjects.physics",
-    color: "#4caf50",
-    termsKey: "teacherListPage.modal.contract",
-    date: "26/06/26",
-    alert: true,
-    status: "offline",
-    email: "skoval@onlineschool.com",
-    nextLessons: [],
-  },
-  {
-    id: 4,
-    nameKey: "teacherListPage.teachers.nataliiaIvanenko",
-    subjectKey: "subjects.biology",
-    color: "#9c27b0",
-    termsKey: "teacherListPage.modal.contract",
-    date: "31/8/27",
-    status: "online",
-    email: "nivanenko@onlineschool.com",
-    nextLessons: [],
-  },
-  {
-    id: 5,
-    nameKey: "teacherListPage.teachers.olenaMelnyk",
-    subjectKey: "subjects.english",
-    color: "#ffb300",
-    termsKey: "teacherListPage.modal.contract",
-    date: "31/12/27",
-    status: "online",
-    email: "omelnyk@onlineschool.com",
-    nextLessons: [],
-  },
-];
 
 export default function InstructorListPage() {
   const { t } = useTranslation();
-  const [selectedTeacherId, setSelectedTeacherId] = useState<number | null>(1);
+  const [teachers, setTeachers] = useState<Teacher[]>([]);
+  const [lessons, setLessons] = useState<Lesson[]>([]);
+  const [selectedTeacherUuid, setSelectedTeacherUuid] = useState<string | null>(
+    null,
+  );
+  const [isLoading, setIsLoading] = useState(true);
+  const [error, setError] = useState<string | null>(null);
+
+  useEffect(() => {
+    let isMounted = true;
+
+    async function loadTeachers() {
+      setIsLoading(true);
+      setError(null);
+
+      try {
+        const data = await fetchPublicTeachers(0, 100);
+        const mapped: Teacher[] = data.content.map(
+          (teacher: PublicTeacher) => ({
+            uuid: teacher.uuid,
+            name: `${teacher.firstName} ${teacher.lastName}`.trim(),
+          }),
+        );
+
+        if (isMounted) {
+          setTeachers(mapped);
+          setSelectedTeacherUuid(mapped[0]?.uuid ?? null);
+        }
+      } catch {
+        if (isMounted) {
+          setError("Unable to load teachers. Please try again later.");
+        }
+      } finally {
+        if (isMounted) {
+          setIsLoading(false);
+        }
+      }
+    }
+
+    loadTeachers();
+
+    return () => {
+      isMounted = false;
+    };
+  }, []);
+
+  useEffect(() => {
+    let isMounted = true;
+
+    // Lesson booking isn't live yet on every environment, degrade gracefully.
+    async function loadLessons() {
+      try {
+        const data = await fetchLessons();
+        if (isMounted) {
+          setLessons(data.content ?? []);
+        }
+      } catch {
+        if (isMounted) {
+          setLessons([]);
+        }
+      }
+    }
+
+    loadLessons();
+
+    return () => {
+      isMounted = false;
+    };
+  }, []);
 
   const selectedTeacher =
-    MOCK_TEACHERS.find((teacher) => teacher.id === selectedTeacherId) ?? null;
+    teachers.find((teacher) => teacher.uuid === selectedTeacherUuid) ?? null;
+
+  const nextLessons = selectedTeacher
+    ? lessons
+        .filter((lesson) => lesson.teacherUuid === selectedTeacher.uuid)
+        .sort(
+          (a, b) =>
+            new Date(a.startTime).getTime() - new Date(b.startTime).getTime(),
+        )
+        .map((lesson) => format(new Date(lesson.startTime), "dd/MM HH:mm"))
+    : [];
 
   return (
     <div className={styles.dashboardContainer}>
@@ -91,87 +107,63 @@ export default function InstructorListPage() {
             </h1>
           </div>
 
-          <div className={styles.tableWrapper}>
-            <table className={styles.teachersTable}>
-              <thead>
-                <tr>
-                  <th>{t("instructorListPage.table.teacherName")}</th>
-                  <th>{t("instructorListPage.table.subject")}</th>
-                  <th>{t("instructorListPage.table.workTerms")}</th>
-                </tr>
-              </thead>
-              <tbody>
-                {MOCK_TEACHERS.map((teacher) => (
-                  <tr
-                    key={teacher.id}
-                    className={
-                      selectedTeacherId === teacher.id ? styles.selectedRow : ""
-                    }
-                    onClick={() => setSelectedTeacherId(teacher.id)}
-                  >
-                    <td className={styles.teacherNameCell}>
-                      <div className={styles.tableAvatar}>
-                        {t(teacher.nameKey)
-                          .split(" ")
-                          .map((n) => n[0])
-                          .join("")}
-                      </div>
-                      {t(teacher.nameKey)}
-                    </td>
-                    <td>
-                      <span className={styles.subjectBadge}>
-                        <span
-                          className={styles.dot}
-                          style={{ backgroundColor: teacher.color }}
-                        ></span>
-                        {t(teacher.subjectKey)}
-                      </span>
-                    </td>
-                    <td className={styles.termsCell}>
-                      <span className={styles.termsIcon}>📋</span>
-                      <span className={styles.termsText}>
-                        {t(teacher.termsKey)}
-                      </span>
-                      <span
-                        className={`${styles.dateText} ${teacher.alert ? styles.alertDate : ""}`}
-                      >
-                        {teacher.date.startsWith("teacherListPage")
-                          ? t(teacher.date)
-                          : teacher.date}{" "}
-                        {teacher.alert && "⚠️"}
-                      </span>
-                    </td>
+          {isLoading && <p>Loading teachers...</p>}
+          {error && <p>{error}</p>}
+
+          {!isLoading && !error && (
+            <div className={styles.tableWrapper}>
+              <table className={styles.teachersTable}>
+                <thead>
+                  <tr>
+                    <th>{t("instructorListPage.table.teacherName")}</th>
                   </tr>
-                ))}
-              </tbody>
-            </table>
-          </div>
+                </thead>
+                <tbody>
+                  {teachers.map((teacher) => (
+                    <tr
+                      key={teacher.uuid}
+                      className={
+                        selectedTeacherUuid === teacher.uuid
+                          ? styles.selectedRow
+                          : ""
+                      }
+                      onClick={() => setSelectedTeacherUuid(teacher.uuid)}
+                    >
+                      <td className={styles.teacherNameCell}>
+                        <div className={styles.tableAvatar}>
+                          {teacher.name
+                            .split(" ")
+                            .map((n) => n[0])
+                            .join("")}
+                        </div>
+                        {teacher.name}
+                      </td>
+                    </tr>
+                  ))}
+                </tbody>
+              </table>
+            </div>
+          )}
         </section>
 
         {selectedTeacher && (
           <aside className={styles.detailsSidebar}>
             <button
               className={styles.closeSidebarBtn}
-              onClick={() => setSelectedTeacherId(null)}
+              onClick={() => setSelectedTeacherUuid(null)}
             >
               ✕
             </button>
 
             <div className={styles.sidebarHeader}>
-              <h2>{t(selectedTeacher.nameKey)}</h2>
+              <h2>{selectedTeacher.name}</h2>
               <span className={styles.statusIndicator}></span>
-            </div>
-
-            <div className={styles.sidebarEmail}>
-              ✉️ {selectedTeacher.email}
             </div>
 
             <div className={styles.nextLessonsSection}>
               <h3>{t("instructorListPage.details.nextLessons")}</h3>
-              {selectedTeacher.nextLessons.length > 0 ? (
-                <p className={styles.lessonsList}>
-                  {selectedTeacher.nextLessons.join(", ")}
-                </p>
+              {nextLessons.length > 0 ? (
+                <p className={styles.lessonsList}>{nextLessons.join(", ")}</p>
               ) : (
                 <p className={styles.noLessons}>
                   {t("instructorListPage.details.noLessons")}
