@@ -12,7 +12,8 @@ const Txt: React.FC<{ children: string }> = ({ children }) => {
 
 /* Interfaces & Data */
 export interface Teacher {
-  id: number;
+  id: number | string;
+  uuid?: string;
   name: string;
   email: string;
   subjectId?: number;
@@ -203,6 +204,15 @@ const ForkKnifeIcon = () => (
   </svg>
 );
 
+const TrashIcon = () => (
+  <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" width="16" height="16">
+    <polyline points="3 6 5 6 21 6"></polyline>
+    <path d="M19 6v14a2 2 0 0 1-2 2H7a2 2 0 0 1-2-2V6m3 0V4a2 2 0 0 1 2-2h4a2 2 0 0 1 2 2v2"></path>
+    <line x1="10" y1="11" x2="10" y2="17"></line>
+    <line x1="14" y1="11" x2="14" y2="17"></line>
+  </svg>
+);
+
 const timeToMins = (t: string) => {
   if (!t) return 0;
   const [h, m] = t.split(':').map(Number);
@@ -212,7 +222,7 @@ const timeToMins = (t: string) => {
 export const TeacherListPage: React.FC = () => {
   const [teachers, setTeachers] = useState<Teacher[]>(INITIAL_TEACHERS);
   const [viewMode, setViewMode] = useState<"list" | "detail">("list");
-  const [selectedTeacherId, setSelectedTeacherId] = useState<number | null>(null);
+  const [selectedTeacherId, setSelectedTeacherId] = useState<number | string | null>(null);
 
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [modalStep, setModalStep] = useState<1 | 2>(1);
@@ -271,7 +281,8 @@ export const TeacherListPage: React.FC = () => {
             );
 
             return {
-              id: t.id || idx + 100,
+              id: t.uuid || t.id || idx + 100,
+              uuid: t.uuid,
               name: fullName,
               email: emailStr,
               subjectId: t.subjectId || t.subject_id || (t.subject && t.subject.id) || 1,
@@ -282,15 +293,13 @@ export const TeacherListPage: React.FC = () => {
             };
           });
 
-          setTeachers((prev) => {
-            const apiEmails = new Set(
-              mappedFromApi.map((m) => (m.email ? m.email.toLowerCase() : "")).filter(Boolean)
-            );
-            const filteredMock = INITIAL_TEACHERS.filter(
-              (init) => !apiEmails.has(init.email.toLowerCase())
-            );
-            return [...filteredMock, ...mappedFromApi];
-          });
+          const apiEmails = new Set(
+            mappedFromApi.map((m) => (m.email ? m.email.toLowerCase() : "")).filter(Boolean)
+          );
+          const filteredMock = INITIAL_TEACHERS.filter(
+            (init) => !apiEmails.has(init.email.toLowerCase())
+          );
+          setTeachers([...filteredMock, ...mappedFromApi]);
         }
       })
       .catch((err) => {
@@ -376,7 +385,8 @@ export const TeacherListPage: React.FC = () => {
         newTeacherPayload.name!;
 
       const created: Teacher = {
-        id: saved.id || teachers.length + 1,
+        id: saved.uuid || saved.id || teachers.length + 1,
+        uuid: saved.uuid,
         name: savedFullName,
         email: saved.email || newTeacherPayload.email!,
         subjectId: saved.subjectId || newTeacherPayload.subjectId!,
@@ -404,17 +414,18 @@ export const TeacherListPage: React.FC = () => {
     resetForm();
   };
 
-  const handleDeleteTeacher = async (id: number) => {
+  const handleDeleteTeacher = async (teacher: Teacher) => {
+    const identifier = teacher.uuid || teacher.id;
     try {
-      await deleteTeacher(id);
-      setTeachers((prev) => prev.filter((t) => t.id !== id));
-      if (selectedTeacherId === id) {
+      await deleteTeacher(identifier);
+      setTeachers((prev) => prev.filter((t) => (t.uuid ? t.uuid !== teacher.uuid : t.id !== teacher.id)));
+      if (selectedTeacherId === teacher.id || selectedTeacherId === teacher.uuid) {
         setSelectedTeacherId(null);
         setViewMode("list");
       }
     } catch (err) {
       console.error("API Error deleting teacher, removing locally:", err);
-      setTeachers((prev) => prev.filter((t) => t.id !== id));
+      setTeachers((prev) => prev.filter((t) => (t.uuid ? t.uuid !== teacher.uuid : t.id !== teacher.id)));
     }
   };
 
@@ -429,7 +440,7 @@ export const TeacherListPage: React.FC = () => {
     setIsColorPaletteOpen(false);
   };
 
-  const selectedTeacher = teachers.find((t) => t.id === selectedTeacherId) ?? teachers[0];
+  const selectedTeacher = teachers.find((t) => t.id === selectedTeacherId || (t.uuid && t.uuid === selectedTeacherId)) ?? teachers[0];
 
   const MATRIX_DAYS = [
     { id: 'monday', date: '29', name: 'Monday' },
@@ -471,18 +482,18 @@ export const TeacherListPage: React.FC = () => {
                     <th><Txt>Subject</Txt></th>
                     <th><Txt>Work terms & Due date</Txt></th>
                     <th className={styles.thAction}><Txt>Edit</Txt></th>
-                    <th className={styles.thAction}><Txt>More</Txt></th>
+                    <th className={styles.thAction}><Txt>Delete</Txt></th>
                   </tr>
                 </thead>
                 <tbody>
                   {teachers.map((teacher) => {
-                    const isSelected = selectedTeacherId === teacher.id;
+                    const isSelected = selectedTeacherId === teacher.id || (teacher.uuid && selectedTeacherId === teacher.uuid);
 
                     return (
                       <tr
-                        key={teacher.id}
+                        key={teacher.uuid || teacher.id}
                         className={isSelected ? styles.activeRow : ""}
-                        onClick={() => setSelectedTeacherId(isSelected ? null : teacher.id)}
+                        onClick={() => setSelectedTeacherId(isSelected ? null : (teacher.uuid || teacher.id))}
                       >
                         <td className={styles.nameCell}>
                           {teacher.avatar ? (
@@ -512,48 +523,21 @@ export const TeacherListPage: React.FC = () => {
                             </span>
                           </div>
                         </td>
-                        <td className={styles.actionCell}>
+                        <td className={styles.actionCell} onClick={(e) => e.stopPropagation()}>
                           <button className={styles.actionIconButton} title="Edit teacher">
                             <EditIcon />
                           </button>
                         </td>
-                        <td className={styles.actionCell}>
-                          <button className={styles.actionIconButton} title="More options">
-                            <MoreIcon />
+                        <td className={styles.actionCell} onClick={(e) => e.stopPropagation()}>
+                          <button 
+                            type="button" 
+                            className={styles.actionIconButton} 
+                            title="Delete teacher"
+                            style={{ color: "#ff4757" }}
+                            onClick={() => handleDeleteTeacher(teacher)}
+                          >
+                            <TrashIcon />
                           </button>
-                          
-                          {isSelected && (
-                            <aside className={styles.popoverCard} onClick={(e) => e.stopPropagation()}>
-                              <button className={styles.closeDetails} onClick={() => setSelectedTeacherId(null)}>&times;</button>
-                              
-                              <div className={styles.popoverHeader}>
-                                <h3>{teacher.name} <span className={styles.statusDot}></span></h3>
-                                <span className={styles.popoverEmail}>
-                                  <MailIcon /> {teacher.email}
-                                </span>
-                              </div>
-
-                              <div className={styles.nextLessonsBox}>
-                                <p className={styles.label}><Txt>Next lessons:</Txt></p>
-                                <p className={styles.lessons}>
-                                  {teacher.nextLessons ? teacher.nextLessons.join(" | ") : "30/06, 14:00, 15:00, 17:00"}
-                                </p>
-                              </div>
-
-                              <div className={styles.popoverFooter} style={{ display: 'flex', gap: '8px', justifyContent: 'space-between', alignItems: 'center' }}>
-                                <button 
-                                  type="button"
-                                  onClick={() => handleDeleteTeacher(teacher.id)}
-                                  style={{ background: 'transparent', border: 'none', color: '#ff4757', cursor: 'pointer', fontSize: '0.875rem', fontWeight: 600 }}
-                                >
-                                  🗑️ <Txt>Delete</Txt>
-                                </button>
-                                <button className={styles.teacherPageBtn} onClick={() => setViewMode("detail")}>
-                                  <Txt>Teacher's page</Txt> &rarr;
-                                </button>
-                              </div>
-                            </aside>
-                          )}
                         </td>
                       </tr>
                     );
@@ -573,13 +557,13 @@ export const TeacherListPage: React.FC = () => {
               <aside className={styles.avatarsSidebar}>
                 <h3><Txt>Teachers</Txt></h3>
                 {teachers.map((tItem) => {
-                  const isActive = tItem.id === selectedTeacher.id;
+                  const isActive = (tItem.uuid && tItem.uuid === selectedTeacher.uuid) || tItem.id === selectedTeacher.id;
 
                   return (
                     <div
-                      key={tItem.id}
+                      key={tItem.uuid || tItem.id}
                       className={`${styles.teacherNavItem} ${isActive ? styles.activeNavItem : ""}`}
-                      onClick={() => setSelectedTeacherId(tItem.id)}
+                      onClick={() => setSelectedTeacherId(tItem.uuid || tItem.id)}
                     >
                       {tItem.avatar ? (
                         <img src={tItem.avatar} alt={tItem.name} className={styles.navAvatar} />
@@ -616,11 +600,11 @@ export const TeacherListPage: React.FC = () => {
                     <span><Txt>{selectedTeacher.subject}</Txt></span>
                     <button 
                       type="button"
-                      onClick={() => handleDeleteTeacher(selectedTeacher.id)}
+                      onClick={() => handleDeleteTeacher(selectedTeacher)}
                       style={{ background: 'transparent', border: 'none', color: '#ff4757', cursor: 'pointer', fontSize: '1.1rem' }}
                       title="Delete teacher"
                     >
-                      🗑️
+                      <TrashIcon />
                     </button>
                     <button className={styles.actionIconButton}><EditIcon /></button>
                   </div>
@@ -713,7 +697,7 @@ export const TeacherListPage: React.FC = () => {
                     <div className={styles.timeInputs}>
                       <input 
                         type="time" 
-                        step="900"
+                        step="900" 
                         value={lunch.start}
                         onChange={(e) => setLunch({...lunch, start: e.target.value})}
                       />
