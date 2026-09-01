@@ -7,6 +7,10 @@ export const api = axios.create({
 });
 
 api.interceptors.request.use((config) => {
+  if (config.url && config.url.includes("/api/auth")) {
+    return config;
+  }
+
   const token = tokenService.getToken();
 
   if (token) {

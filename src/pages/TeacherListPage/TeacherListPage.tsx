@@ -1,5 +1,7 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import { useTranslatedText } from "../../hooks/useTranslatedText";
+import { getTeachers, createTeacher, deleteTeacher } from "../../api/teachers";
+import type { TeacherDto } from "../../api/teachers";
 import styles from "./TeacherListPage.module.scss";
 
 /* Helper for Google Translator */
@@ -9,10 +11,11 @@ const Txt: React.FC<{ children: string }> = ({ children }) => {
 };
 
 /* Interfaces & Data */
-interface Teacher {
+export interface Teacher {
   id: number;
   name: string;
   email: string;
+  subjectId?: number;
   subject: string;
   subjectColor: string;
   collabType: "Contract" | "Freelance";
@@ -22,11 +25,22 @@ interface Teacher {
   nextLessons?: string[];
 }
 
+const SUBJECT_OPTIONS = [
+  { id: 1, name: "Chemistry" },
+  { id: 2, name: "Mathematics" },
+  { id: 3, name: "Physics" },
+  { id: 4, name: "Biology" },
+  { id: 5, name: "English" },
+  { id: 6, name: "History" },
+  { id: 7, name: "Literature" },
+];
+
 const INITIAL_TEACHERS: Teacher[] = [
   {
     id: 1,
     name: "Kataryna Novak",
     email: "k.nowakchemistry@onlineschool.com",
+    subjectId: 1,
     subject: "Chemistry",
     subjectColor: "#00d2ff",
     collabType: "Contract",
@@ -38,6 +52,7 @@ const INITIAL_TEACHERS: Teacher[] = [
     id: 2,
     name: "Andrii Shevchenko",
     email: "a.shevchenko@onlineschool.com",
+    subjectId: 2,
     subject: "Mathematics",
     subjectColor: "#00f2fe",
     collabType: "Freelance",
@@ -48,6 +63,7 @@ const INITIAL_TEACHERS: Teacher[] = [
     id: 3,
     name: "Sofia Koval",
     email: "PhysicsTeacheroleg@gmail.com",
+    subjectId: 3,
     subject: "Physics",
     subjectColor: "#38ef7d",
     collabType: "Contract",
@@ -60,6 +76,7 @@ const INITIAL_TEACHERS: Teacher[] = [
     id: 4,
     name: "Nataliia Ivanenko",
     email: "n.ivanenko@onlineschool.com",
+    subjectId: 4,
     subject: "Biology",
     subjectColor: "#b155fc",
     collabType: "Contract",
@@ -70,6 +87,7 @@ const INITIAL_TEACHERS: Teacher[] = [
     id: 5,
     name: "Olena Melnyk",
     email: "o.melnyk@onlineschool.com",
+    subjectId: 7,
     subject: "Literature",
     subjectColor: "#fbad34",
     collabType: "Contract",
@@ -80,6 +98,7 @@ const INITIAL_TEACHERS: Teacher[] = [
     id: 6,
     name: "Dmytro Kozak",
     email: "d.kozak@onlineschool.com",
+    subjectId: 5,
     subject: "English",
     subjectColor: "#ff7675",
     collabType: "Freelance",
@@ -90,6 +109,7 @@ const INITIAL_TEACHERS: Teacher[] = [
     id: 7,
     name: "Maksym Bondarenko",
     email: "m.bondarenko@onlineschool.com",
+    subjectId: 6,
     subject: "History",
     subjectColor: "#ff9ff3",
     collabType: "Contract",
@@ -101,6 +121,7 @@ const INITIAL_TEACHERS: Teacher[] = [
     id: 8,
     name: "Anna Kowalska",
     email: "a.kowalska@onlineschool.com",
+    subjectId: 5,
     subject: "English",
     subjectColor: "#ff4757",
     collabType: "Contract",
@@ -182,7 +203,6 @@ const ForkKnifeIcon = () => (
   </svg>
 );
 
-/* Helper function to robustly compare times */
 const timeToMins = (t: string) => {
   if (!t) return 0;
   const [h, m] = t.split(':').map(Number);
@@ -191,7 +211,6 @@ const timeToMins = (t: string) => {
 
 export const TeacherListPage: React.FC = () => {
   const [teachers, setTeachers] = useState<Teacher[]>(INITIAL_TEACHERS);
-  
   const [viewMode, setViewMode] = useState<"list" | "detail">("list");
   const [selectedTeacherId, setSelectedTeacherId] = useState<number | null>(null);
 
@@ -200,7 +219,7 @@ export const TeacherListPage: React.FC = () => {
 
   /* Teacher Form State */
   const [newTeacherName, setNewTeacherName] = useState("");
-  const [newTeacherSubject, setNewTeacherSubject] = useState("");
+  const [newTeacherSubjectId, setNewTeacherSubjectId] = useState<number | "">("");
   const [newTeacherColor, setNewTeacherColor] = useState(""); 
   const [newTeacherEmail, setNewTeacherEmail] = useState("");
   const [emailError, setEmailError] = useState("");
@@ -209,7 +228,7 @@ export const TeacherListPage: React.FC = () => {
 
   const [isColorPaletteOpen, setIsColorPaletteOpen] = useState(false);
 
-  /* Interactive Schedule State with active flags */
+  /* Interactive Schedule State */
   const [scheduleAvail, setScheduleAvail] = useState({
     monday: { start: "14:00", end: "16:00", active: true },
     tuesday: { start: "15:00", end: "19:00", active: true },
@@ -220,6 +239,64 @@ export const TeacherListPage: React.FC = () => {
     sunday: { start: "10:00", end: "14:00", active: false },
   });
   const [lunch, setLunch] = useState({ start: "13:00", end: "14:00" });
+
+  /* Fetch Teachers on Mount */
+  useEffect(() => {
+    getTeachers()
+      .then((res: any) => {
+        const rawList: any[] = Array.isArray(res) ? res : (res?.content || []);
+
+        if (rawList.length > 0) {
+          const mappedFromApi: Teacher[] = rawList.map((t: any, idx: number) => {
+            const firstName = t.firstName || t.first_name || "";
+            const lastName = t.lastName || t.last_name || "";
+            const fullName = t.name || `${firstName} ${lastName}`.trim() || "Teacher";
+
+            const emailStr =
+              typeof t.email === "object" && t.email !== null
+                ? t.email.value || ""
+                : typeof t.email === "string"
+                ? t.email
+                : "";
+
+            const sName =
+              typeof t.subject === "object" && t.subject !== null
+                ? t.subject.name
+                : typeof t.subject === "string"
+                ? t.subject
+                : undefined;
+
+            const foundSubject = SUBJECT_OPTIONS.find(
+              (s) => s.id === (t.subjectId || t.subject_id || (t.subject && t.subject.id))
+            );
+
+            return {
+              id: t.id || idx + 100,
+              name: fullName,
+              email: emailStr,
+              subjectId: t.subjectId || t.subject_id || (t.subject && t.subject.id) || 1,
+              subject: sName || (foundSubject ? foundSubject.name : "Chemistry"),
+              subjectColor: t.subjectColor || "#38ef7d",
+              collabType: (t.collabType as "Contract" | "Freelance") || "Contract",
+              dueDate: t.dueDate || "Without term",
+            };
+          });
+
+          setTeachers((prev) => {
+            const apiEmails = new Set(
+              mappedFromApi.map((m) => (m.email ? m.email.toLowerCase() : "")).filter(Boolean)
+            );
+            const filteredMock = INITIAL_TEACHERS.filter(
+              (init) => !apiEmails.has(init.email.toLowerCase())
+            );
+            return [...filteredMock, ...mappedFromApi];
+          });
+        }
+      })
+      .catch((err) => {
+        console.warn("Could not fetch teachers from backend, using default mock data:", err);
+      });
+  }, []);
 
   /* Remove and Add Day Functions */
   const handleRemoveDay = (dayId: string) => {
@@ -251,7 +328,12 @@ export const TeacherListPage: React.FC = () => {
     }
   };
 
-  const isStep1Valid = newTeacherName.trim() !== "" && newTeacherSubject !== "" && newTeacherEmail.trim() !== "" && newTeacherColor !== "" && !emailError;
+  const isStep1Valid =
+    newTeacherName.trim() !== "" &&
+    newTeacherSubjectId !== "" &&
+    newTeacherEmail.trim() !== "" &&
+    newTeacherColor !== "" &&
+    !emailError;
 
   const handleNextStep = (e: React.FormEvent) => {
     e.preventDefault();
@@ -260,25 +342,87 @@ export const TeacherListPage: React.FC = () => {
     }
   };
 
-  const handleSaveTeacher = () => {
-    const created: Teacher = {
-      id: teachers.length + 1,
-      name: newTeacherName || "Draft Teacher",
+  const handleSaveTeacher = async () => {
+    const selectedSub = SUBJECT_OPTIONS.find((s) => s.id === Number(newTeacherSubjectId));
+    const subjectName = selectedSub ? selectedSub.name : "Chemistry";
+
+    const nameParts = (newTeacherName || "Draft Teacher").trim().split(" ");
+    const firstName = nameParts[0] || "Draft";
+    const lastName = nameParts.slice(1).join(" ") || "Teacher";
+
+    const newTeacherPayload: Partial<TeacherDto> = {
+      firstName,
+      lastName,
+      name: `${firstName} ${lastName}`,
       email: newTeacherEmail || "draft@school.com",
-      subject: newTeacherSubject || "Draft",
+      subjectId: Number(newTeacherSubjectId) || 1,
       subjectColor: newTeacherColor || "#00d2ff",
       collabType: collabType,
       dueDate: collabType === "Freelance" ? "Without term" : new Date(dueDate).toLocaleDateString("en-GB"),
     };
-    setTeachers([...teachers, created]);
+
+    try {
+      const saved: any = await createTeacher(newTeacherPayload);
+      const subjectLabel =
+        typeof saved.subject === "object" && saved.subject !== null
+          ? saved.subject.name
+          : typeof saved.subject === "string"
+          ? saved.subject
+          : subjectName;
+
+      const savedFullName =
+        saved.name ||
+        `${saved.firstName || ""} ${saved.lastName || ""}`.trim() ||
+        newTeacherPayload.name!;
+
+      const created: Teacher = {
+        id: saved.id || teachers.length + 1,
+        name: savedFullName,
+        email: saved.email || newTeacherPayload.email!,
+        subjectId: saved.subjectId || newTeacherPayload.subjectId!,
+        subject: subjectLabel || "Chemistry",
+        subjectColor: saved.subjectColor || newTeacherPayload.subjectColor!,
+        collabType: (saved.collabType as "Contract" | "Freelance") || newTeacherPayload.collabType!,
+        dueDate: saved.dueDate || newTeacherPayload.dueDate!,
+      };
+      setTeachers((prev) => [...prev, created]);
+    } catch (err) {
+      console.error("API Error saving teacher, falling back to local state:", err);
+      const fallback: Teacher = {
+        id: teachers.length + 1,
+        name: newTeacherPayload.name!,
+        email: newTeacherPayload.email!,
+        subjectId: newTeacherPayload.subjectId!,
+        subject: subjectName,
+        subjectColor: newTeacherPayload.subjectColor!,
+        collabType: newTeacherPayload.collabType!,
+        dueDate: newTeacherPayload.dueDate!,
+      };
+      setTeachers((prev) => [...prev, fallback]);
+    }
+
     resetForm();
+  };
+
+  const handleDeleteTeacher = async (id: number) => {
+    try {
+      await deleteTeacher(id);
+      setTeachers((prev) => prev.filter((t) => t.id !== id));
+      if (selectedTeacherId === id) {
+        setSelectedTeacherId(null);
+        setViewMode("list");
+      }
+    } catch (err) {
+      console.error("API Error deleting teacher, removing locally:", err);
+      setTeachers((prev) => prev.filter((t) => t.id !== id));
+    }
   };
 
   const resetForm = () => {
     setIsModalOpen(false);
     setModalStep(1);
     setNewTeacherName("");
-    setNewTeacherSubject("");
+    setNewTeacherSubjectId("");
     setNewTeacherEmail("");
     setNewTeacherColor("");
     setEmailError("");
@@ -287,7 +431,6 @@ export const TeacherListPage: React.FC = () => {
 
   const selectedTeacher = teachers.find((t) => t.id === selectedTeacherId) ?? teachers[0];
 
-  /* Constants for rendering */
   const MATRIX_DAYS = [
     { id: 'monday', date: '29', name: 'Monday' },
     { id: 'tuesday', date: '30', name: 'Tuesday' },
@@ -369,9 +512,15 @@ export const TeacherListPage: React.FC = () => {
                             </span>
                           </div>
                         </td>
-                        <td className={styles.actionCell}><button className={styles.actionIconButton}><EditIcon /></button></td>
                         <td className={styles.actionCell}>
-                          <button className={styles.actionIconButton}><MoreIcon /></button>
+                          <button className={styles.actionIconButton} title="Edit teacher">
+                            <EditIcon />
+                          </button>
+                        </td>
+                        <td className={styles.actionCell}>
+                          <button className={styles.actionIconButton} title="More options">
+                            <MoreIcon />
+                          </button>
                           
                           {isSelected && (
                             <aside className={styles.popoverCard} onClick={(e) => e.stopPropagation()}>
@@ -391,7 +540,14 @@ export const TeacherListPage: React.FC = () => {
                                 </p>
                               </div>
 
-                              <div className={styles.popoverFooter}>
+                              <div className={styles.popoverFooter} style={{ display: 'flex', gap: '8px', justifyContent: 'space-between', alignItems: 'center' }}>
+                                <button 
+                                  type="button"
+                                  onClick={() => handleDeleteTeacher(teacher.id)}
+                                  style={{ background: 'transparent', border: 'none', color: '#ff4757', cursor: 'pointer', fontSize: '0.875rem', fontWeight: 600 }}
+                                >
+                                  🗑️ <Txt>Delete</Txt>
+                                </button>
                                 <button className={styles.teacherPageBtn} onClick={() => setViewMode("detail")}>
                                   <Txt>Teacher's page</Txt> &rarr;
                                 </button>
@@ -407,8 +563,6 @@ export const TeacherListPage: React.FC = () => {
             </div>
           </div>
         ) : (
-          
-          /* DETAIL VIEW */
           <div>
             <button className={styles.backBtn} onClick={() => { setViewMode("list"); setSelectedTeacherId(null); }}>
               &larr; <Txt>Back to Teachers List</Txt>
@@ -416,7 +570,6 @@ export const TeacherListPage: React.FC = () => {
 
             <div className={styles.detailGrid}>
               
-              {/* Left Sidebar */}
               <aside className={styles.avatarsSidebar}>
                 <h3><Txt>Teachers</Txt></h3>
                 {teachers.map((tItem) => {
@@ -444,7 +597,6 @@ export const TeacherListPage: React.FC = () => {
                 })}
               </aside>
 
-              {/* Center Schedule */}
               <main className={styles.scheduleColumn}>
                 <div className={styles.teacherHeaderCard}>
                   <div className={styles.headerLeft}>
@@ -460,8 +612,16 @@ export const TeacherListPage: React.FC = () => {
                       <p>{selectedTeacher.email}</p>
                     </div>
                   </div>
-                  <div className={styles.headerRight}>
+                  <div className={styles.headerRight} style={{ display: 'flex', alignItems: 'center', gap: '10px' }}>
                     <span><Txt>{selectedTeacher.subject}</Txt></span>
+                    <button 
+                      type="button"
+                      onClick={() => handleDeleteTeacher(selectedTeacher.id)}
+                      style={{ background: 'transparent', border: 'none', color: '#ff4757', cursor: 'pointer', fontSize: '1.1rem' }}
+                      title="Delete teacher"
+                    >
+                      🗑️
+                    </button>
                     <button className={styles.actionIconButton}><EditIcon /></button>
                   </div>
                 </div>
@@ -492,7 +652,6 @@ export const TeacherListPage: React.FC = () => {
                           
                           const isSelected = isWork && !isLunch;
                           
-                          // Mock booked slots logic
                           const isBooked = (day.id === "wednesday" || day.id === "thursday") && time === "17:00";
 
                           let classes = styles.timeSlot;
@@ -515,7 +674,6 @@ export const TeacherListPage: React.FC = () => {
                 </div>
               </main>
 
-              {/* Right Availability Form */}
               <aside className={styles.availabilityColumn}>
                 <div className={styles.availabilityCard}>
                   <div className={styles.cardHeader}>
@@ -524,7 +682,6 @@ export const TeacherListPage: React.FC = () => {
                   </div>
                   <p className={styles.subtext}><Txt>Set weekly availability hours for this teacher</Txt></p>
 
-                  {/* Render ONLY active days */}
                   {ALL_DAYS_LIST.filter(day => scheduleAvail[day.id as keyof typeof scheduleAvail].active).map(day => (
                     <div key={day.id} className={styles.availRow}>
                       <span className={styles.dayName}><Txt>{day.name}</Txt></span>
@@ -620,14 +777,17 @@ export const TeacherListPage: React.FC = () => {
                 <div className={styles.subjectRow}>
                   <div className={styles.inputWrapper}>
                     <label><Txt>Subject (required) *</Txt></label>
-                    <select required value={newTeacherSubject} onChange={(e) => setNewTeacherSubject(e.target.value)}>
+                    <select
+                      required
+                      value={newTeacherSubjectId}
+                      onChange={(e) => setNewTeacherSubjectId(Number(e.target.value))}
+                    >
                       <option value="" disabled hidden></option>
-                      <option value="Chemistry">Chemistry</option>
-                      <option value="Mathematics">Mathematics</option>
-                      <option value="Physics">Physics</option>
-                      <option value="Biology">Biology</option>
-                      <option value="English">English</option>
-                      <option value="History">History</option>
+                      {SUBJECT_OPTIONS.map((sub) => (
+                        <option key={sub.id} value={sub.id}>
+                          {sub.name}
+                        </option>
+                      ))}
                     </select>
                   </div>
 
