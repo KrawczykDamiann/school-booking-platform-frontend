@@ -160,13 +160,6 @@ const EditIcon = () => (
     <path d="M18.5 2.5a2.121 2.121 0 0 1 3 3L12 15l-4 1 1-4 9.5-9.5z"></path>
   </svg>
 );
-const MoreIcon = () => (
-  <svg viewBox="0 0 24 24" fill="currentColor">
-    <circle cx="5" cy="12" r="2"></circle>
-    <circle cx="12" cy="12" r="2"></circle>
-    <circle cx="19" cy="12" r="2"></circle>
-  </svg>
-);
 const MailIcon = () => (
   <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" width="16" height="16">
     <path d="M4 4h16c1.1 0 2 .9 2 2v12c0 1.1-.9 2-2 2H4c-1.1 0-2-.9-2-2V6c0-1.1.9-2 2-2z"></path>
@@ -203,7 +196,6 @@ const ForkKnifeIcon = () => (
     <path d="M21 15V2v0a5 5 0 0 0-5 5v6c0 1.1.9 2 2 2h3zm0 0v7"></path>
   </svg>
 );
-
 const TrashIcon = () => (
   <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" width="16" height="16">
     <polyline points="3 6 5 6 21 6"></polyline>
@@ -697,7 +689,7 @@ export const TeacherListPage: React.FC = () => {
                     <div className={styles.timeInputs}>
                       <input 
                         type="time" 
-                        step="900" 
+                        step="900"
                         value={lunch.start}
                         onChange={(e) => setLunch({...lunch, start: e.target.value})}
                       />
