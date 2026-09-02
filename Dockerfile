@@ -3,6 +3,10 @@ FROM node:20-alpine AS build
 
 WORKDIR /app
 
+# Build-time argument for Vite environment variable
+ARG VITE_SBP_BACKEND_BASE_URL
+ENV VITE_SBP_BACKEND_BASE_URL=$VITE_SBP_BACKEND_BASE_URL
+
 COPY package*.json ./
 RUN npm install
 
@@ -14,7 +18,7 @@ FROM nginx:alpine
 
 COPY --from=build /app/dist /usr/share/nginx/html
 
-# Domyślna konfiguracja Nginx dla React Router (SPA)
+# Default Nginx configuration for SPA routing
 RUN echo 'server { \
     listen 80; \
     location / { \
