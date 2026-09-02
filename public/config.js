@@ -1,0 +1,3 @@
+window.__RUNTIME_CONFIG__ = {
+  VITE_SBP_BACKEND_BASE_URL: ""
+};
