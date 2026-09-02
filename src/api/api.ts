@@ -2,7 +2,7 @@ import axios from "axios";
 import { tokenService } from "../services/tokenService";
 
 export const api = axios.create({
-  baseURL: import.meta.env.VITE_SBP_BACKEND_BASE_URL || "http://localhost:8080",
+  baseURL: import.meta.env.VITE_SBP_BACKEND_BASE_URL || "",
   withCredentials: true,
 });
 
