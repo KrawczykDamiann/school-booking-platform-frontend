@@ -23,10 +23,21 @@
 .title {
   font-size: 28px;
   line-height: 115%;
-  color: v.$color-system-success;
   font-weight: 500;
   text-align: left;
   margin-top: 12px;
+
+  &-lessonBooked {
+    color: v.$color-system-success;
+  }
+
+  &-lessonRequested {
+    color: v.$color-system-info;
+  }
+
+  &-confirmationRequested, &-somethingWentWrong {
+    color: v.$color-system-warning;
+  }
 }
 
 .subtitle {
@@ -35,7 +46,7 @@
   font-weight: 400;
   color: v.$color-gray30;
   margin-top: 8px;
-  text-align: left;
+  text-align: center;
 }
 
 .bookingId {
@@ -59,10 +70,12 @@
   display: flex;
   align-items: center;
   gap: 8px;
+  text-align: left;
 }
 
 .buttonsConainer {
   display: flex;
   flex-direction: column;
+  align-self: center;
   gap: 16px;
 }

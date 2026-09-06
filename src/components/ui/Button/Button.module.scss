@@ -71,9 +71,10 @@
 
 .warning {
   background: v.$color-system-warning;
+  color: v.$color-black;
 
   &:hover {
-    background: #F2DD17 !important;
+    background: #EFC44A !important;
   }
 }
 

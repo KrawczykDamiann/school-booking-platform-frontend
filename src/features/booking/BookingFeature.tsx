@@ -5,7 +5,6 @@ import { LessonPreview } from "./components/LessonPreview/LessonPreview";
 import { SubjectFilter } from "./components/SubjectFilter/SubjectFilter";
 import { LessonPreviewContext } from "../../context/LessonPreviewContext";
 import { bookLesson } from "../../api/lessons";
-import axios from "axios";
 import { AuthContext } from "../../context/AuthContext";
 import { ModalContext } from "../../context/ModalContext";
 import { useBookingCalendar } from "./hooks/useBookingCalendar";
@@ -15,9 +14,17 @@ import { useLessons } from "./hooks/useLessons";
 import { useCalendarLessons } from "./hooks/useCalendarLessons";
 import { useStudentActiveBookings } from "./hooks/useStudentActiveBookings";
 import { useFilteredLessons } from "./hooks/useFilteredLessons";
+import { format } from "date-fns";
+
+type Booking = {
+  uuid: string;
+  studentUuid: string;
+  lessonUuid: string;
+  bookedAt: string;
+  type: "ACCEPTED" | "REQUESTED";
+};
 
 export const BookingFeature: React.FC = () => {
-
   const { selectedLessonUuid, setSelectedLessonUuid } =
     useContext(LessonPreviewContext);
   const { openModal, closeModal } = useContext(ModalContext);
@@ -44,7 +51,7 @@ export const BookingFeature: React.FC = () => {
 
   const { subjects, isSubjectsLoading } = useSubjects();
   const { lessons } = useLessons();
-  const { studentActiveBookings } = useStudentActiveBookings();
+  const { studentActiveBookings, bookedSlots } = useStudentActiveBookings();
 
   const selectedLesson = lessons?.find(
     (lesson) => lesson.uuid === selectedLessonUuid,
@@ -68,31 +75,64 @@ export const BookingFeature: React.FC = () => {
       return;
     }
 
-    setIsLoading(true);
-    if (!selectedLessonUuid) {
+    if (!selectedLessonUuid || !selectedLesson) {
       return;
     }
 
-    try {
-      const response = await bookLesson(selectedLessonUuid);
+    setIsLoading(true);
 
-      const bookingUuid: string = response.uuid;
-      if (bookingUuid) {
+    try {
+      const start = new Date(selectedLesson?.startTime);
+      const selectedLessonKey = `${format(start, "yyyy-MM-dd")}-${start.getHours()}`;
+
+      if (bookedSlots.includes(selectedLessonKey)) {
         openModal({
-          type: "lessonBooked",
+          type: "booking",
+          variant: "confirmationRequested",
+          data: {
+            onResetBooking: handleResetBooking,
+          },
+        });
+
+        return;
+      }
+
+      const response: Booking = await bookLesson(selectedLessonUuid);
+      const bookingType = response.type;
+      const bookingUuid = response.uuid;
+
+      if (bookingType === "REQUESTED") {
+        openModal({
+          type: "booking",
+          variant: "lessonRequested",
           data: {
             onResetBooking: handleResetBooking,
             bookingUuid,
           },
         });
-      }
-    } catch (error) {
-      if (axios.isAxiosError(error)) {
-        if (error.response?.status === 403) {
-          console.log("error");
+        return;  
+      } else if (bookingType === "ACCEPTED") {
+          openModal({
+            type: "booking",
+            variant: "lessonBooked",
+            data: {
+              onResetBooking: handleResetBooking,
+              bookingUuid,
+            },
+          });
           return;
-        }
       }
+
+    } catch (error) {
+      console.error(error);
+      openModal({
+        type: "booking",
+        variant: "somethingWentWrong",
+        data: {
+          onResetBooking: handleResetBooking,
+        },
+      });
+      return;
     } finally {
       setIsLoading(false);
     }

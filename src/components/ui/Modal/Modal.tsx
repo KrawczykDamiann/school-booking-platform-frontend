@@ -1,8 +1,8 @@
 import styles from "./Modal.module.scss";
 import type { ModalState } from "../../../context/ModalContext";
 import { LoginModal } from "../../../modals/Login/LoginModal";
-import { LessonBookedModal } from "../../../modals/LessonBooked/LessonBookedModal";
 import { useEffect } from "react";
+import { BookingModal } from "../../../modals/booking/BookingModal";
 
 type ModalProps = {
   modal: ModalState;
@@ -39,8 +39,9 @@ export const Modal: React.FC<ModalProps> = ({ modal, onClose }) => {
     <div className={styles.overlay} onClick={onClose}>
       <div className={styles.modal} onClick={(e) => e.stopPropagation()}>
         {modal?.type === "login" && <LoginModal onClose={onClose} />}
-        {modal.type === "lessonBooked" && (
-          <LessonBookedModal
+        {modal.type === "booking" && (
+          <BookingModal
+            type={modal.variant}
             onClose={onClose}
             onResetBooking={modal.data.onResetBooking}
             bookingUuid={modal.data.bookingUuid}

@@ -1,5 +1,6 @@
-import { Outlet } from 'react-router-dom';
-import styles from './AdminAuthLayout.module.scss';
+import { Outlet } from "react-router-dom";
+import styles from "./AdminAuthLayout.module.scss";
+import { LanguageSwitcher } from "../../components/LanguageSwitcher/LanguageSwitcher";
 
 export const AdminAuthLayout: React.FC = () => {
   return (
@@ -9,6 +10,9 @@ export const AdminAuthLayout: React.FC = () => {
       </div>
       <main className={styles.content}>
         <Outlet />
+        <div className={styles.languageSwitcherContainer}>
+          <LanguageSwitcher />
+        </div>
       </main>
     </div>
   );

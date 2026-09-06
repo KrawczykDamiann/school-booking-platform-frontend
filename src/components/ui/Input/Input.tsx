@@ -26,6 +26,8 @@ export const Input: React.FC<InputProps> = ({
 
   const inputRef = useRef<HTMLInputElement>(null);
 
+  const withoutIcon = leftIcon === undefined;
+
   /*
 
   We prevent the button from taking focus and restore the cursor position
@@ -57,14 +59,16 @@ export const Input: React.FC<InputProps> = ({
         htmlFor={label}
         className={`${styles.label} ${error ? styles.labelError : ""}`}
       >
-        {`${label}`}
+        {`${label}*`}
       </label>
       <div className={styles.inputWrapper}>
-        <img src={leftIcon} alt={`${label} icon`} className={styles.icon} />
+        {!withoutIcon && (
+          <img src={leftIcon} alt={`${label} icon`} className={styles.icon} />
+        )}
         <input
           id={label}
           type={inputType}
-          className={`${styles.input} ${error && styles.inputError}`}
+          className={`${styles.input} ${error ? styles.inputError : ""} ${withoutIcon && styles.inputWithoutIcon}`}
           {...props}
           ref={inputRef}
         />

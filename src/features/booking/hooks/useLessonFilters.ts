@@ -28,6 +28,7 @@ export function useLessonFilters() {
     }
 
     setSelectedTimePeriod(period);
+    setSelectedLessonUuid(undefined);
   };
 
   const availableHours = useMemo(() => {

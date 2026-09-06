@@ -1,17 +1,17 @@
 import { createContext, useMemo, useState } from "react";
 import { Modal } from "../components/ui/Modal/Modal";
-
-export type ModalType = "login" | "lessonBooked";
+import type { BookingModalType } from "../types/BookingModalType";
 
 export type ModalState =
   | {
       type: "login";
     }
   | {
-      type: "lessonBooked";
+      type: "booking";
+      variant: BookingModalType;
       data: {
         onResetBooking: () => void;
-        bookingUuid: string;
+        bookingUuid?: string;
       };
     }
   | null;

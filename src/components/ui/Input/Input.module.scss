@@ -33,6 +33,10 @@ input:-webkit-autofill:focus {
     &:focus {
         outline: 1px solid v.$color-gray80;
     }
+
+    &WithoutIcon {
+        padding: 10px 12px;
+    }
 }
 
 .inputField {

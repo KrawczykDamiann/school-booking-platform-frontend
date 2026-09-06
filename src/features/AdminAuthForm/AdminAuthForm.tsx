@@ -12,8 +12,8 @@ import { AuthContext } from "../../context/AuthContext";
 import { loginAdmin } from "../../api/auth";
 import { Button } from "../../components/ui/Button/Button";
 
-// import { api } from "../../api/api";
-// import { useEffect } from "react";
+import { api } from "../../api/api";
+import { useEffect } from "react";
 
 export const AdminAuthForm: React.FC = () => {
   const { t } = useTranslation();
@@ -87,17 +87,29 @@ export const AdminAuthForm: React.FC = () => {
     }
   };
 
-  // useEffect(() => {
-  //   const data = {
-  //     email: "admin@example.com",
-  //     password: "administrator",
-  //     zoneId: "Europe/Kyiv",
-  //   };
+  // Re-create initial admin if the JWT token has expired
+  useEffect(() => {
+    const setupAdmin = async () => {
+      try {
+        const data = {
+          email: "admin@example.com",
+          password: "administrator",
+          zoneId: "Europe/Kyiv",
+        };
 
-  //   const response = api.post("/api/setup/admin", data);
+        await api.post("/api/setup/admin", data);
+      // eslint-disable-next-line @typescript-eslint/no-explicit-any
+      } catch (error: any) {
+        if (error.response?.status === 403) {
+          return;
+        }
 
-  //   console.log(response);
-  // }, []);
+        console.error("Failed to setup admin:", error);
+      }
+    };
+
+    setupAdmin();
+  }, []);
 
   return (
     <div className={styles.wrapper}>

@@ -2,7 +2,7 @@ import type { ButtonHTMLAttributes, ReactNode } from "react";
 import styles from "./Button.module.scss";
 
 type ButtonVariant = "primary" | "secondary";
-type ButtonTheme = "default" | "success" | "error" | "warning" | "info";
+export type ButtonTheme = "default" | "success" | "error" | "warning" | "info";
 
 type ButtonProps = ButtonHTMLAttributes<HTMLButtonElement> & {
   variant: ButtonVariant;
