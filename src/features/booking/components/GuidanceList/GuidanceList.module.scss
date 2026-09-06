@@ -1,0 +1,54 @@
+@use '../../../../styles/variables' as v;
+
+.guidanceContainer {
+    display: flex;
+    flex-direction: column;
+    gap: 12px;
+    padding: 16px;
+    margin-top: 40px;
+}
+
+.title {
+    font-weight: 500;
+    font-size: 18px;
+    line-height: 135%;
+    color: v.$color-black;
+    text-align: left;
+    margin: 0;
+}
+
+.list {
+    display: flex;
+    flex-direction: column;
+    gap: 12px;
+}
+
+.item {
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+    gap: 12px;
+
+    &Step {
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        width: 24px;
+        height: 24px;
+
+        border-radius: 50%;
+        background: v.$color-white;
+
+        font-weight: 400;
+        font-size: 12px;
+        line-height: 150%;
+        color: v.$color-secondary-shadow;
+    }
+
+    &Text {
+      font-weight: 400;
+      font-size: 14px;
+      line-height: 145%;
+      color: v.$color-gray80;  
+    }
+}

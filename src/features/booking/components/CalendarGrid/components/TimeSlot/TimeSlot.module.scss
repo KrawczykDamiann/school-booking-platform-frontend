@@ -36,4 +36,8 @@
         background: v.$color-secondary;
         color: v.$color-black;
     }
+
+    &[data-booked="true"] {
+        color: v.$color-system-error;
+    }
 }

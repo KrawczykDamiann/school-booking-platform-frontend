@@ -197,14 +197,15 @@
     "tomorrow": "Завтра"
   },
   "bookingPage": {
-    "title": "Виберіть урок для запису",
+    "title": "Забронювати урок",
     "timePeriods": {
       "morning": "Ранок",
       "afternoon": "День",
       "evening": "Вечір",
       "clearFilter": "Очистити фільтр"
     },
-    "preferredPeriod": "Виберіть бажаний період часу",
+    "clearFilter": "Очистити фільтр",
+    "showLessonsFor": "Показати уроки для:",
     "notification": "Наша школа завжди не працює у неділю",
     "lessonPreview": {
       "title": "Перегляд обраного уроку",

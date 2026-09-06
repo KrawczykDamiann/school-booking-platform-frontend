@@ -2,7 +2,6 @@ import { useContext, useState } from "react";
 import styles from "./BookingFeature.module.scss";
 import { BookingCalendar } from "./components/BookingCalendar/BookingCalendar";
 import { LessonPreview } from "./components/LessonPreview/LessonPreview";
-import { SubjectFilter } from "./components/SubjectFilter/SubjectFilter";
 import { LessonPreviewContext } from "../../context/LessonPreviewContext";
 import { bookLesson } from "../../api/lessons";
 import { AuthContext } from "../../context/AuthContext";
@@ -15,6 +14,7 @@ import { useCalendarLessons } from "./hooks/useCalendarLessons";
 import { useStudentActiveBookings } from "./hooks/useStudentActiveBookings";
 import { useFilteredLessons } from "./hooks/useFilteredLessons";
 import { format } from "date-fns";
+import { GuidanceList } from "./components/GuidanceList/GuidanceList";
 
 type Booking = {
   uuid: string;
@@ -51,7 +51,7 @@ export const BookingFeature: React.FC = () => {
 
   const { subjects, isSubjectsLoading } = useSubjects();
   const { lessons } = useLessons();
-  const { studentActiveBookings, bookedSlots } = useStudentActiveBookings();
+  const { studentActiveBookings, bookedSlots, getBookedSubjectId } = useStudentActiveBookings();
 
   const selectedLesson = lessons?.find(
     (lesson) => lesson.uuid === selectedLessonUuid,
@@ -110,19 +110,18 @@ export const BookingFeature: React.FC = () => {
             bookingUuid,
           },
         });
-        return;  
+        return;
       } else if (bookingType === "ACCEPTED") {
-          openModal({
-            type: "booking",
-            variant: "lessonBooked",
-            data: {
-              onResetBooking: handleResetBooking,
-              bookingUuid,
-            },
-          });
-          return;
+        openModal({
+          type: "booking",
+          variant: "lessonBooked",
+          data: {
+            onResetBooking: handleResetBooking,
+            bookingUuid,
+          },
+        });
+        return;
       }
-
     } catch (error) {
       console.error(error);
       openModal({
@@ -147,12 +146,6 @@ export const BookingFeature: React.FC = () => {
 
   return (
     <>
-      <SubjectFilter
-        subjects={subjects}
-        onSelectSubject={handleSelectSubject}
-        selectedSubjectId={selectedSubjectId}
-        isSubjectsLoading={isSubjectsLoading}
-      />
       <div className={styles.bookingContent}>
         <BookingCalendar
           periodOfDays={period}
@@ -166,6 +159,10 @@ export const BookingFeature: React.FC = () => {
           selectedTimePeriod={selectedTimePeriod}
           hasLessonsOnDay={hasLessonsOnDay}
           selectedSubjectId={selectedSubjectId}
+          subjects={subjects}
+          onSelectSubject={handleSelectSubject}
+          isSubjectsLoading={isSubjectsLoading}
+          getBookedSubjectId={getBookedSubjectId}
         />
         <LessonPreview
           lesson={selectedLesson}
@@ -175,6 +172,7 @@ export const BookingFeature: React.FC = () => {
           studentActiveBookings={studentActiveBookings}
         />
       </div>
+      <GuidanceList />
     </>
   );
 };

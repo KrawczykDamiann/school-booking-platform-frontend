@@ -175,14 +175,15 @@
     "tomorrow": "Jutro"
   },
   "bookingPage": {
-    "title": "Wybierz lekcję, aby ją zarezerwować",
+    "title": "Zarezerwuj lekcję",
     "timePeriods": {
       "morning": "Rano",
       "afternoon": "Popołudnie",
       "evening": "Wieczór",
       "clearFilter": "Wyczyść filtr"
     },
-    "preferredPeriod": "Wybierz preferowany okres",
+    "clearFilter": "Wyczyść filtr",
+    "showLessonsFor": "Wyświetlanie lekcji dla:",
     "notification": "Nasza szkoła jest zawsze zamknięta w niedzielę",
     "lessonPreview": {
       "title": "Podgląd wybranej lekcji",
@@ -195,7 +196,7 @@
         "subtitle": "W tym miejscu wyświetli się wybrany przez Ciebie przedział czasowy"
       }
     },
-    "notSelectedSubject": "Wybierz przedmiot, aby wyświetlić dostępne terminy"
+    "notSelectedSubject": "Wybierz przedmiot, aby wyświetlić terminy zajęć"
   },
   "footer": {
     "legalCenter": "Centrum Prawne",

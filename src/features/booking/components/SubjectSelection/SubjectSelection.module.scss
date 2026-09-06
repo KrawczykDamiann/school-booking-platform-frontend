@@ -1,0 +1,127 @@
+@use '../../../../styles/variables' as v;
+
+.subjectSelectionWrapper {
+    margin-top: 28px;
+}
+
+.subjectSelectionList {
+    display: grid;
+    grid-template-columns: repeat(4, 1fr);
+    grid-template-rows: repeat(3, 1fr);
+    gap: 16px;
+}
+
+.subjectSelectionDropdown {
+    position: relative;
+    display: flex;
+    flex-direction: column;
+}
+
+.loadingText {
+    font-weight: 400;
+    font-size: 28px;
+    line-height: 115%;
+    height: 40px;
+}
+
+.subjectSelectionItem {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 4px;
+
+    padding: 8px 16px;
+    border: 1px solid v.$color-gray20;
+    border-radius: 8px;
+    background: v.$color-white;
+
+    color: v.$color-gray80;
+    font-weight: 400;
+    font-size: 14px;
+    line-height: 145%;
+    cursor: pointer;
+
+    &:hover {
+        background: v.$color-secondary-shadow;
+    }
+
+    &[data-selected="true"] {
+        background: v.$color-secondary-shadow;
+        color: v.$color-black;
+    }
+}
+
+.subjectIcon {
+    height: 20px;
+    width: 20px;
+}
+
+.dropdownTrigger {
+    width: 250px;
+    display: flex;
+    flex-direction: row;
+    justify-content: space-between;
+    padding: 12px 20px;
+    cursor: pointer;
+
+    background: inherit;
+    border-radius: 10000px;
+    border: 1px solid v.$color-secondary-shadow;
+
+    &:hover {
+        background: v.$color-secondary-shadow;
+    }
+}
+
+.dropdownSelectedItem {
+    display: flex;
+    flex-direction: row;
+    gap: 4px;
+
+    &Text {
+        font-weight: 400;
+        font-size: 14px;
+        line-height: 145%;
+        color: v.$color-black;
+    }
+}
+
+.dropdownMenu {
+    position: absolute;
+    top: 100%;
+    left: 0;
+    width: 100%;
+    cursor: pointer;
+
+    background: v.$color-white;
+    border-radius: 10px;
+    border: 1px solid v.$color-secondary-shadow;
+}
+
+.dropdownItem {
+    display: flex;
+    justify-content: start;
+    align-items: center;
+    gap: 4px;
+
+    padding: 12px 20px;
+    border-bottom: 1px solid v.$color-gray10;
+    cursor: pointer;
+
+    font-weight: 400;
+    font-size: 14px;
+    line-height: 145%;
+    color: v.$color-black;
+
+    &:hover {
+        background: v.$color-secondary-shadow;
+    }
+}
+
+.dropdownIcon {
+    color: v.$color-black;
+
+    &Active {
+        transform: rotate(180deg);
+    }
+}

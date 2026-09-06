@@ -1,7 +1,6 @@
 @use '../../../../styles/variables' as v;
 
 .bookingCalendar {
-    position: relative;
     width: 840px;
     background: v.$color-white;
     border-radius: 32px;
@@ -11,27 +10,20 @@
     flex-direction: column;
     gap: 16px;
     z-index: 0;
+}
 
-    &Collapsed {
-        height: 317px;
-        overflow: hidden;
-    }
+.infoIcon {
+    height: 60px;
+    width: 60px;
+    margin-bottom: 16px;
+}
 
-    &Overlay {
-        position: absolute;
-        inset: 0;
-        display: flex;
-        align-items: center;
-        justify-content: center;
-        background-color: rgba(255, 255, 255, 0.8);
-        backdrop-filter: blur(0.5px);
-        z-index: 10;
-
-        font-weight: 500;
-        font-size: 28px;
-        line-height: 115%;
-        color: v.$color-system-info;
-    }
+.notSelectedSubjectTitle {
+    font-weight: 500;
+    font-size: 28px;
+    line-height: 115%;
+    color: v.$color-gray80;
+    margin-bottom: 32px;
 }
 
 .warningMessage {

@@ -197,14 +197,15 @@
     "tomorrow": "Tomorrow"
   },
   "bookingPage": {
-    "title": "Select a lesson to book",
+    "title": "Book a lesson",
     "timePeriods": {
       "morning": "Morning",
       "afternoon": "Afternoon",
       "evening": "Evening",
       "clearFilter": "Clear filter"
     },
-    "preferredPeriod": "Select preferred period of time",
+    "clearFilter": "Clear filter",
+    "showLessonsFor": "Showing lessons for:",
     "notification": "Our school is always closed on Sunday",
     "lessonPreview": {
       "title": "Selected lesson preview",
@@ -217,7 +218,7 @@
         "subtitle": "Your selected timeslot will be shown here"
       }
     },
-    "notSelectedSubject": "Select a subject to view slots"
+    "notSelectedSubject": "Select a subject to view timeslots"
   },
   "footer": {
     "legalCenter": "Legal Center",

@@ -53,7 +53,7 @@ export const LessonPreview: React.FC<LessonPreviewType> = ({
           </div>
           <div className={styles.buttonWrapperDisabled}>
             <Button variant="primary" onClick={handleConfirm} disabled={true}>
-              Confirm
+              {t("bookingPage.lessonPreview.button_confirm")}
             </Button>
           </div>
         </>

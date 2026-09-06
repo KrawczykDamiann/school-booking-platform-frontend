@@ -13,6 +13,8 @@ type CalendarGridProps = {
   handlePrevDate: () => void;
   isPrevDisabled: boolean;
   hasLessonsOnDay: (day: Date) => boolean;
+  getBookedSubjectId: (day: Date, hour: number) => number;
+  selectedSubjectId: number | null;
 };
 
 export const CalendarGrid: React.FC<CalendarGridProps> = ({
@@ -23,6 +25,8 @@ export const CalendarGrid: React.FC<CalendarGridProps> = ({
   handlePrevDate,
   isPrevDisabled,
   hasLessonsOnDay,
+  getBookedSubjectId,
+  selectedSubjectId,
 }) => {
   return (
     <div className={styles.calendarGrid}>
@@ -31,20 +35,31 @@ export const CalendarGrid: React.FC<CalendarGridProps> = ({
         onClick={handlePrevDate}
         disabled={isPrevDisabled}
       >
-        <LeftIcon size={16} className={styles.leftIcon}/>
+        <LeftIcon size={16} className={styles.leftIcon} />
       </button>
       <ul className={styles.daysList}>
         {currentWeek.map((day) => (
           <li key={day.toISOString()} className={styles.daysItem}>
-            <div className={`${styles.headerColumn} ${!hasLessonsOnDay(day) ? styles.headerColumnEmpty : ""}`}>
+            <div
+              className={`${styles.headerColumn} ${!hasLessonsOnDay(day) ? styles.headerColumnEmpty : ""}`}
+            >
               <span className={styles.date}>{format(day, "d")}</span>
               <span className={styles.weekDay}>{format(day, "EEEE")}</span>
             </div>
             <ul className={styles.listHours}>
               {availableHours.map((hour) => {
                 const lesson = getLesson(day, hour);
+                const isBookedLesson =
+                  selectedSubjectId === getBookedSubjectId(day, hour);
 
-                return <TimeSlot key={hour} hour={hour} lesson={lesson} />;
+                return (
+                  <TimeSlot
+                    key={hour}
+                    hour={hour}
+                    lesson={lesson}
+                    isBookedLesson={isBookedLesson}
+                  />
+                );
               })}
             </ul>
           </li>

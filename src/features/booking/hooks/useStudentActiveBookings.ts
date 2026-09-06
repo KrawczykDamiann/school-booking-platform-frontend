@@ -14,6 +14,22 @@ export function useStudentActiveBookings() {
     format(new Date(b.startTime), "yyyy-MM-dd-H"),
   );
 
+  const bookedSubjectsBySlot = new Map();
+
+  studentActiveBookings.forEach((b) => {
+    const start = new Date(b.startTime);
+
+    const key = `${format(start, "yyyy-MM-dd")}-${start.getHours()}`;
+
+    bookedSubjectsBySlot.set(key, b.subjectId);
+  });
+
+  const getBookedSubjectId = (day: Date, hour: number) => {
+    const key = `${format(day, "yyyy-MM-dd")}-${hour}`;
+
+    return bookedSubjectsBySlot.get(key);
+  };
+
   useEffect(() => {
     if (!isAuthenticated || userType !== "student") {
       return;
@@ -35,5 +51,6 @@ export function useStudentActiveBookings() {
   return {
     studentActiveBookings,
     bookedSlots,
+    getBookedSubjectId,
   };
 }

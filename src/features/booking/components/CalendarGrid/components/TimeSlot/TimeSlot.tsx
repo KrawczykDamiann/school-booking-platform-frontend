@@ -6,14 +6,15 @@ import { LessonPreviewContext } from "../../../../../../context/LessonPreviewCon
 type TimeSlotProps = {
   lesson?: Lesson;
   hour: number;
+  isBookedLesson: boolean;
 };
 
-export const TimeSlot: React.FC<TimeSlotProps> = ({ lesson, hour }) => {
-  const { selectedLessonUuid: selectedLessonId, setSelectedLessonUuid: setSelectedLessonId } =
+export const TimeSlot: React.FC<TimeSlotProps> = ({ lesson, hour, isBookedLesson }) => {
+  const { selectedLessonUuid, setSelectedLessonUuid } =
     useContext(LessonPreviewContext);
 
   const isSelected =
-    lesson !== undefined && selectedLessonId === lesson.uuid;
+    lesson !== undefined && selectedLessonUuid === lesson.uuid;
 
   return (
     <li className={styles.timeSlot}>
@@ -21,9 +22,10 @@ export const TimeSlot: React.FC<TimeSlotProps> = ({ lesson, hour }) => {
         className={styles.slotButton}
         data-available={lesson ? "available" : "disabled"}
         data-selected={isSelected}
+        data-booked={isBookedLesson}
         onClick={() => {
           if (lesson) {
-            setSelectedLessonId(lesson.uuid);
+            setSelectedLessonUuid(lesson.uuid);
           }
         }}
       >
