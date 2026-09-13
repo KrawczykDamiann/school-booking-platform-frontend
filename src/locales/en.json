@@ -30,13 +30,8 @@
     "success_text_start": "We have sent a secure link for authorization to ",
     "success_text_end": "Click the link in your email to log in"
   },
-  "auth": {
-    "callback": {
-      "verifying": "Verifying your magic link, please wait...",
-      "errorTitle": "Authentication Error",
-      "errorText": "Your magic link is invalid or has expired. Please try logging in again.",
-      "backToLogin": "Back to Login"
-    }
+  "ottVerification": {
+    "verifying": "Verifying your magic link, please wait..."
   },
   "calendar": {
     "chooseTime": "Choose a lesson time:",
@@ -225,5 +220,9 @@
     "privacyPolicy": "Privacy Policy",
     "aboutUs": "About us",
     "sendFeedback": "Send feedback"
+  },
+  "expiredLinkModal": {
+    "title": "The link expired",
+    "text": "The link you are trying to use has already expired. Please submit a new request."
   }
 }

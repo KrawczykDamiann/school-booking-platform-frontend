@@ -14,6 +14,9 @@ export type ModalState =
         bookingUuid?: string;
       };
     }
+  | {
+      type: "expiredLink";
+    }
   | null;
 
 type ModalContextType = {

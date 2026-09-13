@@ -3,6 +3,7 @@ import type { ModalState } from "../../../context/ModalContext";
 import { LoginModal } from "../../../modals/Login/LoginModal";
 import { useEffect } from "react";
 import { BookingModal } from "../../../modals/booking/BookingModal";
+import { ExpiredLinkModal } from "../../../modals/ExpiredLinkModal/ExpiredLinkModal";
 
 type ModalProps = {
   modal: ModalState;
@@ -38,7 +39,7 @@ export const Modal: React.FC<ModalProps> = ({ modal, onClose }) => {
   return (
     <div className={styles.overlay} onClick={onClose}>
       <div className={styles.modal} onClick={(e) => e.stopPropagation()}>
-        {modal?.type === "login" && <LoginModal onClose={onClose} />}
+        {modal.type === "login" && <LoginModal onClose={onClose} />}
         {modal.type === "booking" && (
           <BookingModal
             type={modal.variant}
@@ -47,6 +48,7 @@ export const Modal: React.FC<ModalProps> = ({ modal, onClose }) => {
             bookingUuid={modal.data.bookingUuid}
           />
         )}
+        {modal.type === "expiredLink" && <ExpiredLinkModal />}
       </div>
     </div>
   );

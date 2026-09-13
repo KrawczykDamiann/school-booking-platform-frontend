@@ -4,20 +4,22 @@ import { useNavigate, useSearchParams } from "react-router-dom";
 import { useTranslation } from "react-i18next"; // Tool for handling multi-language translation keys
 import { loginStudentWithOtt } from "../../api/auth";
 import { AuthContext } from "../../context/AuthContext";
-import { Button } from "../../components/ui/Button/Button";
 import { authStorage } from "../../services/authStorage";
+import { ModalContext } from "../../context/ModalContext";
+import { Loader } from "../../components/ui/Loader/Loader";
 
 export const OttVerificationPage: React.FC = () => {
   const [searchParams] = useSearchParams();
   const navigate = useNavigate();
-  const { login } = useContext(AuthContext);
+  const { login, isAuthenticated } = useContext(AuthContext);
   const { t } = useTranslation(); // The 't' function fetches strings from your JSON dictionary
-  const [isError, setIsError] = useState<boolean>(false);
+  const { openModal } = useContext(ModalContext);
+  const [isError, setIsError] = useState(false);
 
   useEffect(() => {
     const ottToken = searchParams.get("token");
 
-    if (!ottToken) {
+    if (!ottToken || isAuthenticated) {
       navigate("/login");
       return;
     }
@@ -45,37 +47,23 @@ export const OttVerificationPage: React.FC = () => {
         }
       } catch (error) {
         console.error("Authentication verification failed:", error);
-        setIsError(true);
         authStorage.clearPendingEmail();
+        setIsError(true);
+        openModal({ type: "expiredLink" });
       }
     };
 
     verifyOtt();
-  }, [searchParams, navigate, login]);
-
-  if (isError) {
-    return (
-      <div className={styles.overlay}>
-        <div className={styles.modal}>
-          <div className={styles.verificationContainer}>
-            <h2 className={styles.errorTitle}>
-              {t("auth.callback.errorTitle")}
-            </h2>
-            <p className={styles.errorText}>{t("auth.callback.errorText")}</p>
-            <div className={styles.buttonWrapper}>
-              <Button variant="primary" onClick={() => navigate("/login")}>
-                {t("auth.callback.backToLogin")}
-              </Button>
-            </div>
-          </div>
-        </div>
-      </div>
-    );
-  }
+  }, [searchParams, navigate, login, openModal, isAuthenticated]);
 
   return (
-    <div className={styles.callbackContainer}>
-      <h2 className={styles.loadingTitle}>{t("auth.callback.verifying")}</h2>
+    <div className={styles.verificationContainer}>
+      <div className={styles.topContainer}>
+        {!isError && <Loader />}
+        <h2 className={styles.loadingTitle}>
+          {t("ottVerification.verifying")}
+        </h2>
+      </div>
     </div>
   );
 };

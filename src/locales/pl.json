@@ -30,13 +30,8 @@
     "success_text_start": "Wysłaliśmy bezpieczny link logowania na adres ",
     "success_text_end": "Kliknij w link w wiadomości e-mail, aby się zalogować"
   },
-  "auth": {
-    "callback": {
-      "verifying": "Weryfikacja linku logowania, proszę czekać...",
-      "errorTitle": "Błąd uwierzytelniania",
-      "errorText": "Twój link logowania jest nieprawidłowy lub wygasł. Spróbuj zalogować się ponownie.",
-      "backToLogin": "Powrót do logowania"
-    }
+  "ottVerification": {
+    "verifying": "Weryfikacja linku logowania, proszę czekać..."
   },
   "calendar": {
     "chooseTime": "Wybierz godzinę lekcji:",
@@ -203,5 +198,9 @@
     "privacyPolicy": "Polityka Prywatności",
     "aboutUs": "O nas",
     "sendFeedback": "Wyślij opinię"
+  },
+  "expiredLinkModal": {
+    "title": "Link stracił ważność",
+    "text": "Link, z którego próbujesz skorzystać, stracił już ważność. Prześlij proszę nowe zgłoszenie."
   }
 }
