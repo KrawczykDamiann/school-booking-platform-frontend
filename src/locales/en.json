@@ -206,7 +206,11 @@
       "title": "Selected lesson preview",
       "subtitle": "Review your timeslot",
       "lessonToBook": "The lesson to book:",
-      "activeBookings": "You already have active bookings",
+      "activeBookings": {
+        "title": "You already have active bookings",
+        "subject": "Subject:",
+        "date": "Date:"
+      },
       "button_confirm": "Confirm",
       "button_sending": "Sending...",
       "notSelected": {

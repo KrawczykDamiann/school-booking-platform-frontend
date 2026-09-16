@@ -86,7 +86,7 @@ export const LessonPreview: React.FC<LessonPreviewType> = ({
                 className={styles.dropdownTrigger}
                 onClick={() => setIsDropdownOpen(!isDropdownOpen)}
               >
-                <span>{t("bookingPage.lessonPreview.activeBookings")}</span>
+                <span>{t("bookingPage.lessonPreview.activeBookings.title")}</span>
                 <DropdownIcon
                   size={16}
                   className={isDropdownOpen ? styles.dropdownIconActive : ""}
@@ -99,13 +99,13 @@ export const LessonPreview: React.FC<LessonPreviewType> = ({
                 {studentActiveBookings.map((l) => (
                   <li key={l.uuid} className={styles.activeBookingsItem}>
                     <span className={styles.activeBookingsText}>
-                      Subject:
+                      {t("bookingPage.lessonPreview.activeBookings.subject")}
                       <span className={styles.activeBookingsValue}>
                         {getSubjectById(l.subjectId)}
                       </span>
                     </span>
                     <span className={styles.activeBookingsText}>
-                      Date:
+                      {t("bookingPage.lessonPreview.activeBookings.date")}
                       <span className={styles.activeBookingsValue}>
                         {format(new Date(l.startTime), "dd/MM HH:mm")}
                       </span>

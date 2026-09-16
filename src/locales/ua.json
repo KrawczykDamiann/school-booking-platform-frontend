@@ -206,7 +206,11 @@
       "title": "Перегляд обраного уроку",
       "subtitle": "Перегляньте свій часовий проміжок",
       "lessonToBook": "Запис на урок:",
-      "activeBookings": "У вас уже є активні бронювання",
+      "activeBookings": {
+        "title": "У вас уже є активні бронювання",
+        "subject": "Предмет:",
+        "date": "Дата:"
+      },
       "button_confirm": "Підтвердити",
       "button_sending": "Надсилання...",
       "notSelected": {

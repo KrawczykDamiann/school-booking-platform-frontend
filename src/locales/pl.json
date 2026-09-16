@@ -184,7 +184,11 @@
       "title": "Podgląd wybranej lekcji",
       "subtitle": "Sprawdź swój przedział czasowy",
       "lessonToBook": "Zajęcie do rezerwacji:",
-      "activeBookings": "Masz już aktywne rezerwacje",
+      "activeBookings": {
+        "title": "Masz już aktywne rezerwacje",
+        "subject": "Temat:",
+        "date": "Data:"
+      },
       "button_confirm": "Potwierdź",
       "button_sending": "Wysyłanie...",
       "notSelected": {
