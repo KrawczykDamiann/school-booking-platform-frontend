@@ -8,6 +8,7 @@ import { useTranslation } from "react-i18next";
 import infoIcon from "../../../../assets/black-info-circle.svg";
 import { SubjectSelection } from "../SubjectSelection/SubjectSelection";
 import type { Subject } from "../../../../types/Subject";
+import { Skeleton } from "../../../../components/ui/Skeleton/Skeleton";
 
 type BookingCalendarProps = {
   periodOfDays: string;
@@ -25,6 +26,7 @@ type BookingCalendarProps = {
   onSelectSubject: (subjectId: number) => void;
   isSubjectsLoading: boolean;
   getBookedSubjectId: (day: Date, hour: number) => number;
+  isLessonsLoading: boolean;
 };
 
 export const BookingCalendar: React.FC<BookingCalendarProps> = ({
@@ -43,8 +45,21 @@ export const BookingCalendar: React.FC<BookingCalendarProps> = ({
   onSelectSubject,
   isSubjectsLoading,
   getBookedSubjectId,
+  isLessonsLoading,
 }) => {
   const { t } = useTranslation();
+  const isDataLoading = isSubjectsLoading || isLessonsLoading;
+  const minHeightSkeleton = isLessonsLoading ? "838px" : "374px";
+
+  if (isDataLoading) {
+    return (
+      <div
+        className={`${styles.bookingCalendar} ${styles.bookingCalendarLoading}`}
+      >
+        <Skeleton height={minHeightSkeleton} />
+      </div>
+    );
+  }
 
   if (!selectedSubjectId) {
     return (
@@ -59,21 +74,14 @@ export const BookingCalendar: React.FC<BookingCalendarProps> = ({
             subjects={subjects}
             onSelectSubject={onSelectSubject}
             selectedSubjectId={selectedSubjectId}
-            isSubjectsLoading={isSubjectsLoading}
           />
         </div>
       </div>
     );
   }
+
   return (
-    <div
-      className={`${styles.bookingCalendar} ${!selectedSubjectId ? styles.bookingCalendarCollapsed : ""}`}
-    >
-      {!selectedSubjectId && (
-        <div className={styles.bookingCalendarOverlay}>
-          {t("bookingPage.notSelectedSubject")}
-        </div>
-      )}
+    <div className={styles.bookingCalendar}>
       <CalendarToolbar
         periodOfDays={periodOfDays}
         onSelectTimePeriod={onSelectTimePeriod}
@@ -81,7 +89,6 @@ export const BookingCalendar: React.FC<BookingCalendarProps> = ({
         subjects={subjects}
         onSelectSubject={onSelectSubject}
         selectedSubjectId={selectedSubjectId}
-        isSubjectsLoading={isSubjectsLoading}
       />
       <CalendarGrid
         currentWeek={currentWeek}

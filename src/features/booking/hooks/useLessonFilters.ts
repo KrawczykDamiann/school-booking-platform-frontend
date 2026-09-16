@@ -5,12 +5,12 @@ import { LessonPreviewContext } from "../../../context/LessonPreviewContext";
 export function useLessonFilters() {
   const { setSelectedLessonUuid } = useContext(LessonPreviewContext);
 
-  const [selectedSubjectId, setSelectedSubjectId] = useState<number | null>(
-    null,
+  const [selectedSubjectId, setSelectedSubjectId] = useState<number>(
+    0,
   );
   const handleSelectSubject = (subjectId: number) => {
     if (selectedSubjectId === subjectId) {
-      setSelectedSubjectId(null);
+      setSelectedSubjectId(0);
       return;
     }
 

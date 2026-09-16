@@ -50,8 +50,9 @@ export const BookingFeature: React.FC = () => {
   } = useLessonFilters();
 
   const { subjects, isSubjectsLoading } = useSubjects();
-  const { lessons } = useLessons();
-  const { studentActiveBookings, bookedSlots, getBookedSubjectId } = useStudentActiveBookings();
+  const { lessons, isLessonsLoading } = useLessons(selectedSubjectId);
+  const { studentActiveBookings, bookedSlots, getBookedSubjectId } =
+    useStudentActiveBookings();
 
   const selectedLesson = lessons?.find(
     (lesson) => lesson.uuid === selectedLessonUuid,
@@ -59,7 +60,6 @@ export const BookingFeature: React.FC = () => {
 
   const { filteredLessons } = useFilteredLessons(
     lessons,
-    selectedSubjectId ? selectedSubjectId : 0,
     selectedTimePeriod,
   );
 
@@ -139,7 +139,7 @@ export const BookingFeature: React.FC = () => {
 
   // Clears active selection, resets subject filters, and closes the booking modal.
   const handleResetBooking = () => {
-    setSelectedSubjectId(null);
+    setSelectedSubjectId(0);
     setSelectedLessonUuid(undefined);
     closeModal();
   };
@@ -163,7 +163,9 @@ export const BookingFeature: React.FC = () => {
           onSelectSubject={handleSelectSubject}
           isSubjectsLoading={isSubjectsLoading}
           getBookedSubjectId={getBookedSubjectId}
+          isLessonsLoading={isLessonsLoading}
         />
+
         <LessonPreview
           lesson={selectedLesson}
           handleConfirm={handleConfirm}

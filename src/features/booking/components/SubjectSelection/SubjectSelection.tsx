@@ -11,7 +11,6 @@ type SubjectSelectionProps = {
   subjects: Subject[] | null;
   onSelectSubject: (subjectId: number) => void;
   selectedSubjectId: number | null;
-  isSubjectsLoading: boolean;
 };
 
 type SubjectWithIcon = Subject & {
@@ -23,7 +22,6 @@ export const SubjectSelection: React.FC<SubjectSelectionProps> = ({
   onSelectSubject,
   selectedSubjectId,
   subjects,
-  isSubjectsLoading,
 }) => {
   const subjectsWithIcon: SubjectWithIcon[] | undefined = subjects?.map(
     (subject) => ({
@@ -69,28 +67,24 @@ export const SubjectSelection: React.FC<SubjectSelectionProps> = ({
     return (
       <div className={styles.subjectSelectionWrapper}>
         <ul className={styles.subjectSelectionList}>
-          {isSubjectsLoading ? (
-            <span className={styles.loadingText}>Loading subjects…</span>
-          ) : (
-            <>
-              {subjectsWithIcon &&
-                subjectsWithIcon.map((subject) => (
-                  <li
-                    key={subject.id}
-                    className={styles.subjectSelectionItem}
-                    onClick={() => onSelectSubject(subject.id)}
-                    data-selected={subject.id === selectedSubjectId}
-                  >
-                    <img
-                      src={subject.icon}
-                      alt="Subject icon"
-                      className={styles.subjectIcon}
-                    />
-                    {subject.name}
-                  </li>
-                ))}
-            </>
-          )}
+          <>
+            {subjectsWithIcon &&
+              subjectsWithIcon.map((subject) => (
+                <li
+                  key={subject.id}
+                  className={styles.subjectSelectionItem}
+                  onClick={() => onSelectSubject(subject.id)}
+                  data-selected={subject.id === selectedSubjectId}
+                >
+                  <img
+                    src={subject.icon}
+                    alt="Subject icon"
+                    className={styles.subjectIcon}
+                  />
+                  {subject.name}
+                </li>
+              ))}
+          </>
         </ul>
       </div>
     );

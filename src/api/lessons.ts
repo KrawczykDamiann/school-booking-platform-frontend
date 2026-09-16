@@ -7,12 +7,13 @@ type LessonsPostData = {
   maxEnrolled: number;
 };
 
-export async function fetchLessons() {
+export async function fetchLessonsBySubjectId(subjectId: number) {
+  const currentDate = new Date();
   try {
-    const response = await api.get("/api/lessons", {
+    const response = await api.get("/api/lessons/search", {
       params: {
-        page: 0,
-        size: 100,
+        from: currentDate,
+        "subject.id": subjectId,
       },
     });
 

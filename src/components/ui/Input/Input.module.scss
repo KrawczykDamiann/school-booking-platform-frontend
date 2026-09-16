@@ -8,6 +8,11 @@ input:-webkit-autofill:focus {
   -webkit-box-shadow: 0 0 0 1000px v.$color-white inset;
 }
 
+// Hide native Edge/IE password reveal icon
+input::-ms-reveal {
+    display: none;
+}
+
 .input {
     &::placeholder {
         color: v.$color-gray60;

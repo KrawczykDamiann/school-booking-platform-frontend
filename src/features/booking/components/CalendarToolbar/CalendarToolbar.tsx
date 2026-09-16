@@ -12,7 +12,6 @@ type CalendarToolbarProps = {
   selectedSubjectId: number | null;
   subjects: Subject[] | null;
   onSelectSubject: (subjectId: number) => void;
-  isSubjectsLoading: boolean;
 };
 
 export const CalendarToolbar: React.FC<CalendarToolbarProps> = ({
@@ -22,7 +21,6 @@ export const CalendarToolbar: React.FC<CalendarToolbarProps> = ({
   selectedSubjectId,
   subjects,
   onSelectSubject,
-  isSubjectsLoading,
 }) => {
   const { t } = useTranslation();
   return (
@@ -36,7 +34,6 @@ export const CalendarToolbar: React.FC<CalendarToolbarProps> = ({
           subjects={subjects}
           onSelectSubject={onSelectSubject}
           selectedSubjectId={selectedSubjectId}
-          isSubjectsLoading={isSubjectsLoading}
         />
       </div>
       <div className={styles.toolbarMain}>
