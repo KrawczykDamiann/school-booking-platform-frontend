@@ -8,7 +8,7 @@ import { useTranslation } from "react-i18next";
 import infoIcon from "../../../../assets/black-info-circle.svg";
 import { SubjectSelection } from "../SubjectSelection/SubjectSelection";
 import type { Subject } from "../../../../types/Subject";
-import { Skeleton } from "../../../../components/ui/Skeleton/Skeleton";
+import { BookingCalendarSkeleton } from "./BookingCalendarSkeleton";
 
 type BookingCalendarProps = {
   periodOfDays: string;
@@ -48,15 +48,19 @@ export const BookingCalendar: React.FC<BookingCalendarProps> = ({
   isLessonsLoading,
 }) => {
   const { t } = useTranslation();
-  const isDataLoading = isSubjectsLoading || isLessonsLoading;
-  const minHeightSkeleton = isLessonsLoading ? "838px" : "374px";
 
-  if (isDataLoading) {
+  if (isSubjectsLoading) {
     return (
-      <div
-        className={`${styles.bookingCalendar} ${styles.bookingCalendarLoading}`}
-      >
-        <Skeleton height={minHeightSkeleton} />
+      <div className={styles.bookingCalendar}>
+        <BookingCalendarSkeleton type="subjectSelection" />
+      </div>
+    );
+  }
+
+  if (isLessonsLoading) {
+    return (
+      <div className={styles.bookingCalendar}>
+        <BookingCalendarSkeleton type="calendar" />
       </div>
     );
   }
@@ -69,6 +73,7 @@ export const BookingCalendar: React.FC<BookingCalendarProps> = ({
           <h3 className={styles.notSelectedSubjectTitle}>
             {t("bookingPage.notSelectedSubject")}
           </h3>
+
           <SubjectSelection
             type="list"
             subjects={subjects}
