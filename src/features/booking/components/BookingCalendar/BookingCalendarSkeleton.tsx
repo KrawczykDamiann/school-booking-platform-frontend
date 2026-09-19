@@ -25,22 +25,22 @@ export const BookingCalendarSkeleton: React.FC<
       <div className={styles.skeletonWrapper}>
         <div className={styles.headerSkeleton}>
           <div className={styles.skeletonSpaceBetween}>
-            <Skeleton width={264} height={40} borderRadius={10} />
-            <Skeleton width={250} height={40} borderRadius={10} />
+            <Skeleton width={264} height={40} />
+            <Skeleton width={250} height={40} />
           </div>
           <div className={styles.skeletonSpaceBetween}>
-            <Skeleton width={287} height={36} borderRadius={10} />
-            <Skeleton width={425} height={36} borderRadius={10} />
+            <Skeleton width={287} height={36} />
+            <Skeleton width={425} height={36} />
           </div>
         </div>
         <ul className={styles.skeletonDaysList}>
           {Array.from({ length: SKELETON_DAYS_COUNT }).map((_, index) => (
             <li key={index}>
-              <Skeleton width={100} height={45} borderRadius={10} />
+              <Skeleton width={100} height={45} />
               <ul className={styles.skeletonHoursList}>
                 {Array.from({ length: DAILY_SLOTS_COUNT }).map((_, index) => (
                   <li key={index}>
-                    <Skeleton width={37} height={20} borderRadius={10} />
+                    <Skeleton width={37} height={20} />
                   </li>
                 ))}
               </ul>
@@ -48,7 +48,7 @@ export const BookingCalendarSkeleton: React.FC<
           ))}
         </ul>
         <div className={styles.skeletonWarningMessage}>
-            <Skeleton height={40} borderRadius={10}/>
+          <Skeleton height={40} />
         </div>
       </div>
     );
