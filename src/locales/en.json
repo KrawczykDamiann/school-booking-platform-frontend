@@ -217,7 +217,8 @@
         "subtitle": "Your selected timeslot will be shown here"
       }
     },
-    "notSelectedSubject": "Select a subject to view timeslots"
+    "notSelectedSubject": "Select a subject to view timeslots",
+    "noSubjectsAvailable": "No subjects available"
   },
   "footer": {
     "legalCenter": "Legal Center",

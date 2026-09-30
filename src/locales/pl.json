@@ -195,7 +195,8 @@
         "subtitle": "W tym miejscu wyświetli się wybrany przez Ciebie przedział czasowy"
       }
     },
-    "notSelectedSubject": "Wybierz przedmiot, aby wyświetlić terminy zajęć"
+    "notSelectedSubject": "Wybierz przedmiot, aby wyświetlić terminy zajęć",
+    "noSubjectsAvailable": "Brak dostępnych tematów"
   },
   "footer": {
     "legalCenter": "Centrum Prawne",

@@ -65,6 +65,19 @@ export const BookingCalendar: React.FC<BookingCalendarProps> = ({
     );
   }
 
+  if (subjects?.length === 0) {
+    return (
+      <div className={styles.bookingCalendar}>
+        <div>
+          <img src={infoIcon} alt="Info icon" className={styles.infoIcon} />
+          <h3 className={styles.notSelectedSubjectTitle}>
+            {t("bookingPage.noSubjectsAvailable")}
+          </h3>
+        </div>
+      </div>
+    );
+  }
+
   if (!selectedSubjectId) {
     return (
       <div className={styles.bookingCalendar}>

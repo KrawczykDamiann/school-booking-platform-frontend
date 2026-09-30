@@ -3,8 +3,14 @@ import { api } from "../../api/api";
 import styles from "./styles.module.scss";
 
 export const AdminSetupController: React.FC = () => {
+  const [isLoading, setIsLoading] = useState(false);
+
   const handleSetup = async (s: number) => {
-    const response = api.post(`/api/setup/examples/install?step=${s}`);
+    try {
+      const response = api.post(`/api/setup/examples/install?step=${s}`);
+    } catch (error) {
+    } finally {
+    }
 
     console.log(response);
   };
@@ -13,15 +19,10 @@ export const AdminSetupController: React.FC = () => {
 
   const [step, setStep] = useState(0);
 
-  console.log(step);
-
   return (
     <div className={styles.setupController}>
       <h3>Setup controller</h3>
-      <select
-        value={step}
-        onChange={(e) => setStep(+e.target.value)}
-      >
+      <select value={step} onChange={(e) => setStep(+e.target.value)}>
         <option value="">Subjects:</option>
         {steps.map((s) => (
           <option value={s} key={s}>

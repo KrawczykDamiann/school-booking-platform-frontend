@@ -39,7 +39,6 @@ export const LoginModal: React.FC<LoginModalProps> = ({ onClose }) => {
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
     setError(null);
-    setIsLoading(true);
 
     const error = validation.validateEmail(email);
 
@@ -52,6 +51,8 @@ export const LoginModal: React.FC<LoginModalProps> = ({ onClose }) => {
       setError(t("login_magic_link.ageConfirmation"));
       return;
     }
+
+    setIsLoading(true);
 
     try {
       const zoneId = Intl.DateTimeFormat().resolvedOptions().timeZone;
