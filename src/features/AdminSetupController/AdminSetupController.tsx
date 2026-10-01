@@ -3,15 +3,8 @@ import { api } from "../../api/api";
 import styles from "./styles.module.scss";
 
 export const AdminSetupController: React.FC = () => {
-  const [isLoading, setIsLoading] = useState(false);
-
   const handleSetup = async (s: number) => {
-    try {
-      const response = api.post(`/api/setup/examples/install?step=${s}`);
-    } catch (error) {
-    } finally {
-    }
-
+    const response = api.post(`/api/setup/examples/install?step=${s}`);
     console.log(response);
   };
 
