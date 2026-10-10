@@ -130,26 +130,40 @@
   align-items: center;
   gap: 0.75rem;
   font-weight: 600;
+  min-width: 180px;
+
+  span {
+    font-weight: 500;
+  }
 }
 
+/* Symetryczne kółka awatara w tabeli */
 .avatarMock {
-  width: 36px;
-  height: 36px;
+  width: 40px;
+  height: 40px;
+  min-width: 40px;
+  min-height: 40px;
   border-radius: 50%;
-  background-color: #8ce99a;
-  color: #2b8a3e;
+  aspect-ratio: 1 / 1;
+  flex-shrink: 0;
   display: flex;
   align-items: center;
   justify-content: center;
-  font-size: 0.8rem;
+  font-size: 0.85rem;
   font-weight: 700;
+  background-color: color-mix(in srgb, var(--subject-color, #00d2ff) 20%, transparent);
+  color: var(--subject-color, #00d2ff);
 }
 
 .avatarImg {
-  width: 36px;
-  height: 36px;
+  width: 40px;
+  height: 40px;
+  min-width: 40px;
+  min-height: 40px;
   border-radius: 50%;
   object-fit: cover;
+  flex-shrink: 0;
+  aspect-ratio: 1 / 1;
 }
 
 .subjectWrapper {
@@ -164,6 +178,8 @@
   height: 8px;
   border-radius: 50%;
   display: inline-block;
+  flex-shrink: 0;
+  background-color: var(--subject-color, #00d2ff);
 }
 
 .termsCell {
@@ -200,6 +216,7 @@
   border-radius: 50%;
   background-color: #f1c40f;
   display: inline-block;
+  flex-shrink: 0;
 }
 
 .actionCell {
@@ -215,111 +232,9 @@
     &:hover { opacity: 1; }
     svg { width: 15px; height: 15px; color: #a0aec0; }
   }
-}
 
-/* POPOVER - MOVED FURTHER RIGHT */
-.popoverCard {
-  width: max-content;
-  min-width: 300px;
-  background: #ffffff;
-  border-radius: 12px;
-  padding: 1.25rem 1.5rem;
-  position: absolute;
-  left: calc(100% + 45px); /* Increased to 45px to clear the table completely */
-  top: 50%;
-  transform: translateY(-50%);
-  z-index: 100;
-  box-shadow: 0 10px 30px rgba(0, 0, 0, 0.12);
-  border: 1px solid #edf2f7;
-  box-sizing: border-box;
-  text-align: left;
-
-  &::before {
-    content: "";
-    position: absolute;
-    left: -8px;
-    top: 50%;
-    transform: translateY(-50%);
-    width: 0;
-    height: 0;
-    border-top: 7px solid transparent;
-    border-bottom: 7px solid transparent;
-    border-right: 8px solid #ffffff;
-  }
-
-  .closeDetails {
-    position: absolute;
-    top: 0.85rem;
-    right: 0.85rem;
-    background: none;
-    border: none;
-    font-size: 1rem;
-    color: #a0aec0;
-    cursor: pointer;
-    line-height: 1;
-    &:hover { color: $color-text-main; }
-  }
-
-  .popoverHeader {
-    margin-bottom: 1rem;
-    padding-right: 1.5rem;
-    h3 {
-      margin: 0 0 0.25rem 0;
-      font-size: 0.95rem;
-      font-weight: 700;
-      color: #1a202c;
-      display: flex;
-      align-items: center;
-      gap: 0.4rem;
-    }
-    .statusDot {
-      width: 6px;
-      height: 6px;
-      border-radius: 50%;
-      background-color: #38ef7d;
-      display: inline-block;
-    }
-    .popoverEmail {
-      font-size: 0.78rem;
-      color: #718096;
-      display: flex;
-      align-items: center;
-      gap: 0.35rem;
-      margin-top: 0.2rem;
-      white-space: nowrap;
-      svg { width: 13px; height: 13px; color: #a0aec0; flex-shrink: 0; }
-    }
-  }
-
-  .nextLessonsBox {
-    margin-bottom: 1.2rem;
-    .label {
-      font-size: 0.78rem;
-      color: #a0aec0;
-      margin: 0 0 0.3rem 0;
-      font-weight: 500;
-    }
-    .lessons {
-      font-size: 0.82rem;
-      color: #2d3748;
-      margin: 0;
-      line-height: 1.4;
-      font-weight: 500;
-    }
-  }
-
-  .popoverFooter {
-    text-align: right;
-    .teacherPageBtn {
-      background: none;
-      border: none;
-      color: #ff7675;
-      font-weight: 600;
-      font-size: 0.8rem;
-      cursor: pointer;
-      padding: 0;
-      &:hover { text-decoration: underline; }
-    }
+  .deleteBtn {
+    color: #ff4757;
   }
 }
 
@@ -370,8 +285,29 @@
     .navAvatar {
       width: 32px;
       height: 32px;
+      min-width: 32px;
+      min-height: 32px;
       border-radius: 50%;
       object-fit: cover;
+      flex-shrink: 0;
+      aspect-ratio: 1 / 1;
+    }
+
+    .navAvatarMock {
+      width: 32px;
+      height: 32px;
+      min-width: 32px;
+      min-height: 32px;
+      border-radius: 50%;
+      background-color: color-mix(in srgb, var(--subject-color, #00d2ff) 20%, transparent);
+      color: var(--subject-color, #00d2ff);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 0.75rem;
+      font-weight: 700;
+      flex-shrink: 0;
+      aspect-ratio: 1 / 1;
     }
 
     .navInfo {
@@ -418,8 +354,29 @@
     .headerAvatar {
       width: 56px;
       height: 56px;
+      min-width: 56px;
+      min-height: 56px;
       border-radius: 50%;
       object-fit: cover;
+      flex-shrink: 0;
+      aspect-ratio: 1 / 1;
+    }
+
+    .headerAvatarMock {
+      width: 56px;
+      height: 56px;
+      min-width: 56px;
+      min-height: 56px;
+      border-radius: 50%;
+      background-color: color-mix(in srgb, var(--subject-color, #00d2ff) 20%, transparent);
+      color: var(--subject-color, #00d2ff);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 1.2rem;
+      font-weight: 700;
+      flex-shrink: 0;
+      aspect-ratio: 1 / 1;
     }
 
     .headerDetails {
@@ -440,9 +397,20 @@
   .headerRight {
     display: flex;
     align-items: center;
-    gap: 0.5rem;
+    gap: 0.75rem;
     font-size: 0.85rem;
     color: #a0aec0;
+
+    .headerDeleteBtn {
+      background: transparent;
+      border: none;
+      color: #ff4757;
+      cursor: pointer;
+      font-size: 1.1rem;
+      display: flex;
+      align-items: center;
+      padding: 0;
+    }
   }
 }
 
@@ -603,25 +571,23 @@
       color: $color-text-main;
       font-weight: 500;
       text-transform: capitalize;
-      width: 95px; /* Ensures all inputs align beautifully vertically */
+      width: 95px;
       flex-shrink: 0;
     }
 
-    /* TIME INPUTS WITH ARROWS - WIDTH REDUCED & ALIGNED */
     .timeInputs {
       display: flex;
       align-items: center;
       gap: 0.3rem;
 
       input[type="time"] {
-        width: 76px; /* Reduced so the trash icon fits and doesn't wrap */
+        width: 76px;
         padding: 0.3rem 0.1rem 0.3rem 0.4rem;
         border: 1px solid $color-border;
         border-radius: 6px;
         text-align: center;
         font-size: 0.85rem;
         font-weight: 500;
-        
         background-color: #ffffff;
         color: #000000;
         color-scheme: light;
@@ -649,6 +615,10 @@
         margin-left: 0.2rem;
         flex-shrink: 0;
       }
+    }
+
+    &.lunchRow {
+      margin-top: 1.25rem;
     }
   }
 
@@ -797,7 +767,7 @@
   padding: 0;
 }
 
-/* Float Label Inputs (Inset Label) */
+/* Float Label Inputs */
 .inputWrapper {
   position: relative;
   margin-bottom: 1.2rem;
@@ -959,6 +929,7 @@
   border-radius: 50%;
   border: 2px solid #ffffff;
   box-shadow: 0 1px 3px rgba(0,0,0,0.2);
+  background-color: var(--selected-color, #00d2ff);
 }
 
 .floatingPalette {
@@ -981,9 +952,10 @@
   width: 22px;
   height: 22px;
   border-radius: 50%;
-  border: 2px transparent;
+  border: 2px solid transparent;
   cursor: pointer;
   transition: transform 0.1s;
+  background-color: var(--dot-color, #00d2ff);
 
   &:hover { transform: scale(1.1); }
 }

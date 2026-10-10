@@ -1,7 +1,9 @@
 import React, { useState, useEffect } from "react";
+import { useSearchParams } from "react-router-dom";
 import { useTranslatedText } from "../../hooks/useTranslatedText";
 import { getTeachers, createTeacher, deleteTeacher } from "../../api/teachers";
 import type { TeacherDto } from "../../api/teachers";
+import { fetchSubjects } from "../../api/subjects";
 import styles from "./TeacherListPage.module.scss";
 
 /* Helper for Google Translator */
@@ -11,6 +13,12 @@ const Txt: React.FC<{ children: string }> = ({ children }) => {
 };
 
 /* Interfaces & Data */
+export interface SubjectItem {
+  id: number;
+  name: string;
+  description?: string | null;
+}
+
 export interface Teacher {
   id: number | string;
   uuid?: string;
@@ -26,112 +34,18 @@ export interface Teacher {
   nextLessons?: string[];
 }
 
-const SUBJECT_OPTIONS = [
-  { id: 1, name: "Chemistry" },
-  { id: 2, name: "Mathematics" },
-  { id: 3, name: "Physics" },
-  { id: 4, name: "Biology" },
-  { id: 5, name: "English" },
-  { id: 6, name: "History" },
-  { id: 7, name: "Literature" },
+const AVAILABLE_COLORS = [
+  "#ff4757",
+  "#fbad34",
+  "#fec107",
+  "#38ef7d",
+  "#00f2fe",
+  "#00d2ff",
+  "#b155fc",
+  "#ff9ff3",
 ];
 
-const INITIAL_TEACHERS: Teacher[] = [
-  {
-    id: 1,
-    name: "Kataryna Novak",
-    email: "k.nowakchemistry@onlineschool.com",
-    subjectId: 1,
-    subject: "Chemistry",
-    subjectColor: "#00d2ff",
-    collabType: "Contract",
-    dueDate: "Without term",
-    avatar: "https://i.pravatar.cc/150?img=47",
-    nextLessons: ["30/06, 14:00, 15:00, 17:00"],
-  },
-  {
-    id: 2,
-    name: "Andrii Shevchenko",
-    email: "a.shevchenko@onlineschool.com",
-    subjectId: 2,
-    subject: "Mathematics",
-    subjectColor: "#00f2fe",
-    collabType: "Freelance",
-    dueDate: "Without term",
-    avatar: "https://i.pravatar.cc/150?img=11",
-  },
-  {
-    id: 3,
-    name: "Sofia Koval",
-    email: "PhysicsTeacheroleg@gmail.com",
-    subjectId: 3,
-    subject: "Physics",
-    subjectColor: "#38ef7d",
-    collabType: "Contract",
-    dueDate: "26/06/26",
-    isWarningDate: true,
-    avatar: "https://i.pravatar.cc/150?img=5",
-    nextLessons: ["29/06, 14:00, 15:00", "2/07, 14:00"],
-  },
-  {
-    id: 4,
-    name: "Nataliia Ivanenko",
-    email: "n.ivanenko@onlineschool.com",
-    subjectId: 4,
-    subject: "Biology",
-    subjectColor: "#b155fc",
-    collabType: "Contract",
-    dueDate: "31/8/27",
-    avatar: "https://i.pravatar.cc/150?img=9",
-  },
-  {
-    id: 5,
-    name: "Olena Melnyk",
-    email: "o.melnyk@onlineschool.com",
-    subjectId: 7,
-    subject: "Literature",
-    subjectColor: "#fbad34",
-    collabType: "Contract",
-    dueDate: "31/12/27",
-    avatar: "https://i.pravatar.cc/150?img=41",
-  },
-  {
-    id: 6,
-    name: "Dmytro Kozak",
-    email: "d.kozak@onlineschool.com",
-    subjectId: 5,
-    subject: "English",
-    subjectColor: "#ff7675",
-    collabType: "Freelance",
-    dueDate: "Without term",
-    avatar: "https://i.pravatar.cc/150?img=60",
-  },
-  {
-    id: 7,
-    name: "Maksym Bondarenko",
-    email: "m.bondarenko@onlineschool.com",
-    subjectId: 6,
-    subject: "History",
-    subjectColor: "#ff9ff3",
-    collabType: "Contract",
-    dueDate: "30/07/26",
-    isWarningDate: true,
-    avatar: "https://i.pravatar.cc/150?img=68",
-  },
-  {
-    id: 8,
-    name: "Anna Kowalska",
-    email: "a.kowalska@onlineschool.com",
-    subjectId: 5,
-    subject: "English",
-    subjectColor: "#ff4757",
-    collabType: "Contract",
-    dueDate: "27/04/27",
-    avatar: "https://i.pravatar.cc/150?img=32",
-  },
-];
-
-const AVAILABLE_COLORS = ["#ff4757", "#fbad34", "#fec107", "#38ef7d", "#00f2fe", "#00d2ff", "#b155fc", "#ff9ff3"];
+const DEFAULT_COLOR = "#00d2ff";
 
 /* SVG Icons */
 const BriefcaseIcon = () => (
@@ -207,12 +121,15 @@ const TrashIcon = () => (
 
 const timeToMins = (t: string) => {
   if (!t) return 0;
-  const [h, m] = t.split(':').map(Number);
+  const [h, m] = t.split(":").map(Number);
   return h * 60 + m;
 };
 
 export const TeacherListPage: React.FC = () => {
-  const [teachers, setTeachers] = useState<Teacher[]>(INITIAL_TEACHERS);
+  const [searchParams] = useSearchParams();
+  const [teachers, setTeachers] = useState<Teacher[]>([]);
+  const [subjects, setSubjects] = useState<SubjectItem[]>([]);
+  const [isLoadingSubjects, setIsLoadingSubjects] = useState<boolean>(true);
   const [viewMode, setViewMode] = useState<"list" | "detail">("list");
   const [selectedTeacherId, setSelectedTeacherId] = useState<number | string | null>(null);
 
@@ -222,7 +139,7 @@ export const TeacherListPage: React.FC = () => {
   /* Teacher Form State */
   const [newTeacherName, setNewTeacherName] = useState("");
   const [newTeacherSubjectId, setNewTeacherSubjectId] = useState<number | "">("");
-  const [newTeacherColor, setNewTeacherColor] = useState(""); 
+  const [newTeacherColor, setNewTeacherColor] = useState(DEFAULT_COLOR);
   const [newTeacherEmail, setNewTeacherEmail] = useState("");
   const [emailError, setEmailError] = useState("");
   const [collabType, setCollabType] = useState<"Contract" | "Freelance">("Contract");
@@ -242,64 +159,87 @@ export const TeacherListPage: React.FC = () => {
   });
   const [lunch, setLunch] = useState({ start: "13:00", end: "14:00" });
 
-  /* Fetch Teachers on Mount */
+  /* Fetch Subjects and Teachers on Mount */
   useEffect(() => {
+    // 1. Fetch Subjects from Spring Boot Backend
+    setIsLoadingSubjects(true);
+    fetchSubjects()
+      .then((res: any) => {
+        const rawSubs: any[] = res?.content || (Array.isArray(res) ? res : []);
+        setSubjects(rawSubs);
+      })
+      .catch((err) => {
+        console.error("Failed to fetch subjects from backend:", err);
+      })
+      .finally(() => {
+        setIsLoadingSubjects(false);
+      });
+
+    // 2. Fetch Teachers from Backend
     getTeachers()
       .then((res: any) => {
-        const rawList: any[] = Array.isArray(res) ? res : (res?.content || []);
+        const rawList: any[] = res?.content || (Array.isArray(res) ? res : []);
 
-        if (rawList.length > 0) {
-          const mappedFromApi: Teacher[] = rawList.map((t: any, idx: number) => {
-            const firstName = t.firstName || t.first_name || "";
-            const lastName = t.lastName || t.last_name || "";
-            const fullName = t.name || `${firstName} ${lastName}`.trim() || "Teacher";
+        const mappedFromApi: Teacher[] = rawList.map((t: any, idx: number) => {
+          const firstName = t.firstName || t.first_name || "";
+          const lastName = t.lastName || t.last_name || "";
+          const fullName =
+            t.name || `${firstName} ${lastName}`.trim() || t.email || "Teacher";
 
-            const emailStr =
-              typeof t.email === "object" && t.email !== null
-                ? t.email.value || ""
-                : typeof t.email === "string"
-                ? t.email
-                : "";
+          const emailStr =
+            typeof t.email === "object" && t.email !== null
+              ? t.email.value || ""
+              : typeof t.email === "string"
+              ? t.email
+              : "";
 
-            const sName =
-              typeof t.subject === "object" && t.subject !== null
-                ? t.subject.name
-                : typeof t.subject === "string"
-                ? t.subject
-                : undefined;
+          const sName =
+            typeof t.subject === "object" && t.subject !== null
+              ? t.subject.name
+              : typeof t.subject === "string"
+              ? t.subject
+              : undefined;
 
-            const foundSubject = SUBJECT_OPTIONS.find(
-              (s) => s.id === (t.subjectId || t.subject_id || (t.subject && t.subject.id))
-            );
+          const sId =
+            t.subjectId ||
+            t.subject_id ||
+            (t.subject && typeof t.subject === "object" ? t.subject.id : undefined);
 
-            return {
-              id: t.uuid || t.id || idx + 100,
-              uuid: t.uuid,
-              name: fullName,
-              email: emailStr,
-              subjectId: t.subjectId || t.subject_id || (t.subject && t.subject.id) || 1,
-              subject: sName || (foundSubject ? foundSubject.name : "Chemistry"),
-              subjectColor: t.subjectColor || "#38ef7d",
-              collabType: (t.collabType as "Contract" | "Freelance") || "Contract",
-              dueDate: t.dueDate || "Without term",
-            };
-          });
+          return {
+            id: t.uuid || t.id || `teacher-${idx}`,
+            uuid: t.uuid,
+            name: fullName,
+            email: emailStr,
+            subjectId: sId,
+            subject: sName || "",
+            subjectColor: t.subjectColor || DEFAULT_COLOR,
+            collabType: (t.collabType as "Contract" | "Freelance") || "Contract",
+            dueDate: t.dueDate || "Without term",
+          };
+        });
 
-          const apiEmails = new Set(
-            mappedFromApi.map((m) => (m.email ? m.email.toLowerCase() : "")).filter(Boolean)
+        setTeachers(mappedFromApi);
+
+        const queryId = searchParams.get("teacherId");
+        if (queryId) {
+          const target = mappedFromApi.find(
+            (t) => String(t.uuid) === queryId || String(t.id) === queryId
           );
-          const filteredMock = INITIAL_TEACHERS.filter(
-            (init) => !apiEmails.has(init.email.toLowerCase())
-          );
-          setTeachers([...filteredMock, ...mappedFromApi]);
+          if (target) {
+            setSelectedTeacherId(target.uuid || target.id);
+            setViewMode("detail");
+          }
         }
       })
       .catch((err) => {
-        console.warn("Could not fetch teachers from backend, using default mock data:", err);
+        console.warn("Could not fetch teachers from backend:", err);
       });
-  }, []);
+  }, [searchParams]);
 
-  /* Remove and Add Day Functions */
+  const handleSubjectSelectChange = (e: React.ChangeEvent<HTMLSelectElement>) => {
+    setNewTeacherSubjectId(Number(e.target.value));
+  };
+
   const handleRemoveDay = (dayId: string) => {
     setScheduleAvail((prev) => ({
       ...prev,
@@ -308,9 +248,9 @@ export const TeacherListPage: React.FC = () => {
   };
 
   const handleAddDay = () => {
-    const allKeys = ['monday', 'tuesday', 'wednesday', 'thursday', 'friday', 'saturday', 'sunday'];
+    const allKeys = ["monday", "tuesday", "wednesday", "thursday", "friday", "saturday", "sunday"];
     const nextInactive = allKeys.find((k) => !scheduleAvail[k as keyof typeof scheduleAvail].active);
-    
+
     if (nextInactive) {
       setScheduleAvail((prev) => ({
         ...prev,
@@ -333,7 +273,6 @@ export const TeacherListPage: React.FC = () => {
     newTeacherName.trim() !== "" &&
     newTeacherSubjectId !== "" &&
     newTeacherEmail.trim() !== "" &&
-    newTeacherColor !== "" &&
     !emailError;
 
   const handleNextStep = (e: React.FormEvent) => {
@@ -344,20 +283,22 @@ export const TeacherListPage: React.FC = () => {
   };
 
   const handleSaveTeacher = async () => {
-    const selectedSub = SUBJECT_OPTIONS.find((s) => s.id === Number(newTeacherSubjectId));
-    const subjectName = selectedSub ? selectedSub.name : "Chemistry";
+    const selectedSub = subjects.find((s) => s.id === Number(newTeacherSubjectId));
+    const subjectName = selectedSub ? selectedSub.name : "";
 
-    const nameParts = (newTeacherName || "Draft Teacher").trim().split(" ");
-    const firstName = nameParts[0] || "Draft";
-    const lastName = nameParts.slice(1).join(" ") || "Teacher";
+    const nameParts = (newTeacherName || "Teacher").trim().split(" ");
+    const firstName = nameParts[0] || "Teacher";
+    const lastName = nameParts.slice(1).join(" ") || "";
+
+    const finalColor = newTeacherColor || DEFAULT_COLOR;
 
     const newTeacherPayload: Partial<TeacherDto> = {
       firstName,
       lastName,
-      name: `${firstName} ${lastName}`,
-      email: newTeacherEmail || "draft@school.com",
-      subjectId: Number(newTeacherSubjectId) || 1,
-      subjectColor: newTeacherColor || "#00d2ff",
+      name: `${firstName} ${lastName}`.trim(),
+      email: newTeacherEmail,
+      subjectId: Number(newTeacherSubjectId),
+      subjectColor: finalColor,
       collabType: collabType,
       dueDate: collabType === "Freelance" ? "Without term" : new Date(dueDate).toLocaleDateString("en-GB"),
     };
@@ -377,30 +318,20 @@ export const TeacherListPage: React.FC = () => {
         newTeacherPayload.name!;
 
       const created: Teacher = {
-        id: saved.uuid || saved.id || teachers.length + 1,
+        id: saved.uuid || saved.id || `teacher-${Date.now()}`,
         uuid: saved.uuid,
         name: savedFullName,
         email: saved.email || newTeacherPayload.email!,
         subjectId: saved.subjectId || newTeacherPayload.subjectId!,
-        subject: subjectLabel || "Chemistry",
-        subjectColor: saved.subjectColor || newTeacherPayload.subjectColor!,
+        subject: subjectLabel,
+        subjectColor: saved.subjectColor || finalColor,
         collabType: (saved.collabType as "Contract" | "Freelance") || newTeacherPayload.collabType!,
         dueDate: saved.dueDate || newTeacherPayload.dueDate!,
       };
+
       setTeachers((prev) => [...prev, created]);
     } catch (err) {
-      console.error("API Error saving teacher, falling back to local state:", err);
-      const fallback: Teacher = {
-        id: teachers.length + 1,
-        name: newTeacherPayload.name!,
-        email: newTeacherPayload.email!,
-        subjectId: newTeacherPayload.subjectId!,
-        subject: subjectName,
-        subjectColor: newTeacherPayload.subjectColor!,
-        collabType: newTeacherPayload.collabType!,
-        dueDate: newTeacherPayload.dueDate!,
-      };
-      setTeachers((prev) => [...prev, fallback]);
+      console.error("API Error saving teacher:", err);
     }
 
     resetForm();
@@ -416,8 +347,7 @@ export const TeacherListPage: React.FC = () => {
         setViewMode("list");
       }
     } catch (err) {
-      console.error("API Error deleting teacher, removing locally:", err);
-      setTeachers((prev) => prev.filter((t) => (t.uuid ? t.uuid !== teacher.uuid : t.id !== teacher.id)));
+      console.error("API Error deleting teacher:", err);
     }
   };
 
@@ -427,29 +357,31 @@ export const TeacherListPage: React.FC = () => {
     setNewTeacherName("");
     setNewTeacherSubjectId("");
     setNewTeacherEmail("");
-    setNewTeacherColor("");
+    setNewTeacherColor(DEFAULT_COLOR);
     setEmailError("");
     setIsColorPaletteOpen(false);
   };
 
-  const selectedTeacher = teachers.find((t) => t.id === selectedTeacherId || (t.uuid && t.uuid === selectedTeacherId)) ?? teachers[0];
+  const selectedTeacher =
+    teachers.find((t) => t.id === selectedTeacherId || (t.uuid && t.uuid === selectedTeacherId)) ??
+    teachers[0];
 
   const MATRIX_DAYS = [
-    { id: 'monday', date: '29', name: 'Monday' },
-    { id: 'tuesday', date: '30', name: 'Tuesday' },
-    { id: 'wednesday', date: '1', name: 'Wednesday' },
-    { id: 'thursday', date: '2', name: 'Thursday' },
-    { id: 'friday', date: '3', name: 'Friday' },
+    { id: "monday", date: "29", name: "Monday" },
+    { id: "tuesday", date: "30", name: "Tuesday" },
+    { id: "wednesday", date: "1", name: "Wednesday" },
+    { id: "thursday", date: "2", name: "Thursday" },
+    { id: "friday", date: "3", name: "Friday" },
   ];
 
   const ALL_DAYS_LIST = [
-    { id: 'monday', name: 'Monday' },
-    { id: 'tuesday', name: 'Tuesday' },
-    { id: 'wednesday', name: 'Wednesday' },
-    { id: 'thursday', name: 'Thursday' },
-    { id: 'friday', name: 'Friday' },
-    { id: 'saturday', name: 'Saturday' },
-    { id: 'sunday', name: 'Sunday' },
+    { id: "monday", name: "Monday" },
+    { id: "tuesday", name: "Tuesday" },
+    { id: "wednesday", name: "Wednesday" },
+    { id: "thursday", name: "Thursday" },
+    { id: "friday", name: "Friday" },
+    { id: "saturday", name: "Saturday" },
+    { id: "sunday", name: "Sunday" },
   ];
 
   const TIMES = ["12:00", "13:00", "14:00", "15:00", "16:00", "17:00", "18:00"];
@@ -479,28 +411,52 @@ export const TeacherListPage: React.FC = () => {
                 </thead>
                 <tbody>
                   {teachers.map((teacher) => {
-                    const isSelected = selectedTeacherId === teacher.id || (teacher.uuid && selectedTeacherId === teacher.uuid);
+                    const isSelected =
+                      selectedTeacherId === teacher.id || (teacher.uuid && selectedTeacherId === teacher.uuid);
+
+                    const matchedSub = subjects.find((s) => s.id === teacher.subjectId);
+                    const displaySubject = matchedSub?.name || teacher.subject || "—";
+                    const avatarColor = teacher.subjectColor || DEFAULT_COLOR;
 
                     return (
                       <tr
                         key={teacher.uuid || teacher.id}
                         className={isSelected ? styles.activeRow : ""}
-                        onClick={() => setSelectedTeacherId(isSelected ? null : (teacher.uuid || teacher.id))}
+                        onClick={() => {
+                          setSelectedTeacherId(teacher.uuid || teacher.id);
+                          setViewMode("detail");
+                        }}
                       >
                         <td className={styles.nameCell}>
                           {teacher.avatar ? (
-                            <img src={teacher.avatar} alt={teacher.name} className={styles.avatarImg} />
+                            <img
+                              src={teacher.avatar}
+                              alt={teacher.name}
+                              className={styles.avatarImg}
+                            />
                           ) : (
-                            <div className={styles.avatarMock}>
-                              {teacher.name.split(" ").map((n) => n[0]).join("")}
+                            <div
+                              className={styles.avatarMock}
+                              style={{ '--subject-color': avatarColor } as React.CSSProperties}
+                            >
+                              {teacher.name
+                                .split(" ")
+                                .filter(Boolean)
+                                .map((n) => n[0])
+                                .join("")
+                                .slice(0, 2)
+                                .toUpperCase() || "T"}
                             </div>
                           )}
-                          {teacher.name}
+                          <span>{teacher.name}</span>
                         </td>
                         <td>
                           <span className={styles.subjectWrapper}>
-                            <span className={styles.colorDot} style={{ backgroundColor: teacher.subjectColor }}></span>
-                            <Txt>{teacher.subject}</Txt>
+                            <span
+                              className={styles.colorDot}
+                              style={{ '--subject-color': avatarColor } as React.CSSProperties}
+                            ></span>
+                            <Txt>{displaySubject}</Txt>
                           </span>
                         </td>
                         <td>
@@ -521,11 +477,10 @@ export const TeacherListPage: React.FC = () => {
                           </button>
                         </td>
                         <td className={styles.actionCell} onClick={(e) => e.stopPropagation()}>
-                          <button 
-                            type="button" 
-                            className={styles.actionIconButton} 
+                          <button
+                            type="button"
+                            className={`${styles.actionIconButton} ${styles.deleteBtn}`}
                             title="Delete teacher"
-                            style={{ color: "#ff4757" }}
                             onClick={() => handleDeleteTeacher(teacher)}
                           >
                             <TrashIcon />
@@ -544,176 +499,227 @@ export const TeacherListPage: React.FC = () => {
               &larr; <Txt>Back to Teachers List</Txt>
             </button>
 
-            <div className={styles.detailGrid}>
-              
-              <aside className={styles.avatarsSidebar}>
-                <h3><Txt>Teachers</Txt></h3>
-                {teachers.map((tItem) => {
-                  const isActive = (tItem.uuid && tItem.uuid === selectedTeacher.uuid) || tItem.id === selectedTeacher.id;
+            {selectedTeacher && (
+              <div className={styles.detailGrid}>
+                <aside className={styles.avatarsSidebar}>
+                  <h3><Txt>Teachers</Txt></h3>
+                  {teachers.map((tItem) => {
+                    const isActive =
+                      (tItem.uuid && tItem.uuid === selectedTeacher.uuid) || tItem.id === selectedTeacher.id;
 
-                  return (
-                    <div
-                      key={tItem.uuid || tItem.id}
-                      className={`${styles.teacherNavItem} ${isActive ? styles.activeNavItem : ""}`}
-                      onClick={() => setSelectedTeacherId(tItem.uuid || tItem.id)}
-                    >
-                      {tItem.avatar ? (
-                        <img src={tItem.avatar} alt={tItem.name} className={styles.navAvatar} />
+                    const matchedSub = subjects.find((s) => s.id === tItem.subjectId);
+                    const displaySubject = matchedSub?.name || tItem.subject || "—";
+                    const navColor = tItem.subjectColor || DEFAULT_COLOR;
+
+                    return (
+                      <div
+                        key={tItem.uuid || tItem.id}
+                        className={`${styles.teacherNavItem} ${isActive ? styles.activeNavItem : ""}`}
+                        onClick={() => setSelectedTeacherId(tItem.uuid || tItem.id)}
+                      >
+                        {tItem.avatar ? (
+                          <img
+                            src={tItem.avatar}
+                            alt={tItem.name}
+                            className={styles.navAvatar}
+                          />
+                        ) : (
+                          <div
+                            className={styles.navAvatarMock}
+                            style={{ '--subject-color': navColor } as React.CSSProperties}
+                          >
+                            {tItem.name
+                              .split(" ")
+                              .filter(Boolean)
+                              .map((n) => n[0])
+                              .join("")
+                              .slice(0, 2)
+                              .toUpperCase() || "T"}
+                          </div>
+                        )}
+                        <div className={styles.navInfo}>
+                          <span className={styles.navName}>{tItem.name}</span>
+                          <span className={styles.navSubject}><Txt>{displaySubject}</Txt></span>
+                        </div>
+                      </div>
+                    );
+                  })}
+                </aside>
+
+                <main className={styles.scheduleColumn}>
+                  <div className={styles.teacherHeaderCard}>
+                    <div className={styles.headerLeft}>
+                      {selectedTeacher.avatar ? (
+                        <img
+                          src={selectedTeacher.avatar}
+                          alt="Avatar"
+                          className={styles.headerAvatar}
+                        />
                       ) : (
-                        <div className={styles.avatarMock} style={{ width: 32, height: 32, fontSize: '0.75rem' }}>
-                          {tItem.name.split(" ").map((n) => n[0]).join("")}
+                        <div
+                          className={styles.headerAvatarMock}
+                          style={{ '--subject-color': selectedTeacher.subjectColor || DEFAULT_COLOR } as React.CSSProperties}
+                        >
+                          {selectedTeacher.name
+                            .split(" ")
+                            .filter(Boolean)
+                            .map((n) => n[0])
+                            .join("")
+                            .slice(0, 2)
+                            .toUpperCase() || "T"}
                         </div>
                       )}
-                      <div className={styles.navInfo}>
-                        <span className={styles.navName}>{tItem.name}</span>
-                        <span className={styles.navSubject}><Txt>{tItem.subject}</Txt></span>
+                      <div className={styles.headerDetails}>
+                        <h3>{selectedTeacher.name}</h3>
+                        <p>{selectedTeacher.email}</p>
                       </div>
                     </div>
-                  );
-                })}
-              </aside>
-
-              <main className={styles.scheduleColumn}>
-                <div className={styles.teacherHeaderCard}>
-                  <div className={styles.headerLeft}>
-                    {selectedTeacher.avatar ? (
-                      <img src={selectedTeacher.avatar} alt="Avatar" className={styles.headerAvatar} />
-                    ) : (
-                      <div className={styles.avatarMock} style={{ width: 56, height: 56, fontSize: '1.2rem' }}>
-                        {selectedTeacher.name.split(" ").map((n) => n[0]).join("")}
-                      </div>
-                    )}
-                    <div className={styles.headerDetails}>
-                      <h3>{selectedTeacher.name}</h3>
-                      <p>{selectedTeacher.email}</p>
+                    <div className={styles.headerRight}>
+                      <span>
+                        <Txt>
+                          {subjects.find((s) => s.id === selectedTeacher.subjectId)?.name || selectedTeacher.subject}
+                        </Txt>
+                      </span>
+                      <button
+                        type="button"
+                        onClick={() => handleDeleteTeacher(selectedTeacher)}
+                        className={styles.headerDeleteBtn}
+                        title="Delete teacher"
+                      >
+                        <TrashIcon />
+                      </button>
+                      <button className={styles.actionIconButton}><EditIcon /></button>
                     </div>
                   </div>
-                  <div className={styles.headerRight} style={{ display: 'flex', alignItems: 'center', gap: '10px' }}>
-                    <span><Txt>{selectedTeacher.subject}</Txt></span>
-                    <button 
-                      type="button"
-                      onClick={() => handleDeleteTeacher(selectedTeacher)}
-                      style={{ background: 'transparent', border: 'none', color: '#ff4757', cursor: 'pointer', fontSize: '1.1rem' }}
-                      title="Delete teacher"
-                    >
-                      <TrashIcon />
-                    </button>
-                    <button className={styles.actionIconButton}><EditIcon /></button>
-                  </div>
-                </div>
 
-                <div className={styles.scheduleGridCard}>
-                  <div className={styles.scheduleHeader}>
-                    <h3><Txt>Schedule</Txt></h3>
-                    <span>📅 <Txt>June 29 - July 5</Txt></span>
-                  </div>
+                  <div className={styles.scheduleGridCard}>
+                    <div className={styles.scheduleHeader}>
+                      <h3><Txt>Schedule</Txt></h3>
+                      <span>📅 <Txt>June 29 - July 5</Txt></span>
+                    </div>
 
-                  <div className={styles.calendarMatrix}>
-                    {MATRIX_DAYS.map(day => (
-                      <div key={day.id} className={styles.dayColumn}>
-                        <div className={`${styles.dayHeader} ${day.id === 'monday' ? styles.activeDay : ''}`}>
-                          {day.date} <span className={styles.dayNum}><Txt>{day.name}</Txt></span>
+                    <div className={styles.calendarMatrix}>
+                      {MATRIX_DAYS.map((day) => (
+                        <div key={day.id} className={styles.dayColumn}>
+                          <div className={`${styles.dayHeader} ${day.id === "monday" ? styles.activeDay : ""}`}>
+                            {day.date} <span className={styles.dayNum}><Txt>{day.name}</Txt></span>
+                          </div>
+                          {TIMES.map((time) => {
+                            const tMins = timeToMins(time);
+                            const dayConfig = scheduleAvail[day.id as keyof typeof scheduleAvail];
+
+                            const wStart = timeToMins(dayConfig.start);
+                            const wEnd = timeToMins(dayConfig.end);
+                            const lStart = timeToMins(lunch.start);
+                            const lEnd = timeToMins(lunch.end);
+
+                            const isWork = dayConfig.active && tMins >= wStart && tMins < wEnd;
+                            const isLunch = tMins >= lStart && tMins < lEnd;
+
+                            const isSelected = isWork && !isLunch;
+                            const isBooked = (day.id === "wednesday" || day.id === "thursday") && time === "17:00";
+
+                            let classes = styles.timeSlot;
+                            if (isSelected && isBooked) classes += ` ${styles.bookedSlot}`;
+                            else if (isSelected) classes += ` ${styles.selectedSlot}`;
+                            else if (isBooked) classes += ` ${styles.bookedSlot}`;
+
+                            return <div key={time} className={classes}>{time}</div>;
+                          })}
                         </div>
-                        {TIMES.map(time => {
-                          const tMins = timeToMins(time);
-                          const dayConfig = scheduleAvail[day.id as keyof typeof scheduleAvail];
-                          
-                          const wStart = timeToMins(dayConfig.start);
-                          const wEnd = timeToMins(dayConfig.end);
-                          const lStart = timeToMins(lunch.start);
-                          const lEnd = timeToMins(lunch.end);
+                      ))}
+                    </div>
 
-                          const isWork = dayConfig.active && (tMins >= wStart && tMins < wEnd);
-                          const isLunch = tMins >= lStart && tMins < lEnd;
-                          
-                          const isSelected = isWork && !isLunch;
-                          
-                          const isBooked = (day.id === "wednesday" || day.id === "thursday") && time === "17:00";
+                    <div className={styles.scheduleFooter}>
+                      <div className={styles.nextLessonsLabel}>
+                        <Txt>Next lessons:</Txt> <span>29/06 14:00 15:00 2/07 14:00</span>
+                      </div>
+                      <button className={styles.sendScheduleBtn}><Txt>Send schedule</Txt></button>
+                    </div>
+                  </div>
+                </main>
 
-                          let classes = styles.timeSlot;
-                          if (isSelected && isBooked) classes += ` ${styles.bookedSlot}`;
-                          else if (isSelected) classes += ` ${styles.selectedSlot}`;
-                          else if (isBooked) classes += ` ${styles.bookedSlot}`;
+                <aside className={styles.availabilityColumn}>
+                  <div className={styles.availabilityCard}>
+                    <div className={styles.cardHeader}>
+                      <h3><Txt>Availability</Txt></h3>
+                      <button className={styles.addDayBtn} onClick={handleAddDay}><Txt>+ Add day</Txt></button>
+                    </div>
+                    <p className={styles.subtext}><Txt>Set weekly availability hours for this teacher</Txt></p>
 
-                          return <div key={time} className={classes}>{time}</div>;
-                        })}
+                    {ALL_DAYS_LIST.filter((day) => scheduleAvail[day.id as keyof typeof scheduleAvail].active).map((day) => (
+                      <div key={day.id} className={styles.availRow}>
+                        <span className={styles.dayName}><Txt>{day.name}</Txt></span>
+                        <div className={styles.timeInputs}>
+                          <input
+                            type="time"
+                            step="900"
+                            value={scheduleAvail[day.id as keyof typeof scheduleAvail].start}
+                            onChange={(e) =>
+                              setScheduleAvail({
+                                ...scheduleAvail,
+                                [day.id]: {
+                                  ...scheduleAvail[day.id as keyof typeof scheduleAvail],
+                                  start: e.target.value,
+                                },
+                              })
+                            }
+                          />
+                          <span>—</span>
+                          <input
+                            type="time"
+                            step="900"
+                            value={scheduleAvail[day.id as keyof typeof scheduleAvail].end}
+                            onChange={(e) =>
+                              setScheduleAvail({
+                                ...scheduleAvail,
+                                [day.id]: {
+                                  ...scheduleAvail[day.id as keyof typeof scheduleAvail],
+                                  end: e.target.value,
+                                },
+                              })
+                            }
+                          />
+                          <span className={styles.deleteIcon} onClick={() => handleRemoveDay(day.id)}>🗑️</span>
+                        </div>
                       </div>
                     ))}
-                  </div>
 
-                  <div className={styles.scheduleFooter}>
-                    <div className={styles.nextLessonsLabel}>
-                      <Txt>Next lessons:</Txt> <span>29/06 14:00 15:00 2/07 14:00</span>
-                    </div>
-                    <button className={styles.sendScheduleBtn}><Txt>Send schedule</Txt></button>
-                  </div>
-                </div>
-              </main>
+                    <p className={styles.hintFooter}>
+                      <InfoIcon /> <Txt>Other days will be marked unavailable by default</Txt>
+                    </p>
 
-              <aside className={styles.availabilityColumn}>
-                <div className={styles.availabilityCard}>
-                  <div className={styles.cardHeader}>
-                    <h3><Txt>Availability</Txt></h3>
-                    <button className={styles.addDayBtn} onClick={handleAddDay}><Txt>+ Add day</Txt></button>
-                  </div>
-                  <p className={styles.subtext}><Txt>Set weekly availability hours for this teacher</Txt></p>
-
-                  {ALL_DAYS_LIST.filter(day => scheduleAvail[day.id as keyof typeof scheduleAvail].active).map(day => (
-                    <div key={day.id} className={styles.availRow}>
-                      <span className={styles.dayName}><Txt>{day.name}</Txt></span>
+                    <div className={`${styles.availRow} ${styles.lunchRow}`}>
+                      <span className={styles.dayName}><Txt>Lunch break</Txt></span>
                       <div className={styles.timeInputs}>
-                        <input 
-                          type="time" 
-                          step="900" 
-                          value={scheduleAvail[day.id as keyof typeof scheduleAvail].start}
-                          onChange={(e) => setScheduleAvail({...scheduleAvail, [day.id]: { ...scheduleAvail[day.id as keyof typeof scheduleAvail], start: e.target.value }})}
+                        <input
+                          type="time"
+                          step="900"
+                          value={lunch.start}
+                          onChange={(e) => setLunch({ ...lunch, start: e.target.value })}
                         />
                         <span>—</span>
-                        <input 
-                          type="time" 
+                        <input
+                          type="time"
                           step="900"
-                          value={scheduleAvail[day.id as keyof typeof scheduleAvail].end}
-                          onChange={(e) => setScheduleAvail({...scheduleAvail, [day.id]: { ...scheduleAvail[day.id as keyof typeof scheduleAvail], end: e.target.value }})}
+                          value={lunch.end}
+                          onChange={(e) => setLunch({ ...lunch, end: e.target.value })}
                         />
-                        <span className={styles.deleteIcon} onClick={() => handleRemoveDay(day.id)}>🗑️</span>
+                        <span className={styles.deleteIcon}>✏️</span>
                       </div>
                     </div>
-                  ))}
+                  </div>
 
-                  <p className={styles.hintFooter}>
-                    <InfoIcon /> <Txt>Other days will be marked unavailable by default</Txt>
-                  </p>
-
-                  <div className={styles.availRow} style={{ marginTop: '1.25rem' }}>
-                    <span className={styles.dayName}><Txt>Lunch break</Txt></span>
-                    <div className={styles.timeInputs}>
-                      <input 
-                        type="time" 
-                        step="900"
-                        value={lunch.start}
-                        onChange={(e) => setLunch({...lunch, start: e.target.value})}
-                      />
-                      <span>—</span>
-                      <input 
-                        type="time" 
-                        step="900"
-                        value={lunch.end}
-                        onChange={(e) => setLunch({...lunch, end: e.target.value})}
-                      />
-                      <span className={styles.deleteIcon}>✏️</span>
+                  <div className={styles.vacationsCard}>
+                    <div className={styles.vacationHeader}>
+                      <h3><Txt>Vacations</Txt></h3>
+                      <span className={styles.badge}><Txt>Coming in the next update</Txt></span>
                     </div>
+                    <p><Txt>Mark dates when the teacher is unavailable</Txt></p>
                   </div>
-                </div>
-
-                <div className={styles.vacationsCard}>
-                  <div className={styles.vacationHeader}>
-                    <h3><Txt>Vacations</Txt></h3>
-                    <span className={styles.badge}><Txt>Coming in the next update</Txt></span>
-                  </div>
-                  <p><Txt>Mark dates when the teacher is unavailable</Txt></p>
-                </div>
-              </aside>
-            </div>
+                </aside>
+              </div>
+            )}
           </div>
         )}
       </section>
@@ -722,10 +728,8 @@ export const TeacherListPage: React.FC = () => {
       {isModalOpen && (
         <div className={styles.modalOverlay}>
           <div className={styles.modalCard}>
-            
             {modalStep === 1 ? (
               <form onSubmit={handleNextStep}>
-                
                 <div className={styles.modalHeader}>
                   <div className={styles.titleGroup}>
                     <UserPlusIcon />
@@ -736,7 +740,7 @@ export const TeacherListPage: React.FC = () => {
                     <button type="button" className={styles.closeModal} onClick={resetForm}>&times;</button>
                   </div>
                 </div>
-                
+
                 <p className={styles.subtitle}><Txt>Fill-in basic information</Txt></p>
 
                 <div className={styles.inputWrapper}>
@@ -756,10 +760,12 @@ export const TeacherListPage: React.FC = () => {
                     <select
                       required
                       value={newTeacherSubjectId}
-                      onChange={(e) => setNewTeacherSubjectId(Number(e.target.value))}
+                      onChange={handleSubjectSelectChange}
                     >
-                      <option value="" disabled hidden></option>
-                      {SUBJECT_OPTIONS.map((sub) => (
+                      <option value="" disabled hidden>
+                        {isLoadingSubjects ? "Loading subjects..." : "Select subject"}
+                      </option>
+                      {subjects.map((sub) => (
                         <option key={sub.id} value={sub.id}>
                           {sub.name}
                         </option>
@@ -768,12 +774,15 @@ export const TeacherListPage: React.FC = () => {
                   </div>
 
                   <div className={styles.colorPickerContainer}>
-                    <button 
-                      type="button" 
+                    <button
+                      type="button"
                       className={styles.colorWheelBtn}
                       onClick={() => setIsColorPaletteOpen(!isColorPaletteOpen)}
                     >
-                      {newTeacherColor && <span className={styles.innerColorDot} style={{ backgroundColor: newTeacherColor }}></span>}
+                      <span
+                        className={styles.innerColorDot}
+                        style={{ '--selected-color': newTeacherColor || DEFAULT_COLOR } as React.CSSProperties}
+                      ></span>
                     </button>
 
                     {isColorPaletteOpen && (
@@ -783,7 +792,7 @@ export const TeacherListPage: React.FC = () => {
                             type="button"
                             key={c}
                             className={`${styles.paletteDot} ${newTeacherColor === c ? styles.activePaletteDot : ""}`}
-                            style={{ backgroundColor: c }}
+                            style={{ '--dot-color': c } as React.CSSProperties}
                             onClick={() => {
                               setNewTeacherColor(c);
                               setIsColorPaletteOpen(false);
@@ -846,7 +855,9 @@ export const TeacherListPage: React.FC = () => {
                       <ContactIcon />
                       <select
                         value={collabType}
-                        onChange={(e: React.ChangeEvent<HTMLSelectElement>) => setCollabType(e.target.value as "Contract" | "Freelance")}
+                        onChange={(e: React.ChangeEvent<HTMLSelectElement>) =>
+                          setCollabType(e.target.value as "Contract" | "Freelance")
+                        }
                       >
                         <option value="Contract">Contract</option>
                         <option value="Freelance">Freelance</option>
@@ -906,3 +917,5 @@ export const TeacherListPage: React.FC = () => {
     </div>
   );
 };
+
+export default TeacherListPage;

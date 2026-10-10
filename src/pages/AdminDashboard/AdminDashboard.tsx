@@ -1,6 +1,8 @@
 import React, { useState, useRef, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { useTranslatedText } from '../../hooks/useTranslatedText';
+import { getTeachers } from '../../api/teachers';
+import type { TeacherDto } from '../../api/teachers';
 import styles from './AdminDashboard.module.scss';
 
 // Dynamic in-flight translation helper
@@ -9,6 +11,7 @@ const Txt: React.FC<{ children: string }> = ({ children }) => {
   return <>{translated}</>;
 };
 
+/*
 interface PendingRequest {
   id: string;
   studentName: string;
@@ -18,6 +21,36 @@ interface PendingRequest {
   status: 'active' | 'new';
   subjectColor: string;
 }
+
+const INITIAL_REQUESTS: PendingRequest[] = [
+  {
+    id: '1',
+    studentName: 'Sofiia Melnyk',
+    email: 'viktoriia.polishchuk@ukr.net',
+    subject: 'History',
+    dateTime: '6/07 at 14:00',
+    status: 'active',
+    subjectColor: '#a855f7',
+  },
+  {
+    id: '2',
+    studentName: 'Piotr Mazur',
+    email: '314mazur@interia.pl',
+    subject: 'Chemistry',
+    dateTime: '14/07 at 16:00',
+    status: 'new',
+    subjectColor: '#00d2ff',
+  },
+  {
+    id: '3',
+    studentName: 'Michał Zieliński',
+    email: 'michu_zieli69@onet.pl',
+    subject: 'English',
+    dateTime: '15/07 at 12:00',
+    status: 'active',
+    subjectColor: '#ff4757',
+  },
+];
 
 interface TeacherWorkload {
   id: number;
@@ -92,36 +125,7 @@ const INITIAL_TEACHERS_WORKLOAD: TeacherWorkload[] = [
     totalSlots: 7,
   },
 ];
-
-const INITIAL_REQUESTS: PendingRequest[] = [
-  {
-    id: '1',
-    studentName: 'Sofiia Melnyk',
-    email: 'viktoriia.polishchuk@ukr.net',
-    subject: 'History',
-    dateTime: '6/07 at 14:00',
-    status: 'active',
-    subjectColor: '#a855f7',
-  },
-  {
-    id: '2',
-    studentName: 'Piotr Mazur',
-    email: '314mazur@interia.pl',
-    subject: 'Chemistry',
-    dateTime: '14/07 at 16:00',
-    status: 'new',
-    subjectColor: '#00d2ff',
-  },
-  {
-    id: '3',
-    studentName: 'Michał Zieliński',
-    email: 'michu_zieli69@onet.pl',
-    subject: 'English',
-    dateTime: '15/07 at 12:00',
-    status: 'active',
-    subjectColor: '#ff4757',
-  },
-];
+*/
 
 // Formats date to match Figma design (e.g., "July, the 6th")
 const formatFigmaDate = (date: Date): string => {
@@ -138,11 +142,29 @@ const formatFigmaDate = (date: Date): string => {
 
 export const AdminDashboard: React.FC = () => {
   const navigate = useNavigate();
-  const [selectedDate, setSelectedDate] = useState<Date>(new Date(2026, 6, 6));
+  const [selectedDate, setSelectedDate] = useState<Date>(new Date());
   const [isCalendarOpen, setIsCalendarOpen] = useState(false);
-  const [requests, setRequests] = useState<PendingRequest[]>(INITIAL_REQUESTS);
+  const [teachers, setTeachers] = useState<TeacherDto[]>([]);
+  const [isLoadingTeachers, setIsLoadingTeachers] = useState<boolean>(true);
 
   const calendarRef = useRef<HTMLDivElement>(null);
+
+  useEffect(() => {
+    const fetchTeacherData = async () => {
+      try {
+        setIsLoadingTeachers(true);
+        const res: any = await getTeachers();
+        const list = Array.isArray(res) ? res : (res?.content || res?.teachers || []);
+        setTeachers(list);
+      } catch (error) {
+        console.error('Failed to fetch teachers:', error);
+      } finally {
+        setIsLoadingTeachers(false);
+      }
+    };
+
+    fetchTeacherData();
+  }, []);
 
   // Close calendar popup when clicking outside
   useEffect(() => {
@@ -168,12 +190,9 @@ export const AdminDashboard: React.FC = () => {
     setIsCalendarOpen(false);
   };
 
-  const handleAcceptRequest = (id: string) => {
-    setRequests((prev) => prev.filter((r) => r.id !== id));
-  };
-
-  const handleTeacherClick = (teacherId: number) => {
-    navigate(`/admin/teachers?teacherId=${teacherId}`);
+  const handleTeacherClick = (teacherIdentifier: string | number | undefined) => {
+    if (!teacherIdentifier) return;
+    navigate(`/admin/teachers?teacherId=${teacherIdentifier}`);
   };
 
   // Month grid calculations (Monday-based index)
@@ -184,11 +203,12 @@ export const AdminDashboard: React.FC = () => {
   return (
     <div className={styles.dashboardWrapper}>
       <div className={styles.dashboardLayout}>
-        
         {/* Left Column: Teacher Workload */}
         <main className={styles.workloadCard}>
           <div className={styles.cardHeader}>
-            <h2><Txt>Teacher workload</Txt></h2>
+            <h2>
+              <Txt>Teacher workload</Txt>
+            </h2>
 
             <div className={styles.datePickerWrapper} ref={calendarRef}>
               <div className={styles.datePicker}>
@@ -225,11 +245,19 @@ export const AdminDashboard: React.FC = () => {
               {isCalendarOpen && (
                 <div className={styles.calendarBubble}>
                   <div className={styles.bubbleHeader}>
-                    <h4>{selectedDate.toLocaleString('en-US', { month: 'long', year: 'numeric' })}</h4>
+                    <h4>
+                      {selectedDate.toLocaleString('en-US', { month: 'long', year: 'numeric' })}
+                    </h4>
                   </div>
 
                   <div className={styles.weekDaysRow}>
-                    <span>M</span><span>T</span><span>W</span><span>T</span><span>F</span><span>S</span><span>S</span>
+                    <span>M</span>
+                    <span>T</span>
+                    <span>W</span>
+                    <span>T</span>
+                    <span>F</span>
+                    <span>S</span>
+                    <span>S</span>
                   </div>
 
                   <div className={styles.daysGrid}>
@@ -260,80 +288,138 @@ export const AdminDashboard: React.FC = () => {
             <table className={styles.workloadTable}>
               <thead>
                 <tr>
-                  <th className={styles.thName}><Txt>Teacher's name</Txt></th>
-                  <th className={styles.thWorkload}><Txt>Today's workload</Txt></th>
-                  <th className={styles.thCounter}><Txt>Counter</Txt></th>
-                  <th className={styles.thView}><Txt>View</Txt></th>
+                  <th className={styles.thName}>
+                    <Txt>Teacher's name</Txt>
+                  </th>
+                  <th className={styles.thWorkload}>
+                    <Txt>Today's workload</Txt>
+                  </th>
+                  <th className={styles.thCounter}>
+                    <Txt>Counter</Txt>
+                  </th>
+                  <th className={styles.thView}>
+                    <Txt>View</Txt>
+                  </th>
                 </tr>
               </thead>
               <tbody>
-                {INITIAL_TEACHERS_WORKLOAD.map((teacher) => (
-                  <tr
-                    key={teacher.id}
-                    className={styles.tableRow}
-                    onClick={() => handleTeacherClick(teacher.id)}
-                    onKeyDown={(e) => {
-                      if (e.key === 'Enter' || e.key === ' ') {
-                        e.preventDefault();
-                        handleTeacherClick(teacher.id);
-                      }
-                    }}
-                    role="button"
-                    tabIndex={0}
-                  >
-                    <td className={styles.nameCell}>
-                      {teacher.avatar ? (
-                        <img src={teacher.avatar} alt={teacher.name} className={styles.avatarImg} />
-                      ) : (
-                        <div
-                          className={styles.avatarFallback}
-                          style={{ backgroundColor: `${teacher.color}25`, color: teacher.color }}
-                        >
-                          {teacher.name.split(' ').map((n) => n[0]).join('')}
-                        </div>
-                      )}
-                      <span className={styles.teacherNameText}>{teacher.name}</span>
-                    </td>
-
-                    <td className={styles.workloadCell}>
-                      <div className={styles.dotsBar}>
-                        {Array.from({ length: teacher.totalSlots }).map((_, index) => {
-                          const isBooked = index < teacher.bookedSlots;
-                          return (
-                            <span
-                              key={index}
-                              className={`${styles.workloadDot} ${isBooked ? styles.booked : styles.empty}`}
-                              style={{ backgroundColor: isBooked ? teacher.color : undefined }}
-                            />
-                          );
-                        })}
-                      </div>
-                    </td>
-
-                    <td className={styles.counterCell}>
-                      <div className={styles.counterBox}>
-                        <span className={styles.counterValue}>
-                          {teacher.bookedSlots} / {teacher.totalSlots}
-                        </span>
-                        <span className={styles.counterLabel}><Txt>slots</Txt></span>
-                      </div>
-                    </td>
-
-                    <td className={styles.viewCell}>
-                      <button
-                        type="button"
-                        className={styles.chevronBtn}
-                        onClick={(e) => {
-                          e.stopPropagation();
-                          handleTeacherClick(teacher.id);
-                        }}
-                        aria-label={`View ${teacher.name} details`}
-                      >
-                        &rsaquo;
-                      </button>
+                {isLoadingTeachers ? (
+                  <tr>
+                    <td colSpan={4} style={{ textAlign: 'center', padding: '2rem' }}>
+                      <Txt>Loading teachers...</Txt>
                     </td>
                   </tr>
-                ))}
+                ) : teachers.length === 0 ? (
+                  <tr>
+                    <td colSpan={4} style={{ textAlign: 'center', padding: '2rem' }}>
+                      <Txt>No teachers found</Txt>
+                    </td>
+                  </tr>
+                ) : (
+                  teachers.map((teacher: any, index: number) => {
+                    const identifier = teacher.uuid || teacher.id || `teacher-${index}`;
+                    
+                    const emailString =
+                      typeof teacher.email === 'object' && teacher.email !== null
+                        ? teacher.email.value || ''
+                        : typeof teacher.email === 'string'
+                        ? teacher.email
+                        : '';
+
+                    const fullName =
+                      typeof teacher.name === 'string' && teacher.name.trim() !== ''
+                        ? teacher.name
+                        : `${teacher.firstName || ''} ${teacher.lastName || ''}`.trim() ||
+                          emailString ||
+                          'Teacher';
+
+                    const teacherColor = teacher.subjectColor || '#3b82f6';
+                    
+                    const initials = (fullName || 'T')
+                      .split(' ')
+                      .filter(Boolean)
+                      .map((n: string) => n[0])
+                      .join('')
+                      .toUpperCase()
+                      .slice(0, 2) || 'T';
+
+                    const totalSlots = 8;
+                    const bookedSlots = 0;
+
+                    return (
+                      <tr
+                        key={identifier}
+                        className={styles.tableRow}
+                        onClick={() => handleTeacherClick(identifier)}
+                        onKeyDown={(e) => {
+                          if (e.key === 'Enter' || e.key === ' ') {
+                            e.preventDefault();
+                            handleTeacherClick(identifier);
+                          }
+                        }}
+                        role="button"
+                        tabIndex={0}
+                      >
+                        <td className={styles.nameCell}>
+                          <div
+                            className={styles.avatarFallback}
+                            style={{
+                              backgroundColor: `${teacherColor}25`,
+                              color: teacherColor,
+                            }}
+                          >
+                            {initials}
+                          </div>
+                          <span className={styles.teacherNameText}>{fullName}</span>
+                        </td>
+
+                        <td className={styles.workloadCell}>
+                          <div className={styles.dotsBar}>
+                            {Array.from({ length: totalSlots }).map((_, slotIndex) => {
+                              const isBooked = slotIndex < bookedSlots;
+                              return (
+                                <span
+                                  key={slotIndex}
+                                  className={`${styles.workloadDot} ${
+                                    isBooked ? styles.booked : styles.empty
+                                  }`}
+                                  style={{
+                                    backgroundColor: isBooked ? teacherColor : undefined,
+                                  }}
+                                />
+                              );
+                            })}
+                          </div>
+                        </td>
+
+                        <td className={styles.counterCell}>
+                          <div className={styles.counterBox}>
+                            <span className={styles.counterValue}>
+                              {bookedSlots} / {totalSlots}
+                            </span>
+                            <span className={styles.counterLabel}>
+                              <Txt>slots</Txt>
+                            </span>
+                          </div>
+                        </td>
+
+                        <td className={styles.viewCell}>
+                          <button
+                            type="button"
+                            className={styles.chevronBtn}
+                            onClick={(e) => {
+                              e.stopPropagation();
+                              handleTeacherClick(identifier);
+                            }}
+                            aria-label={`View ${fullName} details`}
+                          >
+                            &rsaquo;
+                          </button>
+                        </td>
+                      </tr>
+                    );
+                  })
+                )}
               </tbody>
             </table>
           </div>
@@ -342,60 +428,20 @@ export const AdminDashboard: React.FC = () => {
         {/* Right Column: Pending Requests */}
         <aside className={styles.pendingContainer}>
           <div className={styles.pendingHeader}>
-            <h3><Txt>Pending requests</Txt></h3>
-            <span className={styles.badgeCount}>{requests.length + 2}</span>
+            <h3>
+              <Txt>Pending requests</Txt>
+            </h3>
+            <span className={styles.badgeCount}>0</span>
           </div>
           <p className={styles.pendingSub}>
             <Txt>Accept or decline booking requests that require admin attention.</Txt>
           </p>
 
           <div className={styles.requestsList}>
-            {requests.length > 0 ? (
-              requests.map((req) => (
-                <div key={req.id} className={styles.requestCard}>
-                  <div className={styles.requestTopRow}>
-                    <h4 className={styles.studentName}>{req.studentName}</h4>
-                    <span
-                      className={
-                        req.status === 'active' ? styles.statusActive : styles.statusNew
-                      }
-                    >
-                      <Txt>{req.status === 'active' ? 'Active' : 'New'}</Txt>
-                    </span>
-                  </div>
-                  <span className={styles.studentEmail}>{req.email}</span>
-
-                  <div className={styles.requestDetails}>
-                    <span className={styles.dot} style={{ backgroundColor: req.subjectColor }}></span>
-                    <span><Txt>{req.subject}</Txt>, <Txt>{req.dateTime}</Txt></span>
-                  </div>
-
-                  <div className={styles.requestActions}>
-                    <button
-                      type="button"
-                      className={styles.btnDetails}
-                      onClick={() => navigate('/admin/students')}
-                    >
-                      <Txt>Details</Txt>
-                    </button>
-                    <button
-                      type="button"
-                      className={styles.btnAccept}
-                      onClick={() => handleAcceptRequest(req.id)}
-                    >
-                      <Txt>Accept</Txt>
-                    </button>
-                  </div>
-                </div>
-              ))
-            ) : (
-              <p className={styles.allDoneMessage}><Txt>All requests handled!</Txt></p>
-            )}
+            <p className={styles.allDoneMessage}>
+              <Txt>All requests handled!</Txt>
+            </p>
           </div>
-
-          <p className={styles.moreRequestsInfo}>
-            <span className={styles.greyDot}></span> 2 <Txt>more active requests requiring your attention</Txt>
-          </p>
 
           <button
             type="button"
