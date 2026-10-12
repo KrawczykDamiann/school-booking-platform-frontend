@@ -13,7 +13,6 @@ import { useLessons } from "./hooks/useLessons";
 import { useCalendarLessons } from "./hooks/useCalendarLessons";
 import { useStudentActiveBookings } from "./hooks/useStudentActiveBookings";
 import { useFilteredLessons } from "./hooks/useFilteredLessons";
-import { format } from "date-fns";
 import { GuidanceList } from "./components/GuidanceList/GuidanceList";
 
 type Booking = {
@@ -51,7 +50,7 @@ export const BookingFeature: React.FC = () => {
 
   const { subjects, isSubjectsLoading } = useSubjects();
   const { lessons, isLessonsLoading } = useLessons(selectedSubjectId);
-  const { studentActiveBookings, bookedSlots, getBookedSubjectId } =
+  const { studentActiveBookings, getBookedSubjectId } =
     useStudentActiveBookings();
 
   const selectedLesson = lessons?.find(
@@ -82,21 +81,7 @@ export const BookingFeature: React.FC = () => {
     setIsLoading(true);
 
     try {
-      const start = new Date(selectedLesson?.startTime);
-      const selectedLessonKey = `${format(start, "yyyy-MM-dd")}-${start.getHours()}`;
-
-      if (bookedSlots.includes(selectedLessonKey)) {
-        openModal({
-          type: "booking",
-          variant: "confirmationRequested",
-          data: {
-            onResetBooking: handleResetBooking,
-          },
-        });
-
-        return;
-      }
-
+      // NOTE: Removed slot restriction check (bookedSlots) for demo purposes to allow multiple bookings without limitations.
       const response: Booking = await bookLesson(selectedLessonUuid);
       const bookingType = response.type;
       const bookingUuid = response.uuid;
@@ -178,3 +163,5 @@ export const BookingFeature: React.FC = () => {
     </>
   );
 };
+
+export default BookingFeature;

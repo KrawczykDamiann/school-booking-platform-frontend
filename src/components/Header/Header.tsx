@@ -76,22 +76,10 @@ export const Header: React.FC = () => {
   const navigation = userType === "admin" ? adminNavigation : studentNavigation;
   const homePath = userType === "admin" ? "/admin" : "/";
 
-  const { t, i18n } = useTranslation();
+  const { t } = useTranslation();
 
-  const [isLanguageDropdownOpen, setIsLanguageDropdownOpen] = useState(false);
   const [isDropdownOpen, setIsDropdownOpen] = useState(false);
-
   const dropdownRef = useRef<HTMLDivElement>(null);
-
-  // Read language state from Google cookie, fallback to i18next or 'pl'
-  const [activeLang, setActiveLang] = useState<string>(() => {
-    const match = document.cookie.match(/googtrans=\/[/a-zA-Z]+\/([^/]+)/);
-    if (match) {
-      const code = match[1];
-      return code === "uk" ? "ua" : code; // Map Google's 'uk' back to local 'ua'
-    }
-    return i18n.resolvedLanguage || i18n.language || "pl";
-  });
 
   const handleLogout = () => {
     logout();
@@ -116,29 +104,6 @@ export const Header: React.FC = () => {
     document.addEventListener("mousedown", handleClickOutside);
     return () => document.removeEventListener("mousedown", handleClickOutside);
   }, []);
-
-  const changeLanguage = (langCode: string) => {
-    i18n.changeLanguage(langCode);
-    localStorage.setItem("app_lang", langCode);
-    setActiveLang(langCode);
-    setIsDropdownOpen(false);
-
-    // Map local 'ua' key to official 'uk' for Google Translate widget
-    const googleLangCode = langCode === "ua" ? "uk" : langCode;
-    const selectEl = document.querySelector(
-      ".goog-te-combo",
-    ) as HTMLSelectElement;
-    if (selectEl) {
-      selectEl.value = googleLangCode;
-      selectEl.dispatchEvent(new Event("change"));
-    }
-  };
-
-  const languages = [
-    { code: "en", label: "EN" },
-    { code: "pl", label: "PL" },
-    { code: "ua", label: "UA" },
-  ];
 
   return (
     <PageContainer>
@@ -168,34 +133,6 @@ export const Header: React.FC = () => {
         </nav>
 
         <div className={styles.rightSection}>
-          {/* Custom Dropdown Language Switcher */}
-          <div className={styles.translatorContainer} ref={dropdownRef}>
-            <button
-              className={styles.activeLangBtn}
-              onClick={() => setIsLanguageDropdownOpen(!isLanguageDropdownOpen)}
-            >
-              {activeLang.toUpperCase()}
-              <span className={styles.dropdownArrow}>▼</span>
-            </button>
-
-            {isLanguageDropdownOpen && (
-              <ul className={styles.langDropdown}>
-                {languages
-                  .filter((lang) => lang.code !== activeLang)
-                  .map((lang) => (
-                    <li key={lang.code}>
-                      <button
-                        className={styles.dropdownLangBtn}
-                        onClick={() => changeLanguage(lang.code)}
-                      >
-                        {lang.label}
-                      </button>
-                    </li>
-                  ))}
-              </ul>
-            )}
-          </div>
-
           {isAuthenticated ? (
             <div className={styles.rightSection}>
               {userType === "admin" && <div className={styles.avatar}>VU</div>}
@@ -209,7 +146,10 @@ export const Header: React.FC = () => {
             </div>
           ) : (
             <div>
-              <Button variant="secondary" onClick={() => openModal({ type: "login"})}>
+              <Button
+                variant="secondary"
+                onClick={() => openModal({ type: "login" })}
+              >
                 {t("header.studentLogin")}
               </Button>
             </div>
