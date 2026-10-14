@@ -54,6 +54,7 @@ Live application: [Lessio](https://lessio.koder95.dpdns.org/login)
 
 The application is organized into reusable components, pages, layouts, and feature-specific logic.
 
+```
 src/
 ├── api/          # API client and requests
 ├── assets/       # Images, icons, and other static assets
@@ -69,6 +70,7 @@ src/
 ├── styles/       # Global styles
 ├── types/        # TypeScript types and interfaces
 └── utils/        # Utility functions
+```
 
 ## Getting Started
 
