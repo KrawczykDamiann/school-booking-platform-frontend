@@ -6,16 +6,16 @@ import type { TeacherDto } from "../../api/teachers";
 import { fetchSubjects } from "../../api/subjects";
 import styles from "./TeacherListPage.module.scss";
 
-/* Helper for Google Translator */
+// Dynamic translation helper
 const Txt: React.FC<{ children: string }> = ({ children }) => {
   const translated = useTranslatedText(children);
   return <>{translated}</>;
 };
 
-/* Interfaces & Data */
 export interface SubjectItem {
   id: number;
   name: string;
+  color?: string;
   description?: string | null;
 }
 
@@ -48,7 +48,6 @@ const AVAILABLE_COLORS = [
 
 const DEFAULT_COLOR = "#00d2ff";
 
-/* SVG Icons */
 const BriefcaseIcon = () => (
   <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" width="14" height="14">
     <rect x="2" y="7" width="20" height="14" rx="2" ry="2"></rect>
@@ -137,7 +136,6 @@ export const TeacherListPage: React.FC = () => {
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [modalStep, setModalStep] = useState<1 | 2>(1);
 
-  /* Teacher Form State */
   const [editingTeacherUuid, setEditingTeacherUuid] = useState<string | null>(null);
   const [newTeacherName, setNewTeacherName] = useState("");
   const [newTeacherAvatarUrl, setNewTeacherAvatarUrl] = useState("");
@@ -150,7 +148,6 @@ export const TeacherListPage: React.FC = () => {
 
   const [isColorPaletteOpen, setIsColorPaletteOpen] = useState(false);
 
-  /* Interactive Schedule State */
   const [scheduleAvail, setScheduleAvail] = useState({
     monday: { start: "14:00", end: "16:00", active: true },
     tuesday: { start: "15:00", end: "19:00", active: true },
@@ -162,7 +159,6 @@ export const TeacherListPage: React.FC = () => {
   });
   const [lunch, setLunch] = useState({ start: "13:00", end: "14:00" });
 
-  /* Fetch Subjects and Teachers on Mount */
   useEffect(() => {
     setIsLoadingSubjects(true);
     fetchSubjects()
@@ -206,6 +202,13 @@ export const TeacherListPage: React.FC = () => {
             t.subject_id ||
             (t.subject && typeof t.subject === "object" ? t.subject.id : undefined);
 
+          const resolvedColor =
+            t.color ||
+            t.subjectColor ||
+            t.subject_color ||
+            (typeof t.subject === "object" && t.subject !== null ? t.subject.color : undefined) ||
+            DEFAULT_COLOR;
+
           const resolvedAvatar = t.avatarUrl || t.avatar || undefined;
 
           return {
@@ -217,7 +220,7 @@ export const TeacherListPage: React.FC = () => {
             avatarUrl: resolvedAvatar,
             subjectId: sId,
             subject: sName || "",
-            subjectColor: t.subjectColor || DEFAULT_COLOR,
+            subjectColor: resolvedColor,
             collabType: (t.collabType as "Contract" | "Freelance") || "Contract",
             dueDate: t.dueDate || "Without term",
           };
@@ -315,8 +318,9 @@ export const TeacherListPage: React.FC = () => {
       name: `${firstName} ${lastName}`.trim(),
       email: newTeacherEmail,
       avatarUrl: finalAvatar,
-      subjectId: Number(newTeacherSubjectId),
+      color: finalColor,
       subjectColor: finalColor,
+      subjectId: Number(newTeacherSubjectId),
       collabType: collabType,
       dueDate: collabType === "Freelance" ? "Without term" : new Date(dueDate).toLocaleDateString("en-GB"),
     };
@@ -331,6 +335,13 @@ export const TeacherListPage: React.FC = () => {
             ? updated.subject
             : subjectName;
 
+        const resolvedColor =
+          updated.color ||
+          updated.subjectColor ||
+          updated.subject_color ||
+          (typeof updated.subject === "object" && updated.subject !== null ? updated.subject.color : undefined) ||
+          finalColor;
+
         const resolvedAvatar = updated.avatarUrl || updated.avatar || finalAvatar;
 
         setTeachers((prev) =>
@@ -344,7 +355,7 @@ export const TeacherListPage: React.FC = () => {
                   avatarUrl: resolvedAvatar,
                   subjectId: updated.subjectId || teacherPayload.subjectId!,
                   subject: subjectLabel,
-                  subjectColor: updated.subjectColor || finalColor,
+                  subjectColor: resolvedColor,
                   collabType: (updated.collabType as "Contract" | "Freelance") || teacherPayload.collabType!,
                   dueDate: updated.dueDate || teacherPayload.dueDate!,
                 }
@@ -365,6 +376,13 @@ export const TeacherListPage: React.FC = () => {
           `${saved.firstName || ""} ${saved.lastName || ""}`.trim() ||
           teacherPayload.name!;
 
+        const resolvedColor =
+          saved.color ||
+          saved.subjectColor ||
+          saved.subject_color ||
+          (typeof saved.subject === "object" && saved.subject !== null ? saved.subject.color : undefined) ||
+          finalColor;
+
         const resolvedAvatar = saved.avatarUrl || saved.avatar || finalAvatar;
 
         const created: Teacher = {
@@ -376,7 +394,7 @@ export const TeacherListPage: React.FC = () => {
           avatarUrl: resolvedAvatar,
           subjectId: saved.subjectId || teacherPayload.subjectId!,
           subject: subjectLabel,
-          subjectColor: saved.subjectColor || finalColor,
+          subjectColor: resolvedColor,
           collabType: (saved.collabType as "Contract" | "Freelance") || teacherPayload.collabType!,
           dueDate: saved.dueDate || teacherPayload.dueDate!,
         };
@@ -495,6 +513,7 @@ export const TeacherListPage: React.FC = () => {
                               src={avatarSrc}
                               alt={teacher.name}
                               className={styles.avatarImg}
+                              style={{ outline: `2px solid ${avatarColor}` }}
                             />
                           ) : (
                             <div
@@ -590,6 +609,7 @@ export const TeacherListPage: React.FC = () => {
                             src={navAvatarSrc}
                             alt={tItem.name}
                             className={styles.navAvatar}
+                            style={{ outline: `2px solid ${navColor}` }}
                           />
                         ) : (
                           <div
@@ -622,6 +642,7 @@ export const TeacherListPage: React.FC = () => {
                           src={selectedTeacher.avatarUrl || selectedTeacher.avatar}
                           alt="Avatar"
                           className={styles.headerAvatar}
+                          style={{ outline: `3px solid ${selectedTeacher.subjectColor || DEFAULT_COLOR}` }}
                         />
                       ) : (
                         <div

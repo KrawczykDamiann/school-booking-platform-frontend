@@ -8,129 +8,13 @@ import { EllipseIcon } from "../../components/icons/EllipseIcon";
 import { api } from "../../api/api";
 import { Loader } from "../../components/ui/Loader/Loader";
 
-// Dynamic in-flight translation helper
+// Dynamic translation helper
 const Txt: React.FC<{ children: string }> = ({ children }) => {
   const translated = useTranslatedText(children);
   return <>{translated}</>;
 };
 
-/*
-interface PendingRequest {
-  id: string;
-  studentName: string;
-  email: string;
-  subject: string;
-  dateTime: string;
-  status: 'active' | 'new';
-  subjectColor: string;
-}
-
-const INITIAL_REQUESTS: PendingRequest[] = [
-  {
-    id: '1',
-    studentName: 'Sofiia Melnyk',
-    email: 'viktoriia.polishchuk@ukr.net',
-    subject: 'History',
-    dateTime: '6/07 at 14:00',
-    status: 'active',
-    subjectColor: '#a855f7',
-  },
-  {
-    id: '2',
-    studentName: 'Piotr Mazur',
-    email: '314mazur@interia.pl',
-    subject: 'Chemistry',
-    dateTime: '14/07 at 16:00',
-    status: 'new',
-    subjectColor: '#00d2ff',
-  },
-  {
-    id: '3',
-    studentName: 'Michał Zieliński',
-    email: 'michu_zieli69@onet.pl',
-    subject: 'English',
-    dateTime: '15/07 at 12:00',
-    status: 'active',
-    subjectColor: '#ff4757',
-  },
-];
-
-interface TeacherWorkload {
-  id: number;
-  name: string;
-  color: string;
-  avatar?: string;
-  bookedSlots: number;
-  totalSlots: number;
-}
-
-const INITIAL_TEACHERS_WORKLOAD: TeacherWorkload[] = [
-  {
-    id: 1,
-    name: 'Kataryna Novak',
-    color: '#00d2ff',
-    avatar: 'https://i.pravatar.cc/150?img=47',
-    bookedSlots: 4,
-    totalSlots: 8,
-  },
-  {
-    id: 2,
-    name: 'Andrii Shevchenko',
-    color: '#00c4b4',
-    bookedSlots: 3,
-    totalSlots: 8,
-  },
-  {
-    id: 3,
-    name: 'Sofia Koval',
-    color: '#38ef7d',
-    avatar: 'https://i.pravatar.cc/150?img=5',
-    bookedSlots: 4,
-    totalSlots: 8,
-  },
-  {
-    id: 4,
-    name: 'Nataliia Ivanenko',
-    color: '#b155fc',
-    avatar: 'https://i.pravatar.cc/150?img=9',
-    bookedSlots: 4,
-    totalSlots: 8,
-  },
-  {
-    id: 5,
-    name: 'Olena Melnyk',
-    color: '#fbad34',
-    bookedSlots: 4,
-    totalSlots: 8,
-  },
-  {
-    id: 6,
-    name: 'Dmytro Kozak',
-    color: '#3b82f6',
-    avatar: 'https://i.pravatar.cc/150?img=60',
-    bookedSlots: 1,
-    totalSlots: 8,
-  },
-  {
-    id: 7,
-    name: 'Maksym Bondarenko',
-    color: '#ff9ff3',
-    avatar: 'https://i.pravatar.cc/150?img=68',
-    bookedSlots: 3,
-    totalSlots: 8,
-  },
-  {
-    id: 8,
-    name: 'Anna Kowalska',
-    color: '#ff4757',
-    avatar: 'https://i.pravatar.cc/150?img=32',
-    bookedSlots: 3,
-    totalSlots: 7,
-  },
-];
-*/
-
-// Formats date to match Figma design (e.g., "July, the 6th")
+// Formats date to match Figma design
 const formatFigmaDate = (date: Date): string => {
   const month = date.toLocaleString("en-US", { month: "long" });
   const day = date.getDate();
@@ -171,7 +55,7 @@ export const AdminDashboard: React.FC = () => {
     fetchTeacherData();
   }, []);
 
-  // Close calendar popup when clicking outside
+  // Close calendar popup on click outside
   useEffect(() => {
     const handleClickOutside = (event: MouseEvent) => {
       if (
@@ -213,7 +97,7 @@ export const AdminDashboard: React.FC = () => {
     navigate(`/admin/teachers?teacherId=${teacherIdentifier}`);
   };
 
-  // Month grid calculations (Monday-based index)
+  // Month grid calculations
   const daysInMonth = new Date(
     selectedDate.getFullYear(),
     selectedDate.getMonth() + 1,
@@ -226,13 +110,12 @@ export const AdminDashboard: React.FC = () => {
   ).getDay();
   const offset = firstDayIndex === 0 ? 6 : firstDayIndex - 1;
 
-  // Loading state and function to fetch mock/test data
+  // Trigger test data loader
   const [isSetupLoading, setIsSetupLoading] = useState(false);
   const handleSetup = async () => {
     setIsSetupLoading(true);
     try {
-      const response = await api.post("/api/setup/examples/install?step=1");
-      console.log(response);
+      await api.post("/api/setup/examples/install?step=1");
     } catch (error) {
       console.error(error);
     } finally {
@@ -366,8 +249,6 @@ export const AdminDashboard: React.FC = () => {
                         width: "100%",
                       }}
                     >
-                      {/* Load mock/test data for development purposes */}
-
                       <div
                         style={{
                           display: "flex",
@@ -423,7 +304,14 @@ export const AdminDashboard: React.FC = () => {
                           emailString ||
                           "Teacher";
 
-                    const teacherColor = teacher.subjectColor || "#3b82f6";
+                    const teacherColor =
+                      teacher.color ||
+                      teacher.subjectColor ||
+                      teacher.subject_color ||
+                      (typeof teacher.subject === "object" && teacher.subject !== null ? teacher.subject.color : undefined) ||
+                      "#3b82f6";
+
+                    const avatarSrc = teacher.avatarUrl || teacher.avatar;
 
                     const initials =
                       (fullName || "T")
@@ -452,15 +340,24 @@ export const AdminDashboard: React.FC = () => {
                         tabIndex={0}
                       >
                         <td className={styles.nameCell}>
-                          <div
-                            className={styles.avatarFallback}
-                            style={{
-                              backgroundColor: `${teacherColor}25`,
-                              color: teacherColor,
-                            }}
-                          >
-                            {initials}
-                          </div>
+                          {avatarSrc ? (
+                            <img
+                              src={avatarSrc}
+                              alt={fullName}
+                              className={styles.avatarImg}
+                              style={{ outline: `2px solid ${teacherColor}` }}
+                            />
+                          ) : (
+                            <div
+                              className={styles.avatarFallback}
+                              style={{
+                                backgroundColor: `${teacherColor}25`,
+                                color: teacherColor,
+                              }}
+                            >
+                              {initials}
+                            </div>
+                          )}
                           <span className={styles.teacherNameText}>
                             {fullName}
                           </span>

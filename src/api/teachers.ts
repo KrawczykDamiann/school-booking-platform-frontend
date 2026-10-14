@@ -8,9 +8,10 @@ export interface TeacherDto {
   lastName?: string;
   email: string;
   avatarUrl?: string | null;
-  subjectId?: number;
-  subject?: string | { id: number; name: string; description?: string };
+  color?: string;
   subjectColor?: string;
+  subjectId?: number;
+  subject?: string | { id: number; name: string; color?: string; description?: string };
   collabType?: "Contract" | "Freelance";
   dueDate?: string | null;
 }
