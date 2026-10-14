@@ -51,7 +51,6 @@ export const BookingModal: React.FC<BookingModalProps> = ({
     if (type === "confirmationRequested") {
       return handleSubmitConfirmation();
     } else if (type === "somethingWentWrong") {
-      console.log("ok");
       return handleRetry();
     } else {
       return handleNavigation();

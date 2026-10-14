@@ -127,6 +127,7 @@ export const BookingFeature: React.FC = () => {
     setSelectedSubjectId(0);
     setSelectedLessonUuid(undefined);
     closeModal();
+    window.location.reload();
   };
 
   return (
