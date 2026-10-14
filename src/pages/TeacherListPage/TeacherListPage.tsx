@@ -6,9 +6,11 @@ import {
   createTeacher,
   updateTeacher,
   updateTeacherAvatar,
+  getTeacherAvailability,
+  updateTeacherAvailability,
   deleteTeacher,
 } from "../../api/teachers";
-import type { TeacherDto } from "../../api/teachers";
+import type { TeacherDto, TeacherAvailabilityDto } from "../../api/teachers";
 import { fetchSubjects } from "../../api/subjects";
 import styles from "./TeacherListPage.module.scss";
 
@@ -152,18 +154,25 @@ export const TeacherListPage: React.FC = () => {
   const [collabType, setCollabType] = useState<"Contract" | "Freelance">("Contract");
   const [dueDate, setDueDate] = useState("2027-06-06");
 
+  // Step 2 modal availability hours
+  const [modalWorkStart, setModalWorkStart] = useState("09:00");
+  const [modalWorkEnd, setModalWorkEnd] = useState("17:00");
+  const [modalLunchStart, setModalLunchStart] = useState("12:00");
+  const [modalLunchEnd, setModalLunchEnd] = useState("13:00");
+
   const [isColorPaletteOpen, setIsColorPaletteOpen] = useState(false);
 
+  // Detail view weekly schedule state
   const [scheduleAvail, setScheduleAvail] = useState({
-    monday: { start: "14:00", end: "16:00", active: true },
-    tuesday: { start: "15:00", end: "19:00", active: true },
-    wednesday: { start: "12:00", end: "18:00", active: true },
-    thursday: { start: "14:00", end: "18:00", active: true },
-    friday: { start: "10:00", end: "17:00", active: true },
+    monday: { start: "09:00", end: "17:00", active: true },
+    tuesday: { start: "09:00", end: "17:00", active: true },
+    wednesday: { start: "09:00", end: "17:00", active: true },
+    thursday: { start: "09:00", end: "17:00", active: true },
+    friday: { start: "09:00", end: "17:00", active: true },
     saturday: { start: "10:00", end: "14:00", active: false },
     sunday: { start: "10:00", end: "14:00", active: false },
   });
-  const [lunch, setLunch] = useState({ start: "13:00", end: "14:00" });
+  const [lunch, setLunch] = useState({ start: "12:00", end: "13:00" });
 
   useEffect(() => {
     setIsLoadingSubjects(true);
@@ -250,6 +259,54 @@ export const TeacherListPage: React.FC = () => {
       });
   }, [searchParams]);
 
+  // Fetch teacher availability when navigating to detail view
+  useEffect(() => {
+    if (!selectedTeacherId) return;
+    const teacher = teachers.find(
+      (t) => t.uuid === selectedTeacherId || String(t.id) === String(selectedTeacherId)
+    );
+    const targetUuid = teacher?.uuid || (typeof selectedTeacherId === "string" ? selectedTeacherId : null);
+
+    if (targetUuid) {
+      getTeacherAvailability(targetUuid)
+        .then((avail) => {
+          if (!avail) return;
+          setScheduleAvail((prev) => ({
+            monday: avail.monday
+              ? { start: avail.monday.startTime, end: avail.monday.endTime, active: true }
+              : { ...prev.monday, active: false },
+            tuesday: avail.tuesday
+              ? { start: avail.tuesday.startTime, end: avail.tuesday.endTime, active: true }
+              : { ...prev.tuesday, active: false },
+            wednesday: avail.wednesday
+              ? { start: avail.wednesday.startTime, end: avail.wednesday.endTime, active: true }
+              : { ...prev.wednesday, active: false },
+            thursday: avail.thursday
+              ? { start: avail.thursday.startTime, end: avail.thursday.endTime, active: true }
+              : { ...prev.thursday, active: false },
+            friday: avail.friday
+              ? { start: avail.friday.startTime, end: avail.friday.endTime, active: true }
+              : { ...prev.friday, active: false },
+            saturday: avail.saturday
+              ? { start: avail.saturday.startTime, end: avail.saturday.endTime, active: true }
+              : { ...prev.saturday, active: false },
+            sunday: avail.sunday
+              ? { start: avail.sunday.startTime, end: avail.sunday.endTime, active: true }
+              : { ...prev.sunday, active: false },
+          }));
+          if (avail.lunchBreak) {
+            setLunch({
+              start: avail.lunchBreak.startTime,
+              end: avail.lunchBreak.endTime,
+            });
+          }
+        })
+        .catch((err) => {
+          console.warn("Could not fetch teacher availability:", err);
+        });
+    }
+  }, [selectedTeacherId, teachers]);
+
   const handleSubjectSelectChange = (e: React.ChangeEvent<HTMLSelectElement>) => {
     setNewTeacherSubjectId(Number(e.target.value));
   };
@@ -307,7 +364,40 @@ export const TeacherListPage: React.FC = () => {
     setIsModalOpen(true);
   };
 
-  const handleSaveTeacher = async () => {
+  const buildAvailabilityPayload = (isModal: boolean): TeacherAvailabilityDto => {
+    if (isModal) {
+      const workdayRange = { startTime: modalWorkStart, endTime: modalWorkEnd };
+      return {
+        monday: workdayRange,
+        tuesday: workdayRange,
+        wednesday: workdayRange,
+        thursday: workdayRange,
+        friday: workdayRange,
+        lunchBreak: { startTime: modalLunchStart, endTime: modalLunchEnd },
+      };
+    }
+
+    return {
+      monday: scheduleAvail.monday.active
+        ? { startTime: scheduleAvail.monday.start, endTime: scheduleAvail.monday.end }
+        : null,
+      tuesday: scheduleAvail.tuesday.active
+        ? { startTime: scheduleAvail.tuesday.start, endTime: scheduleAvail.tuesday.end }
+        : null,
+      wednesday: scheduleAvail.wednesday.active
+        ? { startTime: scheduleAvail.wednesday.start, endTime: scheduleAvail.wednesday.end }
+        : null,
+      thursday: scheduleAvail.thursday.active
+        ? { startTime: scheduleAvail.thursday.start, endTime: scheduleAvail.thursday.end }
+        : null,
+      friday: scheduleAvail.friday.active
+        ? { startTime: scheduleAvail.friday.start, endTime: scheduleAvail.friday.end }
+        : null,
+      lunchBreak: { startTime: lunch.start, endTime: lunch.end },
+    };
+  };
+
+  const handleSaveTeacher = async (saveWithAvailability = false) => {
     const selectedSub = subjects.find((s) => s.id === Number(newTeacherSubjectId));
     const subjectName = selectedSub ? selectedSub.name : "";
 
@@ -335,12 +425,20 @@ export const TeacherListPage: React.FC = () => {
       if (editingTeacherUuid) {
         const updated: any = await updateTeacher(editingTeacherUuid, teacherPayload);
 
-        // Update avatar via dedicated endpoint if provided
         if (finalAvatar) {
           try {
             await updateTeacherAvatar(editingTeacherUuid, finalAvatar);
           } catch (avatarErr) {
             console.error("API Error updating avatar via dedicated endpoint:", avatarErr);
+          }
+        }
+
+        if (saveWithAvailability) {
+          try {
+            const availPayload = buildAvailabilityPayload(true);
+            await updateTeacherAvailability(editingTeacherUuid, availPayload);
+          } catch (availErr) {
+            console.error("API Error updating teacher availability:", availErr);
           }
         }
 
@@ -382,12 +480,20 @@ export const TeacherListPage: React.FC = () => {
         const saved: any = await createTeacher(teacherPayload);
         const targetUuid = saved.uuid || saved.id;
 
-        // Save avatar via dedicated endpoint if provided
         if (finalAvatar && targetUuid) {
           try {
             await updateTeacherAvatar(targetUuid, finalAvatar);
           } catch (avatarErr) {
             console.error("API Error setting avatar via dedicated endpoint:", avatarErr);
+          }
+        }
+
+        if (saveWithAvailability && targetUuid) {
+          try {
+            const availPayload = buildAvailabilityPayload(true);
+            await updateTeacherAvailability(targetUuid, availPayload);
+          } catch (availErr) {
+            console.error("API Error setting teacher availability:", availErr);
           }
         }
 
@@ -435,6 +541,19 @@ export const TeacherListPage: React.FC = () => {
     resetForm();
   };
 
+  const handleSaveDetailAvailability = async () => {
+    if (!selectedTeacher) return;
+    const targetUuid = selectedTeacher.uuid || (typeof selectedTeacher.id === "string" ? selectedTeacher.id : null);
+    if (!targetUuid) return;
+
+    try {
+      const payload = buildAvailabilityPayload(false);
+      await updateTeacherAvailability(targetUuid, payload);
+    } catch (err) {
+      console.error("API Error saving availability from details view:", err);
+    }
+  };
+
   const handleDeleteTeacher = async (teacher: Teacher) => {
     const identifier = teacher.uuid || teacher.id;
     try {
@@ -460,6 +579,10 @@ export const TeacherListPage: React.FC = () => {
     setNewTeacherColor(DEFAULT_COLOR);
     setEmailError("");
     setIsColorPaletteOpen(false);
+    setModalWorkStart("09:00");
+    setModalWorkEnd("17:00");
+    setModalLunchStart("12:00");
+    setModalLunchEnd("13:00");
   };
 
   const selectedTeacher =
@@ -529,6 +652,7 @@ export const TeacherListPage: React.FC = () => {
                       <tr
                         key={teacher.uuid || teacher.id}
                         className={isSelected ? styles.activeRow : ""}
+                        style={{ '--subject-color': avatarColor } as React.CSSProperties}
                         onClick={() => {
                           setSelectedTeacherId(teacher.uuid || teacher.id);
                           setViewMode("detail");
@@ -540,13 +664,9 @@ export const TeacherListPage: React.FC = () => {
                               src={avatarSrc}
                               alt={teacher.name}
                               className={styles.avatarImg}
-                              style={{ outline: `2px solid ${avatarColor}` }}
                             />
                           ) : (
-                            <div
-                              className={styles.avatarMock}
-                              style={{ '--subject-color': avatarColor } as React.CSSProperties}
-                            >
+                            <div className={styles.avatarMock}>
                               {teacher.name
                                 .split(" ")
                                 .filter(Boolean)
@@ -560,10 +680,7 @@ export const TeacherListPage: React.FC = () => {
                         </td>
                         <td>
                           <span className={styles.subjectWrapper}>
-                            <span
-                              className={styles.colorDot}
-                              style={{ '--subject-color': avatarColor } as React.CSSProperties}
-                            ></span>
+                            <span className={styles.colorDot}></span>
                             <Txt>{displaySubject}</Txt>
                           </span>
                         </td>
@@ -629,6 +746,7 @@ export const TeacherListPage: React.FC = () => {
                       <div
                         key={tItem.uuid || tItem.id}
                         className={`${styles.teacherNavItem} ${isActive ? styles.activeNavItem : ""}`}
+                        style={{ '--subject-color': navColor } as React.CSSProperties}
                         onClick={() => setSelectedTeacherId(tItem.uuid || tItem.id)}
                       >
                         {navAvatarSrc ? (
@@ -636,13 +754,9 @@ export const TeacherListPage: React.FC = () => {
                             src={navAvatarSrc}
                             alt={tItem.name}
                             className={styles.navAvatar}
-                            style={{ outline: `2px solid ${navColor}` }}
                           />
                         ) : (
-                          <div
-                            className={styles.navAvatarMock}
-                            style={{ '--subject-color': navColor } as React.CSSProperties}
-                          >
+                          <div className={styles.navAvatarMock}>
                             {tItem.name
                               .split(" ")
                               .filter(Boolean)
@@ -662,20 +776,19 @@ export const TeacherListPage: React.FC = () => {
                 </aside>
 
                 <main className={styles.scheduleColumn}>
-                  <div className={styles.teacherHeaderCard}>
+                  <div
+                    className={styles.teacherHeaderCard}
+                    style={{ '--subject-color': selectedTeacher.subjectColor || DEFAULT_COLOR } as React.CSSProperties}
+                  >
                     <div className={styles.headerLeft}>
                       {selectedTeacher.avatarUrl || selectedTeacher.avatar ? (
                         <img
                           src={selectedTeacher.avatarUrl || selectedTeacher.avatar}
                           alt="Avatar"
                           className={styles.headerAvatar}
-                          style={{ outline: `3px solid ${selectedTeacher.subjectColor || DEFAULT_COLOR}` }}
                         />
                       ) : (
-                        <div
-                          className={styles.headerAvatarMock}
-                          style={{ '--subject-color': selectedTeacher.subjectColor || DEFAULT_COLOR } as React.CSSProperties}
-                        >
+                        <div className={styles.headerAvatarMock}>
                           {selectedTeacher.name
                             .split(" ")
                             .filter(Boolean)
@@ -778,32 +891,42 @@ export const TeacherListPage: React.FC = () => {
                             type="time"
                             step="900"
                             value={scheduleAvail[day.id as keyof typeof scheduleAvail].start}
-                            onChange={(e) =>
+                            onChange={(e) => {
                               setScheduleAvail({
                                 ...scheduleAvail,
                                 [day.id]: {
                                   ...scheduleAvail[day.id as keyof typeof scheduleAvail],
                                   start: e.target.value,
                                 },
-                              })
-                            }
+                              });
+                              handleSaveDetailAvailability();
+                            }}
                           />
                           <span>—</span>
                           <input
                             type="time"
                             step="900"
                             value={scheduleAvail[day.id as keyof typeof scheduleAvail].end}
-                            onChange={(e) =>
+                            onChange={(e) => {
                               setScheduleAvail({
                                 ...scheduleAvail,
                                 [day.id]: {
                                   ...scheduleAvail[day.id as keyof typeof scheduleAvail],
                                   end: e.target.value,
                                 },
-                              })
-                            }
+                              });
+                              handleSaveDetailAvailability();
+                            }}
                           />
-                          <span className={styles.deleteIcon} onClick={() => handleRemoveDay(day.id)}>🗑️</span>
+                          <span
+                            className={styles.deleteIcon}
+                            onClick={() => {
+                              handleRemoveDay(day.id);
+                              handleSaveDetailAvailability();
+                            }}
+                          >
+                            🗑️
+                          </span>
                         </div>
                       </div>
                     ))}
@@ -819,14 +942,20 @@ export const TeacherListPage: React.FC = () => {
                           type="time"
                           step="900"
                           value={lunch.start}
-                          onChange={(e) => setLunch({ ...lunch, start: e.target.value })}
+                          onChange={(e) => {
+                            setLunch({ ...lunch, start: e.target.value });
+                            handleSaveDetailAvailability();
+                          }}
                         />
                         <span>—</span>
                         <input
                           type="time"
                           step="900"
                           value={lunch.end}
-                          onChange={(e) => setLunch({ ...lunch, end: e.target.value })}
+                          onChange={(e) => {
+                            setLunch({ ...lunch, end: e.target.value });
+                            handleSaveDetailAvailability();
+                          }}
                         />
                         <span className={styles.deleteIcon}>✏️</span>
                       </div>
@@ -957,7 +1086,11 @@ export const TeacherListPage: React.FC = () => {
                   <button type="submit" disabled={!isStep1Valid} className={styles.primaryBtn}>
                     <Txt>Continue to availability</Txt>
                   </button>
-                  <button type="button" className={styles.secondaryBtn} onClick={handleSaveTeacher}>
+                  <button
+                    type="button"
+                    className={styles.secondaryBtn}
+                    onClick={() => handleSaveTeacher(false)}
+                  >
                     <Txt>Save and set later</Txt>
                   </button>
                 </div>
@@ -1017,9 +1150,19 @@ export const TeacherListPage: React.FC = () => {
                     <BriefcaseIcon /> <Txt>Workdays</Txt>
                   </span>
                   <div className={styles.timeInputs}>
-                    <input type="time" step="900" defaultValue="09:00" />
+                    <input
+                      type="time"
+                      step="900"
+                      value={modalWorkStart}
+                      onChange={(e) => setModalWorkStart(e.target.value)}
+                    />
                     <span>—</span>
-                    <input type="time" step="900" defaultValue="17:00" />
+                    <input
+                      type="time"
+                      step="900"
+                      value={modalWorkEnd}
+                      onChange={(e) => setModalWorkEnd(e.target.value)}
+                    />
                   </div>
                 </div>
 
@@ -1028,9 +1171,19 @@ export const TeacherListPage: React.FC = () => {
                     <ForkKnifeIcon /> <Txt>Lunch break</Txt>
                   </span>
                   <div className={styles.timeInputs}>
-                    <input type="time" step="900" defaultValue="12:00" />
+                    <input
+                      type="time"
+                      step="900"
+                      value={modalLunchStart}
+                      onChange={(e) => setModalLunchStart(e.target.value)}
+                    />
                     <span>—</span>
-                    <input type="time" step="900" defaultValue="13:00" />
+                    <input
+                      type="time"
+                      step="900"
+                      value={modalLunchEnd}
+                      onChange={(e) => setModalLunchEnd(e.target.value)}
+                    />
                   </div>
                 </div>
 
@@ -1039,7 +1192,11 @@ export const TeacherListPage: React.FC = () => {
                   <span className={styles.accentText}><Txt>add now</Txt></span>
                 </p>
 
-                <button type="button" className={`${styles.primaryBtn} ${styles.activeBtn}`} onClick={handleSaveTeacher}>
+                <button
+                  type="button"
+                  className={`${styles.primaryBtn} ${styles.activeBtn}`}
+                  onClick={() => handleSaveTeacher(true)}
+                >
                   <Txt>Save teacher</Txt>
                 </button>
               </div>

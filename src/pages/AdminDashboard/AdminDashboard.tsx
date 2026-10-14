@@ -329,6 +329,7 @@ export const AdminDashboard: React.FC = () => {
                       <tr
                         key={identifier}
                         className={styles.tableRow}
+                        style={{ '--teacher-color': teacherColor } as React.CSSProperties}
                         onClick={() => handleTeacherClick(identifier)}
                         onKeyDown={(e) => {
                           if (e.key === "Enter" || e.key === " ") {
@@ -345,16 +346,9 @@ export const AdminDashboard: React.FC = () => {
                               src={avatarSrc}
                               alt={fullName}
                               className={styles.avatarImg}
-                              style={{ outline: `2px solid ${teacherColor}` }}
                             />
                           ) : (
-                            <div
-                              className={styles.avatarFallback}
-                              style={{
-                                backgroundColor: `${teacherColor}25`,
-                                color: teacherColor,
-                              }}
-                            >
+                            <div className={styles.avatarFallback}>
                               {initials}
                             </div>
                           )}
@@ -374,11 +368,6 @@ export const AdminDashboard: React.FC = () => {
                                     className={`${styles.workloadDot} ${
                                       isBooked ? styles.booked : styles.empty
                                     }`}
-                                    style={{
-                                      backgroundColor: isBooked
-                                        ? teacherColor
-                                        : undefined,
-                                    }}
                                   />
                                 );
                               },

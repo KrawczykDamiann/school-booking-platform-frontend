@@ -1,5 +1,21 @@
 import { api } from "./api";
 
+export interface TimeRangeDto {
+  startTime: string;
+  endTime: string;
+}
+
+export interface TeacherAvailabilityDto {
+  monday?: TimeRangeDto | null;
+  tuesday?: TimeRangeDto | null;
+  wednesday?: TimeRangeDto | null;
+  thursday?: TimeRangeDto | null;
+  friday?: TimeRangeDto | null;
+  saturday?: TimeRangeDto | null;
+  sunday?: TimeRangeDto | null;
+  lunchBreak?: TimeRangeDto | null;
+}
+
 export interface TeacherDto {
   id?: number;
   uuid?: string;
@@ -14,6 +30,7 @@ export interface TeacherDto {
   subject?: string | { id: number; name: string; color?: string; description?: string };
   collabType?: "Contract" | "Freelance";
   dueDate?: string | null;
+  availability?: TeacherAvailabilityDto;
 }
 
 export const getTeachers = async (): Promise<TeacherDto[]> => {
@@ -44,6 +61,22 @@ export const updateTeacherAvatar = async (
   avatarUrl: string
 ): Promise<void> => {
   await api.put(`/api/teachers/${uuid}/avatar`, { avatarUrl });
+};
+
+export const getTeacherAvailability = async (
+  uuid: string
+): Promise<TeacherAvailabilityDto> => {
+  const response = await api.get<TeacherAvailabilityDto>(
+    `/api/teachers/${uuid}/availability`
+  );
+  return response.data;
+};
+
+export const updateTeacherAvailability = async (
+  uuid: string,
+  availability: TeacherAvailabilityDto
+): Promise<void> => {
+  await api.put(`/api/teachers/${uuid}/availability`, availability);
 };
 
 export const deleteTeacher = async (idOrUuid: string | number): Promise<void> => {

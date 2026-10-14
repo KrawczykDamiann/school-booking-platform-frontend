@@ -1,9 +1,9 @@
-@import "../../styles/variables";
+@use "../../styles/variables" as v;
 
 /* Layout */
 .dashboardContainer {
   font-family: 'Inter', sans-serif;
-  background-color: $color-bg-main;
+  background-color: v.$color-bg-main;
   min-height: 100vh;
   width: 100%;
   overflow-x: hidden;
@@ -34,7 +34,7 @@
     font-size: 1.5rem;
     font-weight: 700;
     margin: 0;
-    color: $color-text-main;
+    color: v.$color-text-main;
   }
 }
 
@@ -51,32 +51,39 @@
   align-items: center;
   gap: 0.5rem;
 
-  svg { width: 16px; height: 16px; }
-  &:hover { background-color: #155c43; }
+  svg {
+    width: 16px;
+    height: 16px;
+  }
+  &:hover {
+    background-color: #155c43;
+  }
 }
 
 .backBtn {
   background: none;
-  border: 1px solid $color-border;
+  border: 1px solid v.$color-border;
   padding: 0.5rem 1rem;
   border-radius: 12px;
   font-weight: 600;
   cursor: pointer;
-  color: $color-text-main;
+  color: v.$color-text-main;
   display: flex;
   align-items: center;
   gap: 0.4rem;
   margin-bottom: 1rem;
 
-  &:hover { background-color: $color-gray10; }
+  &:hover {
+    background-color: v.$color-gray10;
+  }
 }
 
 /* List View */
 .listSection {
-  background: $color-white;
-  border-radius: $radius-md;
+  background: v.$color-white;
+  border-radius: v.$radius-md;
   padding: 1.5rem 2rem;
-  box-shadow: $shadow-sm;
+  box-shadow: v.$shadow-sm;
   flex: 0 1 950px;
   box-sizing: border-box;
   position: relative;
@@ -98,7 +105,7 @@
     color: #a0aec0;
     font-weight: 500;
     font-size: 0.8rem;
-    border-bottom: 1px solid $color-border;
+    border-bottom: 1px solid v.$color-border;
   }
 
   .thAction {
@@ -108,9 +115,9 @@
 
   td {
     padding: 0.85rem 1rem;
-    border-bottom: 1px solid $color-gray10;
+    border-bottom: 1px solid v.$color-gray10;
     font-size: 0.9rem;
-    color: $color-text-main;
+    color: v.$color-text-main;
     vertical-align: middle;
   }
 
@@ -121,7 +128,9 @@
   tr {
     cursor: pointer;
     transition: background-color 0.15s ease;
-    &:hover { background-color: #f8f9fa; }
+    &:hover {
+      background-color: #f8f9fa;
+    }
   }
 }
 
@@ -137,7 +146,6 @@
   }
 }
 
-/* Symetryczne kółka awatara w tabeli */
 .avatarMock {
   width: 40px;
   height: 40px;
@@ -164,6 +172,7 @@
   object-fit: cover;
   flex-shrink: 0;
   aspect-ratio: 1 / 1;
+  box-shadow: 0 0 0 2px var(--subject-color, #00d2ff);
 }
 
 .subjectWrapper {
@@ -193,7 +202,10 @@
     gap: 0.4rem;
     color: #a0aec0;
     font-size: 0.85rem;
-    svg { width: 14px; height: 14px; }
+    svg {
+      width: 14px;
+      height: 14px;
+    }
   }
 
   .dueDate {
@@ -229,8 +241,14 @@
     cursor: pointer;
     padding: 0.25rem;
     opacity: 0.6;
-    &:hover { opacity: 1; }
-    svg { width: 15px; height: 15px; color: #a0aec0; }
+    &:hover {
+      opacity: 1;
+    }
+    svg {
+      width: 15px;
+      height: 15px;
+      color: #a0aec0;
+    }
   }
 
   .deleteBtn {
@@ -241,7 +259,7 @@
 /* Detail View Layout */
 .detailGrid {
   display: grid;
-  grid-template-columns: 220px 1fr 400px; 
+  grid-template-columns: 220px 1fr 400px;
   gap: 1.5rem;
   align-items: start;
 
@@ -254,10 +272,10 @@
 }
 
 .avatarsSidebar {
-  background: $color-white;
-  border-radius: $radius-md;
+  background: v.$color-white;
+  border-radius: v.$radius-md;
   padding: 1.25rem 1rem;
-  box-shadow: $shadow-sm;
+  box-shadow: v.$shadow-sm;
 
   h3 {
     font-size: 0.9rem;
@@ -276,10 +294,14 @@
     transition: all 0.2s;
     margin-bottom: 0.25rem;
 
-    &:hover { background-color: #f8f9fa; }
+    &:hover {
+      background-color: #f8f9fa;
+    }
     &.activeNavItem {
       background-color: #f1f3f5;
-      .navName { font-weight: 700; }
+      .navName {
+        font-weight: 700;
+      }
     }
 
     .navAvatar {
@@ -291,6 +313,7 @@
       object-fit: cover;
       flex-shrink: 0;
       aspect-ratio: 1 / 1;
+      box-shadow: 0 0 0 2px var(--subject-color, #00d2ff);
     }
 
     .navAvatarMock {
@@ -316,7 +339,7 @@
 
       .navName {
         font-size: 0.82rem;
-        color: $color-text-main;
+        color: v.$color-text-main;
         white-space: nowrap;
         overflow: hidden;
         text-overflow: ellipsis;
@@ -338,10 +361,10 @@
 }
 
 .teacherHeaderCard {
-  background: $color-white;
-  border-radius: $radius-md;
+  background: v.$color-white;
+  border-radius: v.$radius-md;
   padding: 1.25rem 1.5rem;
-  box-shadow: $shadow-sm;
+  box-shadow: v.$shadow-sm;
   display: flex;
   align-items: center;
   justify-content: space-between;
@@ -360,6 +383,7 @@
       object-fit: cover;
       flex-shrink: 0;
       aspect-ratio: 1 / 1;
+      box-shadow: 0 0 0 3px var(--subject-color, #00d2ff);
     }
 
     .headerAvatarMock {
@@ -383,7 +407,7 @@
       h3 {
         margin: 0 0 0.25rem 0;
         font-size: 1.1rem;
-        color: $color-text-main;
+        color: v.$color-text-main;
       }
       p {
         margin: 0;
@@ -415,10 +439,10 @@
 }
 
 .scheduleGridCard {
-  background: $color-white;
-  border-radius: $radius-md;
+  background: v.$color-white;
+  border-radius: v.$radius-md;
   padding: 1.5rem;
-  box-shadow: $shadow-sm;
+  box-shadow: v.$shadow-sm;
 
   .scheduleHeader {
     display: flex;
@@ -429,7 +453,7 @@
     h3 {
       margin: 0;
       font-size: 1.2rem;
-      color: $color-text-main;
+      color: v.$color-text-main;
     }
     span {
       font-size: 0.85rem;
@@ -459,7 +483,7 @@
           display: block;
           font-size: 0.9rem;
           font-weight: 700;
-          color: $color-text-main;
+          color: v.$color-text-main;
           text-transform: capitalize;
         }
 
@@ -494,14 +518,14 @@
     display: flex;
     justify-content: space-between;
     align-items: center;
-    border-top: 1px solid $color-gray10;
+    border-top: 1px solid v.$color-gray10;
     padding-top: 1rem;
 
     .nextLessonsLabel {
       font-size: 0.8rem;
       color: #a0aec0;
       span {
-        color: $color-text-main;
+        color: v.$color-text-main;
         font-weight: 600;
         margin-left: 0.5rem;
       }
@@ -528,10 +552,10 @@
 }
 
 .availabilityCard {
-  background: $color-white;
-  border-radius: $radius-md;
+  background: v.$color-white;
+  border-radius: v.$radius-md;
   padding: 1.5rem;
-  box-shadow: $shadow-sm;
+  box-shadow: v.$shadow-sm;
 
   .cardHeader {
     display: flex;
@@ -542,7 +566,7 @@
     h3 {
       margin: 0;
       font-size: 1.1rem;
-      color: $color-text-main;
+      color: v.$color-text-main;
     }
     .addDayBtn {
       color: #ff7675;
@@ -568,7 +592,7 @@
 
     .dayName {
       font-size: 0.82rem;
-      color: $color-text-main;
+      color: v.$color-text-main;
       font-weight: 500;
       text-transform: capitalize;
       width: 95px;
@@ -583,7 +607,7 @@
       input[type="time"] {
         width: 76px;
         padding: 0.3rem 0.1rem 0.3rem 0.4rem;
-        border: 1px solid $color-border;
+        border: 1px solid v.$color-border;
         border-radius: 6px;
         text-align: center;
         font-size: 0.85rem;
@@ -591,7 +615,7 @@
         background-color: #ffffff;
         color: #000000;
         color-scheme: light;
-        
+
         &::-webkit-inner-spin-button {
           display: block !important;
           opacity: 1 !important;
@@ -640,10 +664,10 @@
 }
 
 .vacationsCard {
-  background: $color-white;
-  border-radius: $radius-md;
+  background: v.$color-white;
+  border-radius: v.$radius-md;
   padding: 1.25rem 1.5rem;
-  box-shadow: $shadow-sm;
+  box-shadow: v.$shadow-sm;
 
   .vacationHeader {
     display: flex;
@@ -654,7 +678,7 @@
     h3 {
       margin: 0;
       font-size: 0.95rem;
-      color: $color-text-main;
+      color: v.$color-text-main;
     }
 
     .badge {
@@ -692,7 +716,7 @@
 }
 
 .modalCard {
-  background: $color-white;
+  background: v.$color-white;
   width: 100%;
   max-width: 420px;
   border-radius: 16px;
@@ -714,7 +738,7 @@
     gap: 0.5rem;
 
     svg {
-      color: $color-text-main;
+      color: v.$color-text-main;
       opacity: 0.8;
     }
 
@@ -722,7 +746,7 @@
       margin: 0;
       font-size: 1.15rem;
       font-weight: 600;
-      color: $color-text-main;
+      color: v.$color-text-main;
     }
   }
 
@@ -744,9 +768,9 @@
       cursor: pointer;
       line-height: 1;
       padding: 0;
-      
+
       &:hover {
-        color: $color-text-main;
+        color: v.$color-text-main;
       }
     }
   }
@@ -763,7 +787,7 @@
   border: none;
   font-size: 1.2rem;
   cursor: pointer;
-  color: $color-text-main;
+  color: v.$color-text-main;
   padding: 0;
 }
 
@@ -777,7 +801,7 @@
     position: absolute;
     top: -8px;
     left: 12px;
-    background-color: $color-white;
+    background-color: v.$color-white;
     padding: 0 4px;
     font-size: 0.75rem;
     font-weight: 400;
@@ -796,7 +820,7 @@
     font-weight: 500;
     background: #ffffff;
     box-sizing: border-box;
-    appearance: none; 
+    appearance: none;
 
     &::placeholder {
       color: #a0aec0;
@@ -819,7 +843,7 @@
 
 .inputWithLeftIcon {
   position: relative;
-  
+
   svg {
     position: absolute;
     left: 1rem;
@@ -830,14 +854,15 @@
     z-index: 2;
   }
 
-  input, select {
+  input,
+  select {
     padding-left: 2.6rem;
   }
 }
 
 .inputWithRightIcon {
   position: relative;
-  
+
   svg {
     position: absolute;
     right: 1rem;
@@ -851,7 +876,7 @@
   input {
     padding-right: 2.6rem;
     color-scheme: light;
-    
+
     &::-webkit-calendar-picker-indicator {
       position: absolute;
       right: 0;
@@ -866,8 +891,12 @@
 
 /* Error states */
 .errorState {
-  label { color: #e53e3e; }
-  input { border-color: #e53e3e; }
+  label {
+    color: #e53e3e;
+  }
+  input {
+    border-color: #e53e3e;
+  }
 }
 
 .errorText {
@@ -879,12 +908,12 @@
 /* Subject & Color Picker Row */
 .subjectRow {
   display: flex;
-  align-items: center; 
+  align-items: center;
   gap: 0.75rem;
   margin-bottom: 0.25rem;
 
   .inputWrapper {
-    margin-bottom: 0; 
+    margin-bottom: 0;
     flex: 1;
   }
 }
@@ -904,14 +933,14 @@
   border: 1px solid #cbd5e0;
   cursor: pointer;
   background: conic-gradient(
-    #ff4757, 
-    #fbad34, 
-    #fec107, 
-    #38ef7d, 
-    #00f2fe, 
-    #00d2ff, 
-    #b155fc, 
-    #ff9ff3, 
+    #ff4757,
+    #fbad34,
+    #fec107,
+    #38ef7d,
+    #00f2fe,
+    #00d2ff,
+    #b155fc,
+    #ff9ff3,
     #ff4757
   );
   display: flex;
@@ -919,8 +948,10 @@
   justify-content: center;
   padding: 0;
   transition: opacity 0.2s;
-  
-  &:hover { opacity: 0.8; }
+
+  &:hover {
+    opacity: 0.8;
+  }
 }
 
 .innerColorDot {
@@ -928,7 +959,7 @@
   height: 12px;
   border-radius: 50%;
   border: 2px solid #ffffff;
-  box-shadow: 0 1px 3px rgba(0,0,0,0.2);
+  box-shadow: 0 1px 3px rgba(0, 0, 0, 0.2);
   background-color: var(--selected-color, #00d2ff);
 }
 
@@ -957,7 +988,9 @@
   transition: transform 0.1s;
   background-color: var(--dot-color, #00d2ff);
 
-  &:hover { transform: scale(1.1); }
+  &:hover {
+    transform: scale(1.1);
+  }
 }
 
 .activePaletteDot {
@@ -1001,7 +1034,9 @@
     color: #ffffff;
     cursor: pointer;
 
-    &:hover { background-color: #155c43; }
+    &:hover {
+      background-color: #155c43;
+    }
   }
 }
 
@@ -1017,7 +1052,9 @@
   cursor: pointer;
   transition: background-color 0.2s;
 
-  &:hover { background-color: #f8f9fa; }
+  &:hover {
+    background-color: #f8f9fa;
+  }
 }
 
 .modalFooterHint {
@@ -1029,5 +1066,7 @@
   color: #a0aec0;
   margin-top: 1rem;
 
-  svg { color: #a0aec0; }
+  svg {
+    color: #a0aec0;
+  }
 }
