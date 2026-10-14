@@ -1,7 +1,13 @@
 import React, { useState, useEffect } from "react";
 import { useSearchParams } from "react-router-dom";
 import { useTranslatedText } from "../../hooks/useTranslatedText";
-import { getTeachers, createTeacher, updateTeacher, deleteTeacher } from "../../api/teachers";
+import {
+  getTeachers,
+  createTeacher,
+  updateTeacher,
+  updateTeacherAvatar,
+  deleteTeacher,
+} from "../../api/teachers";
 import type { TeacherDto } from "../../api/teachers";
 import { fetchSubjects } from "../../api/subjects";
 import styles from "./TeacherListPage.module.scss";
@@ -328,6 +334,16 @@ export const TeacherListPage: React.FC = () => {
     try {
       if (editingTeacherUuid) {
         const updated: any = await updateTeacher(editingTeacherUuid, teacherPayload);
+
+        // Update avatar via dedicated endpoint if provided
+        if (finalAvatar) {
+          try {
+            await updateTeacherAvatar(editingTeacherUuid, finalAvatar);
+          } catch (avatarErr) {
+            console.error("API Error updating avatar via dedicated endpoint:", avatarErr);
+          }
+        }
+
         const subjectLabel =
           typeof updated.subject === "object" && updated.subject !== null
             ? updated.subject.name
@@ -364,6 +380,17 @@ export const TeacherListPage: React.FC = () => {
         );
       } else {
         const saved: any = await createTeacher(teacherPayload);
+        const targetUuid = saved.uuid || saved.id;
+
+        // Save avatar via dedicated endpoint if provided
+        if (finalAvatar && targetUuid) {
+          try {
+            await updateTeacherAvatar(targetUuid, finalAvatar);
+          } catch (avatarErr) {
+            console.error("API Error setting avatar via dedicated endpoint:", avatarErr);
+          }
+        }
+
         const subjectLabel =
           typeof saved.subject === "object" && saved.subject !== null
             ? saved.subject.name

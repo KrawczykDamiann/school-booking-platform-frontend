@@ -39,6 +39,13 @@ export const updateTeacher = async (
   return response.data;
 };
 
+export const updateTeacherAvatar = async (
+  uuid: string,
+  avatarUrl: string
+): Promise<void> => {
+  await api.put(`/api/teachers/${uuid}/avatar`, { avatarUrl });
+};
+
 export const deleteTeacher = async (idOrUuid: string | number): Promise<void> => {
   await api.delete(`/api/teachers/${idOrUuid}`);
 };
