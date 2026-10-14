@@ -1,4 +1,4 @@
-# Lessio — Lesson Booking Platform
+# Lessio
 
 Lessio is a web application that allows students to browse available lessons and book time slots. It also provides an administration interface for managing the platform.
 
