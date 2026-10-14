@@ -378,7 +378,12 @@ export const TeacherListPage: React.FC = () => {
   }, [selectedTeacherId, teachers]);
 
   const handleSubjectSelectChange = (e: React.ChangeEvent<HTMLSelectElement>) => {
-    setNewTeacherSubjectId(Number(e.target.value));
+    const subId = Number(e.target.value);
+    setNewTeacherSubjectId(subId);
+    const found = subjects.find((s) => s.id === subId);
+    if (found?.color) {
+      setNewTeacherColor(found.color);
+    }
   };
 
   const handleRemoveDay = (dayId: string) => {
@@ -479,7 +484,7 @@ export const TeacherListPage: React.FC = () => {
     const firstName = nameParts[0] || "Teacher";
     const lastName = nameParts.slice(1).join(" ") || "";
 
-    const finalColor = newTeacherColor || DEFAULT_COLOR;
+    const finalColor = newTeacherColor || selectedSub?.color || DEFAULT_COLOR;
     const finalAvatar = newTeacherAvatarUrl.trim() || undefined;
 
     const teacherPayload: Partial<TeacherDto> & { zoneId?: string } = {
@@ -721,12 +726,14 @@ export const TeacherListPage: React.FC = () => {
 
                     const matchedSub = subjects.find((s) => s.id === teacher.subjectId);
                     const displaySubject = matchedSub?.name || teacher.subject || "—";
+                    const avatarColor = teacher.subjectColor || matchedSub?.color || DEFAULT_COLOR;
                     const avatarSrc = teacher.avatarUrl || teacher.avatar;
 
                     return (
                       <tr
                         key={teacher.uuid || teacher.id}
                         className={isSelected ? styles.activeRow : ""}
+                        style={{ '--subject-color': avatarColor } as React.CSSProperties}
                         onClick={() => {
                           setSelectedTeacherId(teacher.uuid || teacher.id);
                           setViewMode("detail");
@@ -813,12 +820,14 @@ export const TeacherListPage: React.FC = () => {
 
                     const matchedSub = subjects.find((s) => s.id === tItem.subjectId);
                     const displaySubject = matchedSub?.name || tItem.subject || "—";
+                    const navColor = tItem.subjectColor || matchedSub?.color || DEFAULT_COLOR;
                     const navAvatarSrc = tItem.avatarUrl || tItem.avatar;
 
                     return (
                       <div
                         key={tItem.uuid || tItem.id}
                         className={`${styles.teacherNavItem} ${isActive ? styles.activeNavItem : ""}`}
+                        style={{ '--subject-color': navColor } as React.CSSProperties}
                         onClick={() => setSelectedTeacherId(tItem.uuid || tItem.id)}
                       >
                         {navAvatarSrc ? (
@@ -848,7 +857,10 @@ export const TeacherListPage: React.FC = () => {
                 </aside>
 
                 <main className={styles.scheduleColumn}>
-                  <div className={styles.teacherHeaderCard}>
+                  <div
+                    className={styles.teacherHeaderCard}
+                    style={{ '--subject-color': selectedTeacher.subjectColor || DEFAULT_COLOR } as React.CSSProperties}
+                  >
                     <div className={styles.headerLeft}>
                       {selectedTeacher.avatarUrl || selectedTeacher.avatar ? (
                         <img
@@ -1104,7 +1116,10 @@ export const TeacherListPage: React.FC = () => {
                       className={styles.colorWheelBtn}
                       onClick={() => setIsColorPaletteOpen(!isColorPaletteOpen)}
                     >
-                      <span className={styles.innerColorDot}></span>
+                      <span
+                        className={styles.innerColorDot}
+                        style={{ '--selected-color': newTeacherColor || DEFAULT_COLOR } as React.CSSProperties}
+                      ></span>
                     </button>
 
                     {isColorPaletteOpen && (
@@ -1114,6 +1129,7 @@ export const TeacherListPage: React.FC = () => {
                             type="button"
                             key={c}
                             className={`${styles.paletteDot} ${newTeacherColor === c ? styles.activePaletteDot : ""}`}
+                            style={{ '--dot-color': c } as React.CSSProperties}
                             onClick={() => {
                               setNewTeacherColor(c);
                               setIsColorPaletteOpen(false);
