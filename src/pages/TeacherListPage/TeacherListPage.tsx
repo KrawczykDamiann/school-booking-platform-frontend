@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from "react";
 import { useSearchParams } from "react-router-dom";
 import { useTranslatedText } from "../../hooks/useTranslatedText";
-import { getTeachers, createTeacher, deleteTeacher } from "../../api/teachers";
+import { getTeachers, createTeacher, updateTeacher, deleteTeacher } from "../../api/teachers";
 import type { TeacherDto } from "../../api/teachers";
 import { fetchSubjects } from "../../api/subjects";
 import styles from "./TeacherListPage.module.scss";
@@ -24,13 +24,14 @@ export interface Teacher {
   uuid?: string;
   name: string;
   email: string;
+  avatarUrl?: string;
+  avatar?: string;
   subjectId?: number;
   subject: string;
   subjectColor: string;
   collabType: "Contract" | "Freelance";
   dueDate: string | null;
   isWarningDate?: boolean;
-  avatar?: string;
   nextLessons?: string[];
 }
 
@@ -137,7 +138,9 @@ export const TeacherListPage: React.FC = () => {
   const [modalStep, setModalStep] = useState<1 | 2>(1);
 
   /* Teacher Form State */
+  const [editingTeacherUuid, setEditingTeacherUuid] = useState<string | null>(null);
   const [newTeacherName, setNewTeacherName] = useState("");
+  const [newTeacherAvatarUrl, setNewTeacherAvatarUrl] = useState("");
   const [newTeacherSubjectId, setNewTeacherSubjectId] = useState<number | "">("");
   const [newTeacherColor, setNewTeacherColor] = useState(DEFAULT_COLOR);
   const [newTeacherEmail, setNewTeacherEmail] = useState("");
@@ -161,7 +164,6 @@ export const TeacherListPage: React.FC = () => {
 
   /* Fetch Subjects and Teachers on Mount */
   useEffect(() => {
-    // 1. Fetch Subjects from Spring Boot Backend
     setIsLoadingSubjects(true);
     fetchSubjects()
       .then((res: any) => {
@@ -175,7 +177,6 @@ export const TeacherListPage: React.FC = () => {
         setIsLoadingSubjects(false);
       });
 
-    // 2. Fetch Teachers from Backend
     getTeachers()
       .then((res: any) => {
         const rawList: any[] = res?.content || (Array.isArray(res) ? res : []);
@@ -205,11 +206,15 @@ export const TeacherListPage: React.FC = () => {
             t.subject_id ||
             (t.subject && typeof t.subject === "object" ? t.subject.id : undefined);
 
+          const resolvedAvatar = t.avatarUrl || t.avatar || undefined;
+
           return {
             id: t.uuid || t.id || `teacher-${idx}`,
             uuid: t.uuid,
             name: fullName,
             email: emailStr,
+            avatar: resolvedAvatar,
+            avatarUrl: resolvedAvatar,
             subjectId: sId,
             subject: sName || "",
             subjectColor: t.subjectColor || DEFAULT_COLOR,
@@ -282,6 +287,17 @@ export const TeacherListPage: React.FC = () => {
     }
   };
 
+  const openEditModal = (t: Teacher) => {
+    setEditingTeacherUuid(t.uuid || String(t.id));
+    setNewTeacherName(t.name);
+    setNewTeacherEmail(t.email);
+    setNewTeacherAvatarUrl(t.avatarUrl || t.avatar || "");
+    setNewTeacherSubjectId(t.subjectId || "");
+    setNewTeacherColor(t.subjectColor || DEFAULT_COLOR);
+    setCollabType(t.collabType || "Contract");
+    setIsModalOpen(true);
+  };
+
   const handleSaveTeacher = async () => {
     const selectedSub = subjects.find((s) => s.id === Number(newTeacherSubjectId));
     const subjectName = selectedSub ? selectedSub.name : "";
@@ -291,12 +307,14 @@ export const TeacherListPage: React.FC = () => {
     const lastName = nameParts.slice(1).join(" ") || "";
 
     const finalColor = newTeacherColor || DEFAULT_COLOR;
+    const finalAvatar = newTeacherAvatarUrl.trim() || undefined;
 
-    const newTeacherPayload: Partial<TeacherDto> = {
+    const teacherPayload: Partial<TeacherDto> = {
       firstName,
       lastName,
       name: `${firstName} ${lastName}`.trim(),
       email: newTeacherEmail,
+      avatarUrl: finalAvatar,
       subjectId: Number(newTeacherSubjectId),
       subjectColor: finalColor,
       collabType: collabType,
@@ -304,32 +322,67 @@ export const TeacherListPage: React.FC = () => {
     };
 
     try {
-      const saved: any = await createTeacher(newTeacherPayload);
-      const subjectLabel =
-        typeof saved.subject === "object" && saved.subject !== null
-          ? saved.subject.name
-          : typeof saved.subject === "string"
-          ? saved.subject
-          : subjectName;
+      if (editingTeacherUuid) {
+        const updated: any = await updateTeacher(editingTeacherUuid, teacherPayload);
+        const subjectLabel =
+          typeof updated.subject === "object" && updated.subject !== null
+            ? updated.subject.name
+            : typeof updated.subject === "string"
+            ? updated.subject
+            : subjectName;
 
-      const savedFullName =
-        saved.name ||
-        `${saved.firstName || ""} ${saved.lastName || ""}`.trim() ||
-        newTeacherPayload.name!;
+        const resolvedAvatar = updated.avatarUrl || updated.avatar || finalAvatar;
 
-      const created: Teacher = {
-        id: saved.uuid || saved.id || `teacher-${Date.now()}`,
-        uuid: saved.uuid,
-        name: savedFullName,
-        email: saved.email || newTeacherPayload.email!,
-        subjectId: saved.subjectId || newTeacherPayload.subjectId!,
-        subject: subjectLabel,
-        subjectColor: saved.subjectColor || finalColor,
-        collabType: (saved.collabType as "Contract" | "Freelance") || newTeacherPayload.collabType!,
-        dueDate: saved.dueDate || newTeacherPayload.dueDate!,
-      };
+        setTeachers((prev) =>
+          prev.map((t) =>
+            t.uuid === editingTeacherUuid || String(t.id) === editingTeacherUuid
+              ? {
+                  ...t,
+                  name: updated.name || teacherPayload.name!,
+                  email: updated.email || teacherPayload.email!,
+                  avatar: resolvedAvatar,
+                  avatarUrl: resolvedAvatar,
+                  subjectId: updated.subjectId || teacherPayload.subjectId!,
+                  subject: subjectLabel,
+                  subjectColor: updated.subjectColor || finalColor,
+                  collabType: (updated.collabType as "Contract" | "Freelance") || teacherPayload.collabType!,
+                  dueDate: updated.dueDate || teacherPayload.dueDate!,
+                }
+              : t
+          )
+        );
+      } else {
+        const saved: any = await createTeacher(teacherPayload);
+        const subjectLabel =
+          typeof saved.subject === "object" && saved.subject !== null
+            ? saved.subject.name
+            : typeof saved.subject === "string"
+            ? saved.subject
+            : subjectName;
 
-      setTeachers((prev) => [...prev, created]);
+        const savedFullName =
+          saved.name ||
+          `${saved.firstName || ""} ${saved.lastName || ""}`.trim() ||
+          teacherPayload.name!;
+
+        const resolvedAvatar = saved.avatarUrl || saved.avatar || finalAvatar;
+
+        const created: Teacher = {
+          id: saved.uuid || saved.id || `teacher-${Date.now()}`,
+          uuid: saved.uuid,
+          name: savedFullName,
+          email: saved.email || teacherPayload.email!,
+          avatar: resolvedAvatar,
+          avatarUrl: resolvedAvatar,
+          subjectId: saved.subjectId || teacherPayload.subjectId!,
+          subject: subjectLabel,
+          subjectColor: saved.subjectColor || finalColor,
+          collabType: (saved.collabType as "Contract" | "Freelance") || teacherPayload.collabType!,
+          dueDate: saved.dueDate || teacherPayload.dueDate!,
+        };
+
+        setTeachers((prev) => [...prev, created]);
+      }
     } catch (err) {
       console.error("API Error saving teacher:", err);
     }
@@ -354,7 +407,9 @@ export const TeacherListPage: React.FC = () => {
   const resetForm = () => {
     setIsModalOpen(false);
     setModalStep(1);
+    setEditingTeacherUuid(null);
     setNewTeacherName("");
+    setNewTeacherAvatarUrl("");
     setNewTeacherSubjectId("");
     setNewTeacherEmail("");
     setNewTeacherColor(DEFAULT_COLOR);
@@ -393,7 +448,13 @@ export const TeacherListPage: React.FC = () => {
           <div className={styles.listSection}>
             <div className={styles.topHeader}>
               <h2><Txt>Teachers</Txt></h2>
-              <button className={styles.addTeacherBtn} onClick={() => setIsModalOpen(true)}>
+              <button
+                className={styles.addTeacherBtn}
+                onClick={() => {
+                  resetForm();
+                  setIsModalOpen(true);
+                }}
+              >
                 <Txt>Add a teacher</Txt> <UserPlusIcon />
               </button>
             </div>
@@ -417,6 +478,7 @@ export const TeacherListPage: React.FC = () => {
                     const matchedSub = subjects.find((s) => s.id === teacher.subjectId);
                     const displaySubject = matchedSub?.name || teacher.subject || "—";
                     const avatarColor = teacher.subjectColor || DEFAULT_COLOR;
+                    const avatarSrc = teacher.avatarUrl || teacher.avatar;
 
                     return (
                       <tr
@@ -428,9 +490,9 @@ export const TeacherListPage: React.FC = () => {
                         }}
                       >
                         <td className={styles.nameCell}>
-                          {teacher.avatar ? (
+                          {avatarSrc ? (
                             <img
-                              src={teacher.avatar}
+                              src={avatarSrc}
                               alt={teacher.name}
                               className={styles.avatarImg}
                             />
@@ -472,7 +534,12 @@ export const TeacherListPage: React.FC = () => {
                           </div>
                         </td>
                         <td className={styles.actionCell} onClick={(e) => e.stopPropagation()}>
-                          <button className={styles.actionIconButton} title="Edit teacher">
+                          <button
+                            type="button"
+                            className={styles.actionIconButton}
+                            title="Edit teacher"
+                            onClick={() => openEditModal(teacher)}
+                          >
                             <EditIcon />
                           </button>
                         </td>
@@ -510,6 +577,7 @@ export const TeacherListPage: React.FC = () => {
                     const matchedSub = subjects.find((s) => s.id === tItem.subjectId);
                     const displaySubject = matchedSub?.name || tItem.subject || "—";
                     const navColor = tItem.subjectColor || DEFAULT_COLOR;
+                    const navAvatarSrc = tItem.avatarUrl || tItem.avatar;
 
                     return (
                       <div
@@ -517,9 +585,9 @@ export const TeacherListPage: React.FC = () => {
                         className={`${styles.teacherNavItem} ${isActive ? styles.activeNavItem : ""}`}
                         onClick={() => setSelectedTeacherId(tItem.uuid || tItem.id)}
                       >
-                        {tItem.avatar ? (
+                        {navAvatarSrc ? (
                           <img
-                            src={tItem.avatar}
+                            src={navAvatarSrc}
                             alt={tItem.name}
                             className={styles.navAvatar}
                           />
@@ -549,9 +617,9 @@ export const TeacherListPage: React.FC = () => {
                 <main className={styles.scheduleColumn}>
                   <div className={styles.teacherHeaderCard}>
                     <div className={styles.headerLeft}>
-                      {selectedTeacher.avatar ? (
+                      {selectedTeacher.avatarUrl || selectedTeacher.avatar ? (
                         <img
-                          src={selectedTeacher.avatar}
+                          src={selectedTeacher.avatarUrl || selectedTeacher.avatar}
                           alt="Avatar"
                           className={styles.headerAvatar}
                         />
@@ -588,7 +656,14 @@ export const TeacherListPage: React.FC = () => {
                       >
                         <TrashIcon />
                       </button>
-                      <button className={styles.actionIconButton}><EditIcon /></button>
+                      <button
+                        type="button"
+                        className={styles.actionIconButton}
+                        title="Edit teacher"
+                        onClick={() => openEditModal(selectedTeacher)}
+                      >
+                        <EditIcon />
+                      </button>
                     </div>
                   </div>
 
@@ -733,7 +808,7 @@ export const TeacherListPage: React.FC = () => {
                 <div className={styles.modalHeader}>
                   <div className={styles.titleGroup}>
                     <UserPlusIcon />
-                    <h3><Txt>Add a teacher</Txt></h3>
+                    <h3><Txt>{editingTeacherUuid ? "Edit teacher" : "Add a teacher"}</Txt></h3>
                   </div>
                   <div className={styles.headerRight}>
                     <span className={styles.stepIndicator}><Txt>Step 1 of 2</Txt></span>
@@ -751,6 +826,16 @@ export const TeacherListPage: React.FC = () => {
                     required
                     value={newTeacherName}
                     onChange={(e) => setNewTeacherName(e.target.value)}
+                  />
+                </div>
+
+                <div className={styles.inputWrapper}>
+                  <label><Txt>Avatar URL</Txt></label>
+                  <input
+                    type="url"
+                    placeholder="https://example.com/avatar.jpg"
+                    value={newTeacherAvatarUrl}
+                    onChange={(e) => setNewTeacherAvatarUrl(e.target.value)}
                   />
                 </div>
 
@@ -838,7 +923,7 @@ export const TeacherListPage: React.FC = () => {
                 <div className={styles.modalHeader}>
                   <div className={styles.titleGroup}>
                     <button type="button" className={styles.backStepBtn} onClick={() => setModalStep(1)}>&larr;</button>
-                    <h3><Txt>Add a teacher</Txt></h3>
+                    <h3><Txt>{editingTeacherUuid ? "Edit teacher" : "Add a teacher"}</Txt></h3>
                   </div>
                   <div className={styles.headerRight}>
                     <span className={styles.stepIndicator}><Txt>Step 2 of 2</Txt></span>
