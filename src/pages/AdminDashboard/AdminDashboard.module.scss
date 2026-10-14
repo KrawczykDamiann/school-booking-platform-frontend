@@ -1,9 +1,9 @@
 @use '../../styles/variables' as v;
 
 .dashboardWrapper {
-  background-color: #f7f9fc;
+  // background-color: #f7f9fc;
   min-height: calc(100vh - 88px);
-  padding: 32px 40px;
+  padding: 32px;
   box-sizing: border-box;
   display: flex;
   justify-content: center;
@@ -28,6 +28,7 @@
    ========================================= */
 .workloadCard {
   background: v.$color-white;
+  border: 1px solid v.$color-gray20;
   border-radius: 28px;
   padding: 36px 40px;
   box-shadow: 0 4px 20px rgba(0, 0, 0, 0.03);
@@ -341,6 +342,7 @@
    ========================================= */
 .pendingContainer {
   background: v.$color-white;
+  border: 1px solid v.$color-gray20;
   border-radius: 28px;
   padding: 36px 32px;
   box-shadow: 0 4px 20px rgba(0, 0, 0, 0.03);
